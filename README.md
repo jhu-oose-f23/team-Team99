@@ -34,10 +34,10 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">Best-README-Template</h3>
+  <h3 align="center">GymConnect</h3>
 
   <p align="center">
-    An awesome README template to jumpstart your projects!
+    Connect with Fellow Gym Bros!
     <br />
     <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
     <br />
@@ -93,7 +93,7 @@ The GymConnect project endeavors to bridge the gap in the fitness world by addre
 
 ### Built With
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+This project was built with React Native for frontend as allows us to use the same codebase to build apps for both iOS and Android. For backend, we will use Python (Flask framework). This is lightweight, easy to build, test and deploy. For a database, we will use supabase (PostgreSQL). Relational database makes sense for this project as users will be connected to each other (social media aspect) and data will be fairly structured.
 
 * [![React Native][React-Native]][React-Native-url]
 * [![Flask][Flask]][Flask-url]
