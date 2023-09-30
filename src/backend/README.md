@@ -58,27 +58,24 @@ GET /workouts -- Provides list of all workouts in database as list of dictionari
 POST /workouts: Creates a new workout in database. Sample request body is below:
 
     {
-        "day": "2023-09-30",
-        "exercises": [
-            {
-                "name": "bench",
-                "reps": 10,
-                "sets": 3
-            },
-            {
-                "name": "squat",
-                "reps": 10,
-                "sets": 3
-            },
-            {
-                "name": "deadlift",
-                "reps": 10,
-                "sets": 3
-            }
-        ],
-        "id": 32,
-        "time": "21:39:36.160359+00",
-        "workout_name": "Leg day"
+    "workout_name": "Leg day",
+    "exercises": [
+        {
+            "name": "bench",
+            "reps": 10,
+            "sets": 3
+        },
+        {
+            "name": "squat",
+            "reps": 10,
+            "sets": 3
+        },
+        {
+            "name": "deadlift",
+            "reps": 10,
+            "sets": 3
+        }
+      ]
     }
 
 DELETE /workouts: Deletes ALL workouts in database (this is more for testing and development purposes)
