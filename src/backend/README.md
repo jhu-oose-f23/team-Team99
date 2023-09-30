@@ -82,6 +82,6 @@ DELETE /workouts: Deletes ALL workouts in database (this is more for testing and
 
 **NOTES**
 
-API is hosted as a free instance on Render, so spins down with inactivity. As a result, when request is made to the API when it has spun down, it takes an extra minute or so to spin up and provide that first response. This is NOT a bug or malfunction.
+Server is hosted as a free instance on Render, so spins down with inactivity. As a result, when request is made to the API when server has spun down, it takes an extra minute or so to spin up and provide that first response. This is NOT a bug or malfunction.
 
 The values inside the _list_ provided for "exercises" in request body must be dictionaries, but the dictionaries themselves can have any key-value pairs in them (ie. could add a "weight":"50" k-v pair if desired).
