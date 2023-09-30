@@ -1,6 +1,84 @@
 Backend Server running at base url: https://gymconnectbackend.onrender.com
-Basic documentation found at https://gymconnectbackend.onrender.com/swagger-ui
-Endpoints:
-1. GET /workouts: Provides list of all workouts in database with following format
-2. POST /workouts: Creates a new workout in database with following format
-3. DELETE /workouts: Deletes ALL workouts in database (this is more for testing and development purposes)
+
+Basic documentation found at https://gymconnectbackend.onrender.com/swagger-ui (see here for request schemas)
+
+**Endpoints**
+
+GET /workouts -- Provides list of all workouts in database as list of dictionaries. Sample response is below:
+    
+    [
+      {
+          "day": "2023-09-30",
+          "exercises": [
+              {
+                  "name": "bench",
+                  "reps": 10,
+                  "sets": 3
+              },
+              {
+                  "name": "squat",
+                  "reps": 10,
+                  "sets": 3
+              },
+              {
+                  "name": "deadlift",
+                  "reps": 10,
+                  "sets": 3
+              }
+          ],
+          "id": 31,
+          "time": "21:28:32.835832+00",
+          "workout_name": "Leg day"
+      },
+      {
+          "day": "2023-09-30",
+          "exercises": [
+              {
+                  "name": "bench",
+                  "reps": 10,
+                  "sets": 3
+              },
+              {
+                  "name": "squat",
+                  "reps": 10,
+                  "sets": 3
+              },
+              {
+                  "name": "deadlift",
+                  "reps": 10,
+                  "sets": 3
+              }
+          ],
+          "id": 32,
+          "time": "21:39:36.160359+00",
+          "workout_name": "Leg day"
+      }
+    ]
+  
+POST /workouts: Creates a new workout in database. Sample request body is below:
+
+    {
+        "day": "2023-09-30",
+        "exercises": [
+            {
+                "name": "bench",
+                "reps": 10,
+                "sets": 3
+            },
+            {
+                "name": "squat",
+                "reps": 10,
+                "sets": 3
+            },
+            {
+                "name": "deadlift",
+                "reps": 10,
+                "sets": 3
+            }
+        ],
+        "id": 32,
+        "time": "21:39:36.160359+00",
+        "workout_name": "Leg day"
+    }
+
+DELETE /workouts: Deletes ALL workouts in database (this is more for testing and development purposes)
