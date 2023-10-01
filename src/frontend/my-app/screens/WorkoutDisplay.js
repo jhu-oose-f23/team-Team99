@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button, ScrollView } from 'react-native';
-import { TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity, FlatList, StyleSheet } from "react-native";
 
 const sections = [
   { title: "Push", content: "This is the content for section 1." },
@@ -26,6 +26,34 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 5,
   },
+  tableContainer: {
+    // Style for the table container
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
+  },
+  tableHeaderCell: {
+    flex: 1,
+    textAlign: 'center',
+    fontWeight: 'bold',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: 'lightgray',
+  },
+  cell: {
+    flex: 1,
+    textAlign: 'center',
+  },
 });
 
 const ExpandableSection = ({ title, content }) => {
@@ -35,22 +63,29 @@ const ExpandableSection = ({ title, content }) => {
     setIsExpanded(!isExpanded);
   };
 
-  console.log(content)
-
   return (
     <View style={styles.section}>
       <TouchableOpacity style={styles.button} onPress={handlePress}>
         <Text>{title}</Text>
       </TouchableOpacity>
       {isExpanded && (
-        <View style={styles.dropdown}>
-          {content.map((exercise, index) => {
-            <>
-              <Text>{exercise.name}</Text>
-              <Text>{exercise.sets}</Text>
-              <Text>{exercise.reps}</Text>
-            </>
-          })}
+        <View style={styles.tableContainer}>
+          <View style={styles.tableHeader}>
+            <Text style={styles.tableHeaderCell}>Exercise</Text>
+            <Text style={styles.tableHeaderCell}>Sets</Text>
+            <Text style={styles.tableHeaderCell}>Reps</Text>
+          </View>
+          <FlatList
+            data={content}
+            keyExtractor={(item, index) => index.toString()}
+            renderItem={({ item }) => (
+              <View style={styles.row}>
+                <Text style={styles.cell}>{item.name}</Text>
+                <Text style={styles.cell}>{item.sets}</Text>
+                <Text style={styles.cell}>{item.reps}</Text>
+              </View>
+            )}
+          />
         </View>
       )}
     </View>
@@ -86,7 +121,7 @@ const WorkoutDisplay = ({ navigation }) => {
       {loading ? (
         <Text>Loading...</Text>
       ) : (
-        <ScrollView>
+        <>
           {data.map((workout, index) => (
             <ExpandableSection
               key={index}
@@ -94,7 +129,7 @@ const WorkoutDisplay = ({ navigation }) => {
               content={workout.exercises}
             />
           ))}
-        </ScrollView>
+        </>
       )}
       <Button
         title="Go back to Home"
