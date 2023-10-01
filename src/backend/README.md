@@ -5,7 +5,7 @@ Basic documentation found at https://gymconnectbackend.onrender.com/swagger-ui (
 **Endpoints**
 
 GET /workouts -- Provides list of all workouts in database as list of dictionaries. Sample response is below:
-    
+
     [
       {
           "day": "2023-09-30",
@@ -54,7 +54,7 @@ GET /workouts -- Provides list of all workouts in database as list of dictionari
           "workout_name": "Leg day"
       }
     ]
-  
+
 POST /workouts: Creates a new workout in database. Sample request body is below:
 
     {
