@@ -8,7 +8,7 @@ const CreateWorkout = () => {
 
   const addExerciseRow = () => {
     const newExercise = {
-      exerciseName: "",
+      name: "",
       sets: "",
       reps: "",
     };
@@ -21,7 +21,25 @@ const CreateWorkout = () => {
     setExerciseRows(updatedExercise);
   };
 
-  const saveWorkout = () => {};
+  const saveWorkout = async () => {
+    // Make POST request
+    const workout = {
+      workout_name: workoutName,
+      exercises: exerciseRows,
+    };
+    const response = await fetch(
+      "https://gymconnectbackend.onrender.com/workouts",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json", // Set the content type to JSON
+        },
+        body: JSON.stringify(workout), // Convert data to JSON format
+      }
+    );
+    const responseData = await response.json();
+    console.log(responseData);
+  };
 
   return (
     <View style={{ flex: 1, padding: 16 }}>
@@ -42,10 +60,8 @@ const CreateWorkout = () => {
             <TextInput
               style={{ flex: 2, marginRight: 10 }}
               placeholder="Exercise Name"
-              value={item.exerciseName}
-              onChangeText={(text) =>
-                updateExercise(index, "exerciseName", text)
-              }
+              value={item.name}
+              onChangeText={(text) => updateExercise(index, "name", text)}
             />
             <TextInput
               style={{ flex: 1, marginRight: 10 }}
