@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Button, ScrollView } from 'react-native';
+import { View, Text, Button } from 'react-native';
 import { TouchableOpacity, FlatList, StyleSheet } from "react-native";
-
-const sections = [
-  { title: "Push", content: "This is the content for section 1." },
-  { title: "Pull", content: "This is the content for section 2." },
-  { title: "Legs", content: "This is the content for section 3." },
-];
 
 const styles = StyleSheet.create({
   container: {
@@ -92,13 +86,11 @@ const ExpandableSection = ({ title, content }) => {
   );
 };
 
-
 const WorkoutDisplay = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Define the URL you want to fetch data from
     const apiUrl = 'https://gymconnectbackend.onrender.com/workouts';
 
     // Make a GET request to the URL
@@ -113,9 +105,8 @@ const WorkoutDisplay = ({ navigation }) => {
         setLoading(false);
       });
   }, []);
-  // console.log(data[0].exercises[0].name)
+  
   return (
-    
     <View>
       <Text>My Workouts</Text>
       {loading ? (
