@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Button } from 'react-native';
-import { TouchableOpacity, FlatList, StyleSheet } from "react-native";
+import { TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
   container: {
@@ -69,17 +69,15 @@ const ExpandableSection = ({ title, content }) => {
             <Text style={styles.tableHeaderCell}>Sets</Text>
             <Text style={styles.tableHeaderCell}>Reps</Text>
           </View>
-          <FlatList
-            data={content}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({ item }) => (
-              <View style={styles.row}>
+          {
+            content.map((item) => (
+              <View style={styles.row} key={item.id}>
                 <Text style={styles.cell}>{item.name}</Text>
                 <Text style={styles.cell}>{item.sets}</Text>
                 <Text style={styles.cell}>{item.reps}</Text>
               </View>
-            )}
-          />
+            ))
+          }
         </View>
       )}
     </View>
@@ -112,7 +110,7 @@ const WorkoutDisplay = ({ navigation }) => {
       {loading ? (
         <Text>Loading...</Text>
       ) : (
-        <>
+        <ScrollView>
           {data.map((workout, index) => (
             <ExpandableSection
               key={index}
@@ -120,7 +118,7 @@ const WorkoutDisplay = ({ navigation }) => {
               content={workout.exercises}
             />
           ))}
-        </>
+        </ScrollView>
       )}
       <Button
         title="Go back to Home"
