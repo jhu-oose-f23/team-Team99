@@ -177,10 +177,15 @@ Don't forget to give the project a star! Thanks again!
 <!-- CONTACT -->
 
 ## Contact
+Darren Shih - dshih5@jhu.edu
+Fabrice Ingabire - fingabi1@jhu.edu
+Ishan Hemmige - ihemmig1@jhu.edu
+Kiron Deb - kdeb1@jhu.edu
+Peter Goh - pgoh4@jhu.edu
+Sambhav Chordia - schordi1@jhu.edu
+<!--Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com-->
 
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
+Project Link: [https://github.com/jhu-oose-f23/team-Team99](https://github.com/jhu-oose-f23/team-Team99)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
