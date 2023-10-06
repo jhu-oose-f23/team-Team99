@@ -5,6 +5,8 @@ import { List, Colors } from "react-native-paper"; // You can use other styling 
 const CreateWorkout = () => {
   const [workoutName, setWorkoutName] = useState("");
   const [exerciseRows, setExerciseRows] = useState([]);
+  const [workoutNameError, setWorkoutNameError] = useState("");
+  const [exerciseError, setExerciseError] = useState("");
 
   const addExerciseRow = () => {
     const newExercise = {
@@ -22,6 +24,33 @@ const CreateWorkout = () => {
   };
 
   const saveWorkout = async () => {
+    // Input validation
+    let isValid = true;
+
+    // Validate workout name
+    if (!workoutName.trim()) {
+      setWorkoutNameError("Workout name is required");
+      isValid = false;
+    } else {
+      setWorkoutNameError("");
+    }
+
+    // Validate exercise rows
+    for (const exercise of exerciseRows) {
+      if (!exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim()) {
+        setExerciseError("All exercise fields must be filled");
+        isValid = false;
+        break; // Exit the loop after the first error
+      } else {
+        setExerciseError("");
+      }
+    }
+
+    // If any validation failed, don't proceed with the save
+    if (!isValid) {
+      return;
+    }
+
     // Make POST request
     const workout = {
       workout_name: workoutName,
@@ -49,6 +78,8 @@ const CreateWorkout = () => {
         value={workoutName}
         onChangeText={(text) => setWorkoutName(text)}
       />
+      {workoutNameError && <Text style={{ color: "red" }}>{workoutNameError}</Text>}
+      {exerciseError && <Text style={{ color: "red" }}>{exerciseError}</Text>}
 
       <Button title="Add Exercise Row" onPress={addExerciseRow} />
 
