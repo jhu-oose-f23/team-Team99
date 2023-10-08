@@ -23,3 +23,14 @@ def add_workout(workout_name, exercises):
 def delete_all_workouts():
   data = supabase.table("Workouts").delete().neq("id",0).execute()
   return data.data
+
+def add_user(data):
+  try:
+    data = supabase.table("Users").insert(data).execute()
+  except:
+    return "Username already exists"
+  return data.data[0]
+
+def get_users():
+  data = supabase.table("Users").select("first_name, last_name, username, id").execute()
+  return data.data
