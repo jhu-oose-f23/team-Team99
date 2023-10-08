@@ -120,7 +120,7 @@ GET /user: get all users. Sample response below:
         }
     ]
 
-GET /user/_username_: get specific user with username. Example: /user/k6
+GET /user/username: get specific user with username. Example: /user/k6
 
 Sample response below:
 
