@@ -120,7 +120,9 @@ GET /user: get all users. Sample response below:
         }
     ]
 
-GET /user/username: get specific user with username. Sample response below:
+GET /user/<username>: get specific user with username. Example: /user/k6
+
+Sample response below:
 
     {
         "birthdate": "2003-09-08",
