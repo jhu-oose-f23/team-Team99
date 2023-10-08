@@ -21,3 +21,7 @@ class UserSchema(Schema):
     level = fields.Str(required=True)
     frequency = fields.Str(required=True)
     preferred_time = fields.Str(required=True)
+
+class LoginSchema(Schema):
+    username = fields.Str(required=True)
+    password = fields.Str(required=True, load_only=True)
