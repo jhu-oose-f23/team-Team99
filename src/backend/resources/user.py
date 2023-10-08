@@ -25,25 +25,25 @@ class User(MethodView):
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
   
-  @blp.route("/user/<string:username>")
-  class User(MethodView):
-    @blp.response(200, UserSchema)
-    def get(self, username):
-      result = get_user(username)
-      if result:
-        response = make_response(result)
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        return response
-      abort(400, message="User not found")
-
-  @blp.route("/user/login")
-  class User(MethodView):
-    @blp.arguments(LoginSchema)
-    @blp.response(200, UserSchema)
-    def post(self, data):
-      result = login_user(data["username"], data["password"])
-      if not result:
-        abort(400, message="Invalid username or password")
+@blp.route("/user/<string:username>")
+class User(MethodView):
+  @blp.response(200, UserSchema)
+  def get(self, username):
+    result = get_user(username)
+    if result:
       response = make_response(result)
       response.headers['Access-Control-Allow-Origin'] = '*'
       return response
+    abort(400, message="User not found")
+
+@blp.route("/user/login")
+class User(MethodView):
+  @blp.arguments(LoginSchema)
+  @blp.response(200, UserSchema)
+  def post(self, data):
+    result = login_user(data["username"], data["password"])
+    if not result:
+      abort(400, message="Invalid username or password")
+    response = make_response(result)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
