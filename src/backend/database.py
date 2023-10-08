@@ -31,6 +31,10 @@ def add_user(data):
     return "Username already exists"
   return data.data[0]
 
-def get_users():
+def get_all_users():
   data = supabase.table("Users").select("first_name, last_name, username, id").execute()
   return data.data
+
+def get_user(username):
+  data = supabase.table("Users").select("*").eq("username", username).execute().data
+  return data[0] if data else None
