@@ -4,22 +4,73 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 
 const Connections = () => {
-    
+    const [activeButton, setActiveButton] = useState('Following');
 
+
+    const handleButtonPress = (buttonName) => {
+        setActiveButton(buttonName);
+    };
     
     return (
         <View style={styles.container}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Following</Text>
+            <TouchableOpacity       // For following
+              style={[
+                styles.button,
+                activeButton === 'Following' ? styles.activeButton: null,
+              ]}
+              onPress={()=>handleButtonPress('Following')}
+            >
+              <Text 
+                style={[
+                    styles.buttonText,
+                    activeButton === 'Following' ? styles.activeButton : null,
+                ]}
+              >
+                Following
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Followers</Text>
+
+
+            <TouchableOpacity    // For followers
+              style={[
+                styles.button,
+                activeButton === 'Followers' ? styles.activeButton: null,
+              ]}
+              onPress={()=>handleButtonPress('Followers')}
+            >
+              <Text 
+                style={[
+                    styles.buttonText,
+                    activeButton === 'Followers' ? styles.activeButton : null,
+                ]}
+              >
+                Followers
+              </Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.button}>
-              <Text style={styles.buttonText}>Search</Text>
+
+
+            <TouchableOpacity           // For search
+              style={[
+                styles.button,
+                activeButton === 'Search' ? styles.activeButton: null,
+              ]}
+              onPress={()=>handleButtonPress('Search')}
+            >
+              <Text 
+                style={[
+                    styles.buttonText,
+                    activeButton === 'Search' ? styles.activeButton : null,
+                ]}
+              >
+                Search
+              </Text>
             </TouchableOpacity>
           </View>
+
+          {activeButton === 'Following' && <Text>This is following content</Text>}
+          {activeButton === 'Followers' && <Text>This is followers content</Text>}
+          {activeButton === 'Search' && <Text>This is search content</Text>}
         </View>
       );
 };
@@ -31,19 +82,25 @@ const styles = StyleSheet.create({
       alignItems: 'center',
     },
     buttonContainer: {
+      width: '100%',
       flexDirection: 'row', // Arrange buttons horizontally
       justifyContent: 'space-between', // Space them evenly
     },
     button: {
+      flex: 1,
       backgroundColor: 'white',
-      paddingHorizontal: 20,
+      alignItems: 'center',
       paddingVertical: 10,
     },
     buttonText: {
-      color: 'blue',
+      color: '#47B7F7',
       fontSize: 16,
       fontWeight: 'bold',
     },
+
+    activeButton: {
+        backgroundColor: '#526570'
+    }
   });
   
 
