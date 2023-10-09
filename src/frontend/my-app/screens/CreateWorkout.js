@@ -69,7 +69,14 @@ const CreateWorkout = ({navigation}) => {
       }
     );
     const responseData = await response.json();
-
+    
+    if (responseData.error) {
+      showToast({
+        type: 'error',
+        text1: 'Failed to save the workout!',
+        visibilityTime: 2000,
+      })
+    }
     navigation.popToTop();
 
     showToast({
