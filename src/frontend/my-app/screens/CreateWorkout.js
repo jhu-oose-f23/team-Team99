@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, Button, FlatList } from "react-native";
 import { List, Colors } from "react-native-paper"; // You can use other styling libraries as well
+import { ToastProvider, useToast } from "../components/CreateWorkoutToast";
 
-const CreateWorkout = () => {
+const CreateWorkout = ({navigation}) => {
   const [workoutName, setWorkoutName] = useState("");
   const [exerciseRows, setExerciseRows] = useState([]);
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
+  const showToast = useToast();
 
   const addExerciseRow = () => {
     const newExercise = {
@@ -67,6 +69,15 @@ const CreateWorkout = () => {
       }
     );
     const responseData = await response.json();
+
+    navigation.popToTop();
+
+    showToast({
+      type: 'success',
+      text1: 'Workout Session Saved Successfully!',
+      visibilityTime: 2000, // Adjust the duration as needed (1000ms for 1 second)
+    });
+
     console.log(responseData);
   };
 

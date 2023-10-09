@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WorkoutDisplayScreen from './screens/WorkoutDisplay';
 import CreateWorkout from "./screens/CreateWorkout";
 import Connections from "./screens/connections";
+import { ToastProvider } from "./components/CreateWorkoutToast";
 
 function HomeScreen({ navigation }) {
   return (
@@ -25,6 +26,7 @@ function HomeScreen({ navigation }) {
         title="Connections"
         onPress={()=> navigation.navigate("Connections")}
       />
+
     </View>
   );
 }
@@ -33,14 +35,16 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="WorkoutDisplay" component={WorkoutDisplayScreen} />
-        <Stack.Screen name="CreateWorkout" component={CreateWorkout} />
-        <Stack.Screen name="Connections" component={Connections}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <ToastProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen name="Home" component={HomeScreen} />
+          <Stack.Screen name="WorkoutDisplay" component={WorkoutDisplayScreen} />
+          <Stack.Screen name="CreateWorkout" component={CreateWorkout} />
+          <Stack.Screen name="Connections" component={Connections}/>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </ToastProvider>
   );
 }
 

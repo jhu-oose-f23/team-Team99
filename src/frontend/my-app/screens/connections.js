@@ -5,8 +5,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 const Connections = () => {
     const [activeButton, setActiveButton] = useState('Following');
-
-
+    
     const handleButtonPress = (buttonName) => {
         setActiveButton(buttonName);
     };

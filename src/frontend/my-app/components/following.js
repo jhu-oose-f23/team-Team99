@@ -3,9 +3,8 @@ import { List, Colors } from "react-native-paper";
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
 
-const Connections = () => {
+const Connections = () => {    
     
-
     
     return (
         <View style={styles.container}>
