@@ -23,3 +23,4 @@ def add_workout(workout_name, exercises):
 def delete_all_workouts():
   data = supabase.table("Workouts").delete().neq("id",0).execute()
   return data.data
+
