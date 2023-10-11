@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Button, FlatList } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, TextInput, Button, FlatList, TouchableOpacity} from "react-native";
 import { List, Colors } from "react-native-paper"; // You can use other styling libraries as well
 
 const CreateWorkout = () => {
@@ -8,6 +8,11 @@ const CreateWorkout = () => {
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
 
+  useEffect(() => {
+    // Initialize with one empty exercise row when the component loads
+    addExerciseRow();
+  }, []);
+
   const addExerciseRow = () => {
     const newExercise = {
       name: "",
@@ -15,6 +20,12 @@ const CreateWorkout = () => {
       reps: "",
     };
     setExerciseRows([...exerciseRows, newExercise]);
+  };
+
+  const removeExerciseRow = (index) => {
+    const updatedExerciseRows = [...exerciseRows];
+    updatedExerciseRows.splice(index, 1);
+    setExerciseRows(updatedExerciseRows);
   };
 
   const updateExercise = (index, field, value) => {
@@ -36,13 +47,19 @@ const CreateWorkout = () => {
     }
 
     // Validate exercise rows
-    for (const exercise of exerciseRows) {
-      if (!exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim()) {
-        setExerciseError("All exercise fields must be filled");
-        isValid = false;
-        break; // Exit the loop after the first error
-      } else {
-        setExerciseError("");
+    if (exerciseRows.length === 0) {
+      setExerciseError("At least one exercise is required");
+      isValid = false;
+    } else {
+      setExerciseError("");
+      for (const exercise of exerciseRows) {
+        if (!exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim()) {
+          setExerciseError("All exercise fields must be filled");
+          isValid = false;
+          break; // Exit the loop after the first error
+        } else {
+          setExerciseError("");
+        }
       }
     }
 
@@ -108,6 +125,9 @@ const CreateWorkout = () => {
               onChangeText={(text) => updateExercise(index, "reps", text)}
               keyboardType="numeric"
             />
+            <TouchableOpacity onPress={() => removeExerciseRow(index)}>
+              <Text style={{ color: "red", fontSize: 20, marginLeft: 10 }}>-</Text>
+            </TouchableOpacity>
           </View>
         )}
       />
