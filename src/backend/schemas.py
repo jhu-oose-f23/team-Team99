@@ -25,3 +25,8 @@ class UserSchema(Schema):
 class LoginSchema(Schema):
     username = fields.Str(required=True)
     password = fields.Str(required=True, load_only=True)
+
+class ConnectionSchema(Schema):
+    user1 = fields.Str(required=True)
+    user2 = fields.Str(required=True)
+    connected_on = fields.Str(dump_only=True)

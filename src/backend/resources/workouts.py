@@ -27,7 +27,7 @@ class Workout(MethodView):
     
     @blp.response(200, WorkoutSchema(many=True))
     def delete(self):
-        data = delete_all_workouts()
-        response = make_response(data)
-        response.headers['Access-Control-Allow-Origin'] = '*'
-        return response
+      data = delete_all_workouts()
+      response = make_response(data)
+      response.headers['Access-Control-Allow-Origin'] = '*'
+      return response
