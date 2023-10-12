@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
-from database import add_user, get_all_users, get_user, login_user
+from databases.user import add_user, get_all_users, get_user, login_user
 from schemas import UserSchema, LoginSchema
 
 blp = Blueprint("users", __name__, description="Operations on users")

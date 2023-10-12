@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint
 from flask import make_response
-from database import get_all_workouts, add_workout, delete_all_workouts
+from databases.workouts import get_all_workouts, add_workout, delete_all_workouts
 from schemas import WorkoutSchema
 
 blp = Blueprint("workouts", __name__, description="Operations on workouts")

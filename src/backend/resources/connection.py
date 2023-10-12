@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
-from database import connect, check_connection
+from databases.connection import connect, check_connection
 from schemas import ConnectionSchema
 
 blp = Blueprint("connections", __name__, description="Operations on connections")
