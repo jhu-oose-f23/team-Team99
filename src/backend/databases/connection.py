@@ -28,3 +28,12 @@ def check_connection(user1, user2):
   if not data:
     data = supabase.table("Connections").select("*").eq("user1", user2).eq("user2", user1).execute().data
   return True if data else False
+
+def get_connections(user):
+  data = supabase.table("Connections").select("*").eq("user1", user).execute().data + supabase.table("Connections").select("*").eq("user2", user).execute().data
+  result = set()
+  for connection in data:
+    result.add(connection["user1"])
+    result.add(connection["user2"])
+  result.remove(user)
+  return list(result)
