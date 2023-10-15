@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, Button } from "react-native";
 import { TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
+import { useFocusEffect } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
   container: {
@@ -147,11 +148,14 @@ const Profile = ({ navigation, username }) => {
     // navigation.navigate("Settings");
   };
 
-  useEffect(() => {
-    fetchWorkouts(username);
-    fetchUser(username);
-    fetchConnections(username);
-  }, []);
+  // useEffect doesn't rerender if you switch to this screen from the nav bar but useFocusEffect does
+  useFocusEffect(
+    React.useCallback(() => {
+      fetchWorkouts(username);
+      fetchUser(username);
+      fetchConnections(username);
+    }, [])
+  );
 
   return (
     <View>
