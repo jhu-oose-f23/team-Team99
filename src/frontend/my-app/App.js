@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WorkoutDisplayScreen from './screens/WorkoutDisplay';
 import CreateWorkout from "./CreateWorkout";
+import LoginPage from './LoginPage';
 
 function HomeScreen({ navigation }) {
   return (
@@ -18,6 +19,10 @@ function HomeScreen({ navigation }) {
       <Button
         title="Create workout"
         onPress={() => navigation.navigate("CreateWorkout")}
+      />
+      <Button
+        title="Log In"
+        onPress={() => navigation.navigate('LoginPage')} // Navigate to your LoginPage component
       />
     </View>
   );
@@ -32,6 +37,7 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="WorkoutDisplay" component={WorkoutDisplayScreen} />
         <Stack.Screen name="CreateWorkout" component={CreateWorkout} />
+        <Stack.Screen name="LoginPage" component={LoginPage} /> 
       </Stack.Navigator>
     </NavigationContainer>
   );
