@@ -14,7 +14,7 @@ def add_user(data):
     return None
 
 def get_all_users():
-  data = supabase.table("Users").select("first_name, last_name, username, id").execute()
+  data = supabase.table("Users").select("first_name, last_name, username").execute()
   return data.data
 
 def get_user(username):
@@ -22,5 +22,5 @@ def get_user(username):
   return data[0] if data else None
 
 def login_user(username, password):
-  data = supabase.table("Users").select("first_name, last_name, username, id").eq("username", username).eq("password", password).execute().data
+  data = supabase.table("Users").select("first_name, last_name, username").eq("username", username).eq("password", password).execute().data
   return data[0] if data else None

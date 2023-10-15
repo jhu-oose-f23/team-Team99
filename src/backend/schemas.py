@@ -9,7 +9,6 @@ class WorkoutSchema(Schema):
     day = fields.Str(dump_only=True)
 
 class UserSchema(Schema):
-    id = fields.UUID(dump_only=True)
     first_name = fields.Str(required=True)
     last_name = fields.Str(required=True)
     username = fields.Str(required=True)
