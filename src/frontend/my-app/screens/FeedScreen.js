@@ -24,8 +24,8 @@ const FeedScreen = () => {
   const [connectionRequests, setConnectionRequests] = useState([]);
 
   const sendConnectionRequest = (profileId) => {
-    // Simulate a network request to send a connection request
-    // You can replace this with actual API calls in your app
+      // Simulate a network request to send a connection request
+      // You can replace this with actual API calls in your app
     setTimeout(() => {
       setConnectionRequests((prevRequests) => [...prevRequests, profileId]);
     }, 1000);
