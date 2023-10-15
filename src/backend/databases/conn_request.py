@@ -9,6 +9,8 @@ key = os.environ.get("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
 def create_request(source, dest):
+  if source == dest:
+    return "Cannot connect to yourself"
   if not get_user(source) or not get_user(dest):
     return "One or both of the users doesn't exist"
   if check_connection(source, dest):
