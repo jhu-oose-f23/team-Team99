@@ -4,6 +4,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../constants/themes";
 import { MaterialIcons } from "@expo/vector-icons";
 
+
+
 const Settings = ({ navigation }) => {
   const navigateToEditProfile = () => {
     navigation.navigate("EditProfile");
@@ -68,8 +70,6 @@ const Settings = ({ navigation }) => {
     },
   ];
 
-
-
   const actionsItems = [
     {
       icon: "outlined-flag",
@@ -121,7 +121,7 @@ const Settings = ({ navigation }) => {
           <View
             style={{
               borderRadius: 12,
-              backgrounColor: COLORS.gray,
+              backgroundColor: COLORS.gray,
             }}
           >
             {accountItems.map((item, index) => (
@@ -141,7 +141,7 @@ const Settings = ({ navigation }) => {
           <View
             style={{
               borderRadius: 12,
-              backgrounColor: COLORS.gray,
+              backgroundColor: COLORS.gray,
             }}
           >
             {supportItems.map((item, index) => (
@@ -161,7 +161,7 @@ const Settings = ({ navigation }) => {
           <View
             style={{
               borderRadius: 12,
-              backgrounColor: COLORS.gray,
+              backgroundColor: COLORS.gray,
             }}
           >
             {actionsItems.map((item, index) => (
