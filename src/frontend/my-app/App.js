@@ -6,6 +6,8 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WorkoutDisplayScreen from './screens/WorkoutDisplay';
 import CreateWorkout from "./CreateWorkout";
+import BottomTabNavigator from './BottomTabNavigator';
+
 
 function HomeScreen({ navigation }) {
   return (
@@ -28,11 +30,12 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      {/* <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="WorkoutDisplay" component={WorkoutDisplayScreen} />
         <Stack.Screen name="CreateWorkout" component={CreateWorkout} />
-      </Stack.Navigator>
+      </Stack.Navigator> */}
+      <BottomTabNavigator />
     </NavigationContainer>
   );
 }
