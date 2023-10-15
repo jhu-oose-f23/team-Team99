@@ -10,8 +10,9 @@ def get_all_workouts():
   data = supabase.table("Workouts").select("*").execute()
   return data.data
 
-def add_workout(workout_name, exercises):
+def add_workout(workout_name, exercises, user):
   workout = {
+    "user": user,
     "workout_name": workout_name,
     "exercises": exercises, 
     "time": "now", 
@@ -22,4 +23,8 @@ def add_workout(workout_name, exercises):
 
 def delete_all_workouts():
   data = supabase.table("Workouts").delete().neq("id",0).execute()
+  return data.data
+
+def get_user_workouts(user):
+  data = supabase.table("Workouts").select("*").eq("user", user).execute()
   return data.data
