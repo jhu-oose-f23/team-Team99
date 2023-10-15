@@ -38,7 +38,6 @@ class ConnectionRequest(MethodView):
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
   
-
 @blp.route("/connection/request/<string:dest>")
 class ConnectionRequest(MethodView):
   @blp.response(200, ConnectionRequestSchema)

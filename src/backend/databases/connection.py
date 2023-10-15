@@ -7,20 +7,6 @@ key = os.environ.get("SUPABASE_KEY")
 
 supabase: Client = create_client(url, key)
 
-def connect(user1, user2):
-  connection = {
-    "user1": user1,
-    "user2": user2,
-  }
-  if user1 == user2:
-    return "Cannot connect to yourself"
-  if get_user(user1) is None or get_user(user2) is None:
-    return "One or both of the users doesn't exist"
-  if check_connection(user1, user2):
-    return "Already connected"
-  data = supabase.table("Connections").insert(connection).execute()
-  return data.data[0]
-
 def check_connection(user1, user2):
   if not get_user(user1) or not get_user(user2):
     return "One or both of the users doesn't exist"
