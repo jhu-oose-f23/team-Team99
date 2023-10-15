@@ -82,34 +82,56 @@ const ExpandableSection = ({ title, content }) => {
   );
 };
 
-const Profile = ({ navigation }) => {
-  const [data, setData] = useState([]);
+const Profile = ({ navigation, username }) => {
+  console.log(username);
+  const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState({});
+
+  const fetchWorkouts = async () => {
+    const apiUrl = "https://gymconnectbackend.onrender.com/workouts/k1";
+
+    try {
+      const response = await fetch(apiUrl);
+      const responseData = await response.json();
+      setWorkouts(responseData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchUser = async (username) => {
+    const apiUrl = `https://gymconnectbackend.onrender.com/user/${username}`;
+
+    try {
+      const response = await fetch(apiUrl);
+      const responseData = await response.json();
+      setUser(responseData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const apiUrl = "https://gymconnectbackend.onrender.com/workouts";
-
-    // Make a GET request to the URL
-    fetch(apiUrl)
-      .then((response) => response.json())
-      .then((responseData) => {
-        setData(responseData);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
+    fetchWorkouts();
+    fetchUser(username);
+    console.log(user);
   }, []);
 
   return (
     <View>
+      {/* <Text style={{ textAlign: "right" }}>{fullname}</Text> */}
+      <Text style={{ textAlign: "right" }}>{username}</Text>
       <Text>My Workouts</Text>
       {loading ? (
         <Text>Loading...</Text>
       ) : (
         <ScrollView>
-          {data.map((workout, index) => (
+          {workouts.map((workout, index) => (
             <ExpandableSection
               key={index}
               title={workout.workout_name}

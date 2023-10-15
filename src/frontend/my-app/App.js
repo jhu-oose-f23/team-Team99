@@ -1,5 +1,3 @@
-// In App.js in a new project
-
 import * as React from "react";
 import { Button, View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
@@ -8,13 +6,15 @@ import Profile from "./screens/Profile";
 import CreateWorkout from "./CreateWorkout";
 import BottomTabNavigator from "./BottomTabNavigator";
 
+const username = "k1";
+
 function HomeScreen({ navigation }) {
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
       <Text>Home Screen</Text>
       <Button
         title="Go to Profile"
-        onPress={() => navigation.navigate("Profile")}
+        onPress={() => navigation.navigate("Profile", { username: "blah" })}
       />
       <Button
         title="Create workout"
