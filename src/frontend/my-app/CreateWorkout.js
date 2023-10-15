@@ -7,13 +7,15 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { List, Colors } from "react-native-paper"; // You can use other styling libraries as well
+import { List, Colors } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
 const CreateWorkout = ({ username }) => {
   const [workoutName, setWorkoutName] = useState("");
   const [exerciseRows, setExerciseRows] = useState([]);
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
+  const navigation = useNavigation();
 
   useEffect(() => {
     // Initialize with one empty exercise row when the component loads
@@ -42,6 +44,7 @@ const CreateWorkout = ({ username }) => {
   };
 
   const saveWorkout = async () => {
+    console.log("hellos");
     // Input validation
     let isValid = true;
 
@@ -91,13 +94,18 @@ const CreateWorkout = ({ username }) => {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Set the content type to JSON
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(workout), // Convert data to JSON format
+        body: JSON.stringify(workout),
       }
     );
     const responseData = await response.json();
     console.log(responseData);
+    // Reset all fields to blank
+    setWorkoutName("");
+    setExerciseRows([]);
+    // // Navigate to the Profile screen
+    // navigation.navigate("Profile");
   };
 
   return (

@@ -96,15 +96,17 @@ const Profile = ({ navigation, username }) => {
       const responseData = await response.json();
       // Add a unique id to each workout and each exercise so React doesn't complain when rendering a list of workouts
       responseData.map((workout, workoutId) => {
-        workout.exercises.map((exercise, exerciseId) => ({
+        workout.exercises = workout.exercises.map((exercise, exerciseId) => ({
           ...exercise,
           id: exerciseId,
         }));
+        console.log(workout.exercises);
         return {
           ...workout,
           id: workoutId,
         };
       });
+      console.log(responseData);
       setWorkouts(responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -149,7 +151,6 @@ const Profile = ({ navigation, username }) => {
     fetchWorkouts(username);
     fetchUser(username);
     fetchConnections(username);
-    console.log(user);
   }, []);
 
   return (
