@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button, FlatList, TouchableOpacity} from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { List, Colors } from "react-native-paper"; // You can use other styling libraries as well
 
-const CreateWorkout = () => {
+const CreateWorkout = ({ username }) => {
   const [workoutName, setWorkoutName] = useState("");
   const [exerciseRows, setExerciseRows] = useState([]);
   const [workoutNameError, setWorkoutNameError] = useState("");
@@ -53,7 +60,11 @@ const CreateWorkout = () => {
     } else {
       setExerciseError("");
       for (const exercise of exerciseRows) {
-        if (!exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim()) {
+        if (
+          !exercise.name.trim() ||
+          !exercise.sets.trim() ||
+          !exercise.reps.trim()
+        ) {
           setExerciseError("All exercise fields must be filled");
           isValid = false;
           break; // Exit the loop after the first error
@@ -70,9 +81,11 @@ const CreateWorkout = () => {
 
     // Make POST request
     const workout = {
+      user: username,
       workout_name: workoutName,
       exercises: exerciseRows,
     };
+    console.log(workout);
     const response = await fetch(
       "https://gymconnectbackend.onrender.com/workouts",
       {
@@ -95,7 +108,9 @@ const CreateWorkout = () => {
         value={workoutName}
         onChangeText={(text) => setWorkoutName(text)}
       />
-      {workoutNameError && <Text style={{ color: "red" }}>{workoutNameError}</Text>}
+      {workoutNameError && (
+        <Text style={{ color: "red" }}>{workoutNameError}</Text>
+      )}
       {exerciseError && <Text style={{ color: "red" }}>{exerciseError}</Text>}
 
       <Button title="Add Exercise Row" onPress={addExerciseRow} />
@@ -126,7 +141,9 @@ const CreateWorkout = () => {
               keyboardType="numeric"
             />
             <TouchableOpacity onPress={() => removeExerciseRow(index)}>
-              <Text style={{ color: "red", fontSize: 20, marginLeft: 10 }}>-</Text>
+              <Text style={{ color: "red", fontSize: 20, marginLeft: 10 }}>
+                -
+              </Text>
             </TouchableOpacity>
           </View>
         )}

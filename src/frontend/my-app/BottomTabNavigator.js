@@ -5,13 +5,15 @@ import CreateScreen from "./CreateWorkout";
 import ProfileScreen from "./screens/Profile";
 
 const Tab = createBottomTabNavigator();
-const username = "k1";
 
-const BottomTabNavigator = () => {
+const BottomTabNavigator = ({ username }) => {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Feed" component={FeedScreen} />
-      <Tab.Screen name="Create" component={CreateScreen} />
+      <Tab.Screen
+        name="Create"
+        children={() => <CreateScreen username={username} />}
+      />
       <Tab.Screen
         name="Profile"
         children={() => <ProfileScreen username={username} />}

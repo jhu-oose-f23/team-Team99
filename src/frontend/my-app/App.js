@@ -5,6 +5,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Profile from "./screens/Profile";
 import BottomTabNavigator from "./BottomTabNavigator";
 
+// Test username
 const username = "k1";
 
 const Stack = createNativeStackNavigator();
@@ -12,7 +13,7 @@ const Stack = createNativeStackNavigator();
 function App() {
   return (
     <NavigationContainer>
-      <BottomTabNavigator />
+      <BottomTabNavigator username={username} />
     </NavigationContainer>
   );
 }

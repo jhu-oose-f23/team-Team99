@@ -87,10 +87,10 @@ const Profile = ({ navigation, username }) => {
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
+  const [connections, setConnections] = useState([]);
 
-  const fetchWorkouts = async () => {
-    const apiUrl = "https://gymconnectbackend.onrender.com/workouts/k1";
-
+  const fetchWorkouts = async (username) => {
+    const apiUrl = `https://gymconnectbackend.onrender.com/workouts/${username}`;
     try {
       const response = await fetch(apiUrl);
       const responseData = await response.json();
@@ -115,11 +115,24 @@ const Profile = ({ navigation, username }) => {
 
   const fetchUser = async (username) => {
     const apiUrl = `https://gymconnectbackend.onrender.com/user/${username}`;
-
     try {
       const response = await fetch(apiUrl);
       const responseData = await response.json();
       setUser(responseData);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchConnections = async (username) => {
+    const apiUrl = `https://gymconnectbackend.onrender.com/connection/${username}`;
+
+    try {
+      const response = await fetch(apiUrl);
+      const responseData = await response.json();
+      setConnections(responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -133,10 +146,10 @@ const Profile = ({ navigation, username }) => {
   };
 
   useEffect(() => {
-    fetchWorkouts();
+    fetchWorkouts(username);
     fetchUser(username);
+    fetchConnections(username);
     console.log(user);
-    console.log(workouts);
   }, []);
 
   return (
@@ -147,10 +160,16 @@ const Profile = ({ navigation, username }) => {
           size={30}
           color="black"
           backgroundColor="transparent"
+          style={{ textAlign: "right" }}
         />
       </TouchableOpacity>
-      {/* <Text style={{ textAlign: "right" }}>{fullname}</Text> */}
+      <Text style={{ textAlign: "right" }}>
+        {user.first_name} {user.last_name}
+      </Text>
       <Text style={{ textAlign: "right" }}>{username}</Text>
+      <Text style={{ textAlign: "right" }}>
+        {connections.length} Connections
+      </Text>
       <Text>Workouts</Text>
       {loading ? (
         <Text>Loading...</Text>
