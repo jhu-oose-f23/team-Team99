@@ -6,6 +6,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import WorkoutDisplayScreen from './screens/WorkoutDisplay';
 import CreateWorkout from "./CreateWorkout";
+import Settings from "./screens/SettingsPage";
 
 function HomeScreen({ navigation }) {
   return (
@@ -18,6 +19,11 @@ function HomeScreen({ navigation }) {
       <Button
         title="Create workout"
         onPress={() => navigation.navigate("CreateWorkout")}
+      />
+
+      <Button
+        title="Settings"
+        onPress={()=>navigation.navigate("Settings")}
       />
     </View>
   );
@@ -32,6 +38,7 @@ function App() {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="WorkoutDisplay" component={WorkoutDisplayScreen} />
         <Stack.Screen name="CreateWorkout" component={CreateWorkout} />
+        <Stack.Screen name="Settings" component={Settings}/>
       </Stack.Navigator>
     </NavigationContainer>
   );
