@@ -83,7 +83,6 @@ const ExpandableSection = ({ title, content }) => {
 };
 
 const Profile = ({ navigation, username }) => {
-  console.log(username);
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
@@ -94,6 +93,17 @@ const Profile = ({ navigation, username }) => {
     try {
       const response = await fetch(apiUrl);
       const responseData = await response.json();
+      // Add a unique id to each workout and each exercise so React doesn't complain when rendering a list of workouts
+      responseData.map((workout, workoutId) => {
+        workout.exercises.map((exercise, exerciseId) => ({
+          ...exercise,
+          id: exerciseId,
+        }));
+        return {
+          ...workout,
+          id: workoutId,
+        };
+      });
       setWorkouts(responseData);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -120,6 +130,7 @@ const Profile = ({ navigation, username }) => {
     fetchWorkouts();
     fetchUser(username);
     console.log(user);
+    console.log(workouts);
   }, []);
 
   return (
@@ -133,17 +144,13 @@ const Profile = ({ navigation, username }) => {
         <ScrollView>
           {workouts.map((workout, index) => (
             <ExpandableSection
-              key={index}
+              key={workout.id}
               title={workout.workout_name}
               content={workout.exercises}
             />
           ))}
         </ScrollView>
       )}
-      <Button
-        title="Go back to Home"
-        onPress={() => navigation.navigate("Home")}
-      />
     </View>
   );
 };
