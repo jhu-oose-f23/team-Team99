@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, Button } from 'react-native';
+import React, { useEffect, useState } from "react";
+import { View, Text, Button } from "react-native";
 import { TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 
 const styles = StyleSheet.create({
@@ -24,29 +24,29 @@ const styles = StyleSheet.create({
     // Style for the table container
   },
   tableHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
-    borderBottomColor: 'lightgray',
+    borderBottomColor: "lightgray",
   },
   tableHeaderCell: {
     flex: 1,
-    textAlign: 'center',
-    fontWeight: 'bold',
+    textAlign: "center",
+    fontWeight: "bold",
   },
   row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
     paddingVertical: 5,
     paddingHorizontal: 10,
     borderBottomWidth: 1,
-    borderBottomColor: 'lightgray',
+    borderBottomColor: "lightgray",
   },
   cell: {
     flex: 1,
-    textAlign: 'center',
+    textAlign: "center",
   },
 });
 
@@ -69,27 +69,25 @@ const ExpandableSection = ({ title, content }) => {
             <Text style={styles.tableHeaderCell}>Sets</Text>
             <Text style={styles.tableHeaderCell}>Reps</Text>
           </View>
-          {
-            content.map((item) => (
-              <View style={styles.row} key={item.id}>
-                <Text style={styles.cell}>{item.name}</Text>
-                <Text style={styles.cell}>{item.sets}</Text>
-                <Text style={styles.cell}>{item.reps}</Text>
-              </View>
-            ))
-          }
+          {content.map((item) => (
+            <View style={styles.row} key={item.id}>
+              <Text style={styles.cell}>{item.name}</Text>
+              <Text style={styles.cell}>{item.sets}</Text>
+              <Text style={styles.cell}>{item.reps}</Text>
+            </View>
+          ))}
         </View>
       )}
     </View>
   );
 };
 
-const WorkoutDisplay = ({ navigation }) => {
+const Profile = ({ navigation }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const apiUrl = 'https://gymconnectbackend.onrender.com/workouts';
+    const apiUrl = "https://gymconnectbackend.onrender.com/workouts";
 
     // Make a GET request to the URL
     fetch(apiUrl)
@@ -99,11 +97,11 @@ const WorkoutDisplay = ({ navigation }) => {
         setLoading(false);
       })
       .catch((error) => {
-        console.error('Error fetching data:', error);
+        console.error("Error fetching data:", error);
         setLoading(false);
       });
   }, []);
-  
+
   return (
     <View>
       <Text>My Workouts</Text>
@@ -122,10 +120,10 @@ const WorkoutDisplay = ({ navigation }) => {
       )}
       <Button
         title="Go back to Home"
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => navigation.navigate("Home")}
       />
     </View>
   );
 };
 
-export default WorkoutDisplay;
+export default Profile;

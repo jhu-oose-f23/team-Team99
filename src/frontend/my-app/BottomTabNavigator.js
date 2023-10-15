@@ -1,8 +1,8 @@
-import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import FeedScreen from './screens/FeedScreen'; 
-import CreateScreen from './CreateWorkout';
-import ProfileScreen from './screens/WorkoutDisplay';
+import React from "react";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import FeedScreen from "./screens/FeedScreen";
+import CreateScreen from "./CreateWorkout";
+import ProfileScreen from "./screens/Profile";
 
 const Tab = createBottomTabNavigator();
 
