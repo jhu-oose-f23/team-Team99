@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button } from "react-native";
 import { TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import { EvilIcons } from "@expo/vector-icons";
 
 const styles = StyleSheet.create({
   container: {
@@ -126,6 +127,11 @@ const Profile = ({ navigation, username }) => {
     }
   };
 
+  const navigateToSettings = () => {
+    console.log("here");
+    // navigation.navigate("Settings");
+  };
+
   useEffect(() => {
     fetchWorkouts();
     fetchUser(username);
@@ -135,9 +141,17 @@ const Profile = ({ navigation, username }) => {
 
   return (
     <View>
+      <TouchableOpacity onPress={navigateToSettings}>
+        <EvilIcons
+          name="gear"
+          size={30}
+          color="black"
+          backgroundColor="transparent"
+        />
+      </TouchableOpacity>
       {/* <Text style={{ textAlign: "right" }}>{fullname}</Text> */}
       <Text style={{ textAlign: "right" }}>{username}</Text>
-      <Text>My Workouts</Text>
+      <Text>Workouts</Text>
       {loading ? (
         <Text>Loading...</Text>
       ) : (
