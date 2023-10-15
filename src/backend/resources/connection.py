@@ -1,8 +1,8 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
-from databases.connection import connect, check_connection, get_connections, delete_connection, create_request
-from schemas import ConnectionSchema, ConnectionRequestSchema
+from databases.connection import check_connection, get_connections, delete_connection
+from schemas import ConnectionSchema
 
 blp = Blueprint("connections", __name__, description="Operations on connections")
 
@@ -39,16 +39,6 @@ class Connection(MethodView):
 class Connection(MethodView):
   def get(self, user):
     result = get_connections(user)
-    response = make_response(result)
-    response.headers['Access-Control-Allow-Origin'] = '*'
-    return response
-  
-@blp.route("/connection/request")
-class ConnectionRequestSchema(MethodView):
-  @blp.arguments(ConnectionRequestSchema)
-  @blp.response(201, ConnectionRequestSchema)
-  def post(self, connection):
-    result = create_request(connection["source"], connection["dest"])
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response

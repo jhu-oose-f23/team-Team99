@@ -43,23 +43,3 @@ def delete_connection(user1, user2):
   if not data.data:
     data = supabase.table("Connections").delete().eq("user1", user2).eq("user2", user1).execute()
   return data.data[0]
-
-def create_request(source, dest):
-  if not get_user(source) or not get_user(dest):
-    return "One or both of the users doesn't exist"
-  if check_connection(source, dest):
-    return "Already connected"
-  req = {
-    "source": source,
-    "dest": dest
-  }
-  if not check_requests(source, dest):
-    return supabase.table("Connection_Requests").insert(req).execute().data[0]
-  else:
-    return "Request already exists"
-
-def check_requests(source,dest):
-  if not get_user(source) or not get_user(dest):
-    return "One or both of the users doesn't exist"
-  data = supabase.table("Connection_Requests").delete().eq("source", source).eq("dest", dest).execute()
-  return True if data.data else False
