@@ -41,7 +41,8 @@ def get_requests(dest):
 def accept_connection(source, dest):
   if not check_requests(source, dest):
     return "Request does not exist"
-  supabase.table("Connection_Requests").delete().eq("source", source).eq("dest", dest).execute()
+  if not supabase.table("Connection_Requests").delete().eq("source", source).eq("dest", dest).execute().data:
+    return "Request does not exist"
   new_conn = {
     "user1": source,
     "user2": dest
