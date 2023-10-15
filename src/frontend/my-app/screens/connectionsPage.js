@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, ScrollView, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import Profile from "../assets/profile.png"
 import { Button } from 'react-native-paper';
 
 const Connections = () => {
+
+  const [isPressed, setIsPressed] = useState(false);
 
 
   const navigateToProfile = () => {
@@ -11,7 +13,9 @@ const Connections = () => {
   }
 
   const disconnect = () => {
-    console.log("Make disconnection")
+    if (isPressed) setIsPressed(false)
+    else setIsPressed(true);
+    console.log("Make disconnection");
   }
 
   return (
@@ -34,7 +38,7 @@ const Connections = () => {
 
           <View style={styles.buttonStyle}>
             <Button
-              style={styles.button}
+              style={[styles.button, isPressed ? styles.buttonPressed: null]}
               onPress={disconnect}
               
             >Connected</Button>
@@ -83,9 +87,13 @@ const styles = StyleSheet.create({
 
   button: {
     borderRadius: 5,
-    backgroundColor: "gray",
+    backgroundColor: "skyblue",
     alignSelf: 'flex-start'
   },
+
+  buttonPressed: {
+    backgroundColor: "gray"
+  }
 });
 
 export default Connections;
@@ -106,6 +114,5 @@ const users = [
     username: 'janesmith',
     profilePicture: Profile,
   },
-  // Add more users here...
 ];
 
