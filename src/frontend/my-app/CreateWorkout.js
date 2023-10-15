@@ -104,8 +104,7 @@ const CreateWorkout = ({ username }) => {
     // Reset all fields to blank
     setWorkoutName("");
     setExerciseRows([]);
-    // // Navigate to the Profile screen
-    // navigation.navigate("Profile");
+    navigation.navigate("Profile");
   };
 
   return (
