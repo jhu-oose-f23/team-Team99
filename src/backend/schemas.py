@@ -30,3 +30,8 @@ class ConnectionSchema(Schema):
     user1 = fields.Str(required=True)
     user2 = fields.Str(required=True)
     connected_on = fields.Str(dump_only=True)
+
+class ConnectionRequestSchema(Schema):
+    source = fields.Str(required=True)
+    dest = fields.Str(required=True)
+    requested_on = fields.Str(dump_only=True)
