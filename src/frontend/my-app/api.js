@@ -34,7 +34,6 @@ export const fetchUser = async (username) => {
 
 export const fetchConnections = async (username) => {
   const apiUrl = `https://gymconnectbackend.onrender.com/connection/${username}`;
-
   try {
     const response = await fetch(apiUrl);
     const responseData = await response.json();

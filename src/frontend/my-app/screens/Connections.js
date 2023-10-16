@@ -9,9 +9,14 @@ import {
 } from "react-native";
 import Profile from "../assets/profile.png";
 import { Button } from "react-native-paper";
+import { useFocusEffect } from "@react-navigation/native";
+import { fetchConnections, fetchUser } from "../api";
 
-const Connections = () => {
+const Connections = ({ username }) => {
   const [isPressed, setIsPressed] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [connections, setConnections] = useState([]);
+  const [connectedUsers, setConnectedUsers] = useState([]);
 
   const navigateToProfile = () => {
     console.log("navigate to the clicked user's profile");
@@ -23,13 +28,36 @@ const Connections = () => {
     console.log("Make disconnection");
   };
 
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchConnectionsData = async () => {
+        // TODO: update backend so GET connections returns an array of user objects instead of an array of usernames
+        const connectionsResponse = await fetchConnections(username);
+        setConnections(connectionsResponse);
+        setConnectedUsers([]);
+        await Promise.all(
+          connectionsResponse.map(async (connectionUsername) => {
+            const userResponse = await fetchUser(connectionUsername);
+            setConnectedUsers((connectedUsers) => [
+              ...connectedUsers,
+              userResponse,
+            ]);
+          })
+        );
+        console.log(connectedUsers);
+
+        setLoading(false);
+      };
+      fetchConnectionsData();
+    }, [])
+  );
   return (
     <ScrollView style={styles.container}>
-      {users.map((user) => (
+      {connectedUsers.map((user, index) => (
         <TouchableOpacity
           onPress={navigateToProfile}
           style={styles.userContainer}
-          key={user.id}
+          key={index}
         >
           <Image
             source={require("../assets/profile.png")}
@@ -37,7 +65,7 @@ const Connections = () => {
           />
           <View style={styles.textStyle}>
             <Text style={styles.username}>{"@" + user.username}</Text>
-            <Text>{`${user.firstName} ${user.lastName}`}</Text>
+            <Text>{`${user.first_name} ${user.last_name}`}</Text>
           </View>
 
           <View style={styles.buttonStyle}>

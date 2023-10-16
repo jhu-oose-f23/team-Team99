@@ -21,12 +21,12 @@ const BottomTabNavigator = ({ username }) => {
         children={() => <Profile username={username} />}
       />
       <Tab.Screen
-        name="Settings"
-        children={() => <Settings username={username} />}
-      />
-      <Tab.Screen
         name="Connections"
         children={() => <Connections username={username} />}
+      />
+      <Tab.Screen
+        name="Settings"
+        children={() => <Settings username={username} />}
       />
     </Tab.Navigator>
   );

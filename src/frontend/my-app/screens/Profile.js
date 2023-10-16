@@ -116,15 +116,6 @@ const Profile = ({ navigation, username }) => {
 
   return (
     <View>
-      <TouchableOpacity onPress={navigateToSettings}>
-        <EvilIcons
-          name="gear"
-          size={30}
-          color="black"
-          backgroundColor="transparent"
-          style={{ textAlign: "right" }}
-        />
-      </TouchableOpacity>
       <Text style={{ textAlign: "right" }}>
         {user.first_name} {user.last_name}
       </Text>
