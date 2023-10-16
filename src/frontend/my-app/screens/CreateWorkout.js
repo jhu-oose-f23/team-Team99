@@ -6,9 +6,41 @@ import {
   Button,
   FlatList,
   TouchableOpacity,
+  StyleSheet,
 } from "react-native";
 import { List, Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#f5f5f5",
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 10,
+  },
+  row: {
+    flexDirection: "row",
+    marginBottom: 15,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  input: {
+    margin: 0,
+    marginBottom: 5,
+    backgroundColor: "#fff",
+    height: 40,
+  },
+  removeIcon: {
+    color: "red",
+    fontSize: 24,
+    marginLeft: 10,
+  },
+});
 
 const CreateWorkout = ({ username }) => {
   const [workoutName, setWorkoutName] = useState("");
@@ -105,49 +137,51 @@ const CreateWorkout = ({ username }) => {
   };
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <Text>Workout Name:</Text>
+    <View style={styles.container}>
       <TextInput
-        placeholder="Enter workout name"
+        style={styles.input}
+        mode="outlined"
+        placeholder="Workout name"
         value={workoutName}
         onChangeText={(text) => setWorkoutName(text)}
       />
       {workoutNameError && (
-        <Text style={{ color: "red" }}>{workoutNameError}</Text>
+        <Text style={styles.errorText}>{workoutNameError}</Text>
       )}
-      {exerciseError && <Text style={{ color: "red" }}>{exerciseError}</Text>}
+      {exerciseError && <Text style={styles.errorText}>{exerciseError}</Text>}
 
-      <Button title="Add Exercise Row" onPress={addExerciseRow} />
+      <Button title="Add Exercise" onPress={addExerciseRow} />
 
       <FlatList
         data={exerciseRows}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
-          <View style={{ flexDirection: "row", marginBottom: 10 }}>
+          <View style={styles.row}>
             <TextInput
-              style={{ flex: 2, marginRight: 10 }}
+              style={[styles.input, { flex: 2, marginRight: 10 }]}
+              mode="outlined"
               placeholder="Exercise Name"
               value={item.name}
               onChangeText={(text) => updateExercise(index, "name", text)}
             />
             <TextInput
-              style={{ flex: 1, marginRight: 10 }}
+              style={[styles.input, { flex: 1, marginRight: 10 }]}
+              mode="outlined"
               placeholder="Sets"
               value={item.sets}
               onChangeText={(text) => updateExercise(index, "sets", text)}
               keyboardType="numeric"
             />
             <TextInput
-              style={{ flex: 1 }}
+              style={[styles.input, { flex: 1 }]}
+              mode="outlined"
               placeholder="Reps"
               value={item.reps}
               onChangeText={(text) => updateExercise(index, "reps", text)}
               keyboardType="numeric"
             />
             <TouchableOpacity onPress={() => removeExerciseRow(index)}>
-              <Text style={{ color: "red", fontSize: 20, marginLeft: 10 }}>
-                -
-              </Text>
+              <Text style={styles.removeIcon}>×</Text>
             </TouchableOpacity>
           </View>
         )}
