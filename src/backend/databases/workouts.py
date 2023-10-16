@@ -25,6 +25,10 @@ def delete_all_workouts():
   data = supabase.table("Workouts").delete().neq("id",0).execute()
   return data.data
 
+def delete_workout(id):
+  data = supabase.table("Workouts").delete().eq("id", id).execute()
+  return data.data[0] if data.data else None
+
 def get_user_workouts(user):
   data = supabase.table("Workouts").select("*").eq("user", user).execute()
   return data.data

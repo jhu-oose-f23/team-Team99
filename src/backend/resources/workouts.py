@@ -1,7 +1,7 @@
 from flask.views import MethodView
-from flask_smorest import Blueprint
+from flask_smorest import Blueprint, abort
 from flask import make_response
-from databases.workouts import get_all_workouts, add_workout, delete_all_workouts, get_user_workouts
+from databases.workouts import get_all_workouts, add_workout, delete_all_workouts, get_user_workouts, delete_workout
 from schemas import WorkoutSchema
 
 blp = Blueprint("workouts", __name__, description="Operations on workouts")
@@ -38,6 +38,17 @@ class Workout(MethodView):
   @blp.response(200, WorkoutSchema(many=True))
   def get(self, user):
     data = get_user_workouts(user)
+    response = make_response(data)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+  
+@blp.route("/workouts/<int:id>")
+class Workout(MethodView):
+  @blp.response(200, WorkoutSchema)
+  def delete(self, id):
+    data = delete_workout(id)
+    if not data:
+      abort(400, message="Workout not found")
     response = make_response(data)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
