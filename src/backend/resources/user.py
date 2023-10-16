@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
-from databases.user import add_user, get_all_users, get_user, login_user
+from databases.user import add_user, get_all_users, get_user, login_user, get_recommendations
 from schemas import UserSchema, LoginSchema
 
 blp = Blueprint("users", __name__, description="Operations on users")
@@ -44,6 +44,15 @@ class User(MethodView):
     result = login_user(data["username"], data["password"])
     if not result:
       abort(400, message="Invalid username or password")
+    response = make_response(result)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+  
+@blp.route("/user/recommendations/<string:username>")
+class User(MethodView):
+  @blp.response(200)
+  def get(self, username):
+    result = get_recommendations(username)
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
