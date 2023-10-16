@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button } from "react-native";
 import { TouchableOpacity, ScrollView, StyleSheet } from "react-native";
-import { EvilIcons } from "@expo/vector-icons";
+import { EvilIcons, FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
-import { fetchWorkouts, fetchUser, fetchConnections } from "../api";
+import {
+  fetchWorkouts,
+  fetchUser,
+  fetchConnections,
+  deleteWorkout,
+} from "../api";
 
 const styles = StyleSheet.create({
   container: {
@@ -77,9 +82,9 @@ const styles = StyleSheet.create({
   },
 });
 
+// content is a Workout object
 const ExpandableSection = ({ title, content }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
   return (
     <View style={styles.section}>
       <TouchableOpacity
@@ -100,13 +105,19 @@ const ExpandableSection = ({ title, content }) => {
             <Text style={styles.tableHeaderCell}>Sets</Text>
             <Text style={styles.tableHeaderCell}>Reps</Text>
           </View>
-          {content.map((item) => (
+          {content.exercises.map((item) => (
             <View style={styles.row} key={item.id}>
               <Text style={styles.cell}>{item.name}</Text>
               <Text style={styles.cell}>{item.sets}</Text>
               <Text style={styles.cell}>{item.reps}</Text>
             </View>
           ))}
+          <TouchableOpacity
+            onPress={() => deleteWorkout(content.id)}
+            style={{ alignSelf: "flex-end", marginRight: 10 }}
+          >
+            <FontAwesome name="trash-o" size={30} color="black" />
+          </TouchableOpacity>
         </View>
       )}
     </View>
@@ -140,6 +151,7 @@ const Profile = ({ navigation, route }) => {
     React.useCallback(() => {
       const fetchProfileData = async () => {
         const workoutsResponse = await fetchWorkouts(username);
+        console.log(workoutsResponse);
         const userResponse = await fetchUser(username);
         const connectionsResponse = await fetchConnections(username);
         setProfileData({
@@ -152,8 +164,6 @@ const Profile = ({ navigation, route }) => {
       fetchProfileData();
     }, [username])
   );
-
-  console.log("hi");
 
   return (
     <View style={styles.container}>
@@ -175,7 +185,7 @@ const Profile = ({ navigation, route }) => {
             <ExpandableSection
               key={workout.id}
               title={workout.workout_name}
-              content={workout.exercises}
+              content={workout}
             />
           ))}
         </ScrollView>

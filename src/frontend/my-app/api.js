@@ -1,41 +1,38 @@
+const BASE_URL = "https://gymconnectbackend.onrender.com";
+
+const fetchData = async (endpoint) => {
+  try {
+    const response = await fetch(`${BASE_URL}/${endpoint}`);
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching data:", error);
+  }
+};
+
 export const fetchWorkouts = async (username) => {
-  const apiUrl = `https://gymconnectbackend.onrender.com/workouts/${username}`;
-  try {
-    const response = await fetch(apiUrl);
-    const responseData = await response.json();
-    // Add a unique id to each workout and each exercise so React doesn't complain when rendering a list of workouts
-    responseData.map((workout, workoutId) => {
-      workout.exercises = workout.exercises.map((exercise, exerciseId) => ({
-        ...exercise,
-        id: exerciseId,
-      }));
-      return {
-        ...workout,
-        id: workoutId,
-      };
-    });
-    return responseData;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
+  const workouts = await fetchData(`workouts/${username}`);
+
+  return workouts.map((workout, workoutId) => ({
+    ...workout,
+    exercises: workout.exercises.map((exercise, exerciseId) => ({
+      ...exercise,
+      id: exerciseId,
+    })),
+  }));
 };
 
-export const fetchUser = async (username) => {
-  const apiUrl = `https://gymconnectbackend.onrender.com/user/${username}`;
-  try {
-    const response = await fetch(apiUrl);
-    const responseData = await response.json();
-    return responseData;
-  } catch (error) {
-    console.error("Error fetching data:", error);
-  }
-};
+export const fetchUser = (username) => fetchData(`user/${username}`);
 
-export const fetchConnections = async (username) => {
-  const apiUrl = `https://gymconnectbackend.onrender.com/connection/${username}`;
+export const fetchConnections = (username) =>
+  fetchData(`connection/${username}`);
+
+export const deleteWorkout = async (workoutId) => {
+  console.log(workoutId);
+  const apiUrl = `https://gymconnectbackend.onrender.com/workouts/${workoutId}`;
   try {
-    const response = await fetch(apiUrl);
+    const response = await fetch(apiUrl, { method: "DELETE" });
     const responseData = await response.json();
+    console.log(responseData);
     return responseData;
   } catch (error) {
     console.error("Error fetching data:", error);
