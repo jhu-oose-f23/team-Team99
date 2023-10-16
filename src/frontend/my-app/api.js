@@ -53,3 +53,41 @@ export const fetchUser = (username) => fetchData(`user/${username}`);
 
 export const fetchConnections = (username) =>
   fetchData(`connection/${username}`);
+
+export const fetchRecommendations = async (username) => {
+  try {
+    const recommendations = await fetchData(`user/recommendations/${username}`);
+    // recommendations.map((userData, index) => {
+    //   console.log(userData);
+    // });
+    return recommendations;
+  } catch (error) {
+    console.error("Error fetching recommendations:", error);
+  }
+};
+
+export const postConnectionRequest = async (source, dest) => {
+  const apiUrl = `https://gymconnectbackend.onrender.com/connection/request`;
+  const requestBody = {
+    source: source,
+    dest: dest,
+  };
+  try {
+    const response = await fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+    const responseData = await response.json();
+    if (response.status === 422) {
+      console.error("Validation Error:", responseData.errors);
+    } else {
+      console.log(responseData);
+      return responseData;
+    }
+  } catch (error) {
+    console.error("Error sending connection request:", error);
+  }
+};

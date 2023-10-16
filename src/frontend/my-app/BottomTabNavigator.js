@@ -16,6 +16,7 @@ const BottomTabNavigator = ({ username }) => {
       <Tab.Screen
         name="Feed"
         component={Feed}
+        initialParams={{ username: username }}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-home" color={color} size={size} />
