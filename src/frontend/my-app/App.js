@@ -4,10 +4,11 @@ import * as React from "react";
 import { Button, View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import WorkoutDisplayScreen from './screens/WorkoutDisplay';
+import WorkoutDisplayScreen from "./screens/WorkoutDisplay";
 import CreateWorkout from "./CreateWorkout";
-import BottomTabNavigator from './BottomTabNavigator';
-
+import Settings from "./screens/SettingsPage";
+import Connections from "./screens/connectionsPage";
+import BottomTabNavigator from "./BottomTabNavigator";
 
 function HomeScreen({ navigation }) {
   return (
@@ -20,6 +21,16 @@ function HomeScreen({ navigation }) {
       <Button
         title="Create workout"
         onPress={() => navigation.navigate("CreateWorkout")}
+      />
+
+      <Button
+        title="Settings"
+        onPress={() => navigation.navigate("Settings")}
+      />
+
+      <Button
+        title="Connections"
+        onPress={() => navigation.navigate("Connections")}
       />
     </View>
   );
