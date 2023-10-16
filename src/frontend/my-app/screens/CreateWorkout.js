@@ -55,6 +55,13 @@ const CreateWorkout = ({ username }) => {
   }, []);
 
   const addExerciseRow = () => {
+    if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
+      setExerciseError(
+        "Can't add another exercise unless all exercises are filled in"
+      );
+      return;
+    }
+    setExerciseError("");
     const newExercise = {
       name: "",
       sets: "",
@@ -75,6 +82,9 @@ const CreateWorkout = ({ username }) => {
     setExerciseRows(updatedExercise);
   };
 
+  const isEmptyExercise = (exercise) =>
+    !exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim();
+
   const saveWorkout = async () => {
     // Input validation
     let isValid = true;
@@ -94,11 +104,7 @@ const CreateWorkout = ({ username }) => {
     } else {
       setExerciseError("");
       for (const exercise of exerciseRows) {
-        if (
-          !exercise.name.trim() ||
-          !exercise.sets.trim() ||
-          !exercise.reps.trim()
-        ) {
+        if (isEmptyExercise(exercise)) {
           setExerciseError("All exercise fields must be filled");
           isValid = false;
           break; // Exit the loop after the first error
