@@ -114,10 +114,16 @@ const ExpandableSection = ({ title, content }) => {
 };
 
 const Profile = ({ navigation, route }) => {
-  const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState({});
-  const [connections, setConnections] = useState([]);
+  const [profileData, setProfileData] = useState({
+    workouts: [],
+    user: {
+      first_name: "",
+      last_name: "",
+    },
+    connections: 0,
+    loading: true,
+  });
 
   // If username != loggedinUser, this profile is for a different user than the logged in user
   const { username, loggedinUser } = route.params;
@@ -134,35 +140,38 @@ const Profile = ({ navigation, route }) => {
     React.useCallback(() => {
       const fetchProfileData = async () => {
         const workoutsResponse = await fetchWorkouts(username);
-        setWorkouts(workoutsResponse);
         const userResponse = await fetchUser(username);
-        setUser(userResponse);
         const connectionsResponse = await fetchConnections(username);
-        if (connectionsResponse) {
-          setConnections(connectionsResponse);
-        }
-        setLoading(false);
+        setProfileData({
+          workouts: workoutsResponse,
+          user: userResponse,
+          connections: connectionsResponse?.length || 0,
+          loading: false,
+        });
       };
       fetchProfileData();
     }, [username])
   );
+
   console.log("hi");
 
   return (
     <View style={styles.container}>
       <View style={styles.userInfo}>
         <Text style={[styles.userDetail, { fontSize: 20, fontWeight: "bold" }]}>
-          {user.first_name} {user.last_name}
+          {profileData.user.first_name} {profileData.user.last_name}
         </Text>
         <Text style={styles.userDetail}>@{username}</Text>
-        <Text style={styles.userDetail}>{connections.length} Connections</Text>
+        <Text style={styles.userDetail}>
+          {profileData.connections} Connections
+        </Text>
       </View>
       <Text style={styles.sectionTitle}>Workouts</Text>
-      {loading ? (
+      {profileData.loading ? (
         <Text style={styles.loadingText}>Loading...</Text>
       ) : (
         <ScrollView>
-          {workouts.map((workout, index) => (
+          {profileData.workouts.map((workout, index) => (
             <ExpandableSection
               key={workout.id}
               title={workout.workout_name}
