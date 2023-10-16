@@ -2,7 +2,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
 from databases.user import add_user, get_all_users, get_user, login_user, get_recommendations
-from schemas import UserSchema, LoginSchema
+from schemas import UserSchema, LoginSchema, UsernameSchema
 
 blp = Blueprint("users", __name__, description="Operations on users")
 
@@ -50,7 +50,7 @@ class User(MethodView):
   
 @blp.route("/user/recommendations/<string:username>")
 class User(MethodView):
-  @blp.response(200)
+  @blp.response(200, UsernameSchema(many=True))
   def get(self, username):
     result = get_recommendations(username)
     response = make_response(result)

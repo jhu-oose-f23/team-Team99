@@ -1,5 +1,6 @@
 import os
 from supabase import create_client, Client
+from datetime import date
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
@@ -29,10 +30,11 @@ def get_recommendations(username):
   users = [u["username"] for u in supabase.table("Users").select("username").neq("username", username).execute().data]
   result = []
   for u in users:
+    if check_connection(username, u):
+      continue
     sim_score = calculate_similarity(username, u)
-    if sim_score > 0:
-      result.append((u, sim_score))
-  return result
+    result.append({"username": u, "percent": sim_score/6.5 * 100 })
+  return sorted(result, reverse=True, key=lambda x: (x["percent"], x["username"]))[:5]
 
 def jaccard_similarity(x, y):
     intersection = len(set(x).intersection(y))
@@ -62,12 +64,29 @@ def calculate_similarity(username1, username2):
   goal = jaccard_similarity(user1["goals"], user2["goals"])
 
   # handle height
+  height = 0.5 if abs(user1["height"] - user2["height"]) <= 5 else 0
 
   # handle weight
+  weight = 0.5 if abs(user1["weight"] - user2["weight"]) <= 15 else 0
 
   # handle gender
   gen = 0.5 if user1["gender"] == user2["gender"] else 0
 
   # handle birthdate
+  dif = abs(calculate_age(user1["birthdate"]) - calculate_age(user2["birthdate"]))
+  bir = 1 if dif <= 1 else (0.5 if dif <= 2 else 0)
+  
+  return level + freq + pref_time + goal + height + weight + gen + bir # max-value is 6.5
+ 
+def calculate_age(birthDate):
+    today = date.today()
+    age = today.year - int(birthDate[:4]) - ((today.month, today.day) < (int(birthDate[5:7]), int(birthDate[8:])))
+    return age
 
-  return 0
+def check_connection(user1, user2):
+  if not get_user(user1) or not get_user(user2):
+    return "One or both of the users doesn't exist"
+  data = supabase.table("Connections").select("*").eq("user1", user1).eq("user2", user2).execute().data
+  if not data:
+    data = supabase.table("Connections").select("*").eq("user1", user2).eq("user2", user1).execute().data
+  return True if data else False
