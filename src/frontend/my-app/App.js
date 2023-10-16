@@ -3,7 +3,7 @@ import { Button, View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Profile from "./screens/Profile";
-import CreateWorkout from "./CreateWorkout";
+import CreateWorkout from "./screens/CreateWorkout";
 import BottomTabNavigator from "./BottomTabNavigator";
 import FeedScreen from "./screens/FeedScreen";
 

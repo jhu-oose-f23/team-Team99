@@ -1,32 +1,32 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import FeedScreen from "./screens/FeedScreen";
-import CreateScreen from "./CreateWorkout";
-import ProfileScreen from "./screens/Profile";
-import SettingsPage from "./screens/SettingsPage";
-import ConnectionsPage from "./screens/connectionsPage";
+import Feed from "./screens/FeedScreen";
+import CreateWorkout from "./screens/CreateWorkout";
+import Profile from "./screens/Profile";
+import Settings from "./screens/Settings";
+import Connections from "./screens/Connections";
 
 const Tab = createBottomTabNavigator();
 
 const BottomTabNavigator = ({ username }) => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Feed" component={FeedScreen} />
+      <Tab.Screen name="Feed" component={Feed} />
       <Tab.Screen
         name="Create"
-        children={() => <CreateScreen username={username} />}
+        children={() => <CreateWorkout username={username} />}
       />
       <Tab.Screen
         name="Profile"
-        children={() => <ProfileScreen username={username} />}
+        children={() => <Profile username={username} />}
       />
       <Tab.Screen
         name="Settings"
-        children={() => <SettingsPage username={username} />}
+        children={() => <Settings username={username} />}
       />
       <Tab.Screen
         name="Connections"
-        children={() => <ConnectionsPage username={username} />}
+        children={() => <Connections username={username} />}
       />
     </Tab.Navigator>
   );
