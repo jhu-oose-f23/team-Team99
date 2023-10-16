@@ -1,52 +1,26 @@
-// In App.js in a new project
-
 import * as React from "react";
 import { Button, View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import WorkoutDisplayScreen from "./screens/WorkoutDisplay";
-import CreateWorkout from "./CreateWorkout";
-import Settings from "./screens/SettingsPage";
-import Connections from "./screens/connectionsPage";
+import Profile from "./screens/Profile";
+import CreateWorkout from "./screens/CreateWorkout";
 import BottomTabNavigator from "./BottomTabNavigator";
+import FeedScreen from "./screens/FeedScreen";
 
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to WorkoutDisplay"
-        onPress={() => navigation.navigate("WorkoutDisplay")}
-      />
-      <Button
-        title="Create workout"
-        onPress={() => navigation.navigate("CreateWorkout")}
-      />
-
-      <Button
-        title="Settings"
-        onPress={() => navigation.navigate("Settings")}
-      />
-
-      <Button
-        title="Connections"
-        onPress={() => navigation.navigate("Connections")}
-      />
-    </View>
-  );
-}
+// Test username
+const username = "k1";
 
 const Stack = createNativeStackNavigator();
 
 function App() {
   return (
     <NavigationContainer>
+      <BottomTabNavigator username={username} />
       {/* <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="WorkoutDisplay" component={WorkoutDisplayScreen} />
+        <Stack.Screen name="Profile" component={Profile} />
         <Stack.Screen name="CreateWorkout" component={CreateWorkout} />
+        <Stack.Screen name="Feed" component={FeedScreen} />
       </Stack.Navigator> */}
-      <BottomTabNavigator />
     </NavigationContainer>
   );
 }

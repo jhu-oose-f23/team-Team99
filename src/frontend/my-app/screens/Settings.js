@@ -4,8 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../constants/themes";
 import { MaterialIcons } from "@expo/vector-icons";
 
-
-
 const Settings = ({ navigation }) => {
   const navigateToEditProfile = () => {
     navigation.navigate("EditProfile");
@@ -23,7 +21,6 @@ const Settings = ({ navigation }) => {
     console.log("Privacy function");
   };
 
-
   const navigateToSupport = () => {
     console.log("Support function");
   };
@@ -31,7 +28,6 @@ const Settings = ({ navigation }) => {
   const navigateToTermsAndPolicies = () => {
     console.log("Terms and Policies function");
   };
-
 
   const navigateToReportProblem = () => {
     console.log("Report a problem");
@@ -61,7 +57,6 @@ const Settings = ({ navigation }) => {
   ];
 
   const supportItems = [
-
     { icon: "help-outline", text: "Help & Support", action: navigateToSupport },
     {
       icon: "info-outline",
@@ -112,9 +107,7 @@ const Settings = ({ navigation }) => {
         backgroundColor: COLORS.white,
       }}
     >
-
       <ScrollView style={{ marginHorizontal: 12 }}>
-
         {/* Account Settings */}
         <View style={{ marginBottom: 12 }}>
           <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Account</Text>
@@ -151,8 +144,6 @@ const Settings = ({ navigation }) => {
             ))}
           </View>
         </View>
-
-
 
         {/* Actions Settings */}
 
