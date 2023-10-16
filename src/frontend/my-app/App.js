@@ -9,9 +9,6 @@ import FeedScreen from "./screens/FeedScreen";
 import Login from "./screens/Login";
 import AuthenticationStack from "./AuthenticationStack";
 
-// Test username
-const username = "k1";
-
 const Stack = createNativeStackNavigator();
 
 function App() {
