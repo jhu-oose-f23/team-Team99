@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button } from "react-native";
-import { TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import { TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
 import { EvilIcons, FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import {
@@ -167,15 +167,34 @@ const Profile = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.userInfo}>
-        <Text style={[styles.userDetail, { fontSize: 20, fontWeight: "bold" }]}>
-          {profileData.user.first_name} {profileData.user.last_name}
-        </Text>
-        <Text style={styles.userDetail}>@{username}</Text>
-        <Text style={styles.userDetail}>
-          {profileData.connections} Connections
-        </Text>
+      <View
+        style={{
+          ...styles.userInfo,
+          flexDirection: "row",
+          alignItems: "center",
+        }}
+      >
+        <Image
+          source={require("../assets/profile.png")}
+          style={{
+            width: 100,
+            height: 100,
+            marginRight: 10,
+          }}
+        />
+        <View>
+          <Text
+            style={[styles.userDetail, { fontSize: 20, fontWeight: "bold" }]}
+          >
+            {profileData.user.first_name} {profileData.user.last_name}
+          </Text>
+          <Text style={styles.userDetail}>@{username}</Text>
+          <Text style={styles.userDetail}>
+            {profileData.connections} Connections
+          </Text>
+        </View>
       </View>
+
       <Text style={styles.sectionTitle}>Workouts</Text>
       {profileData.loading ? (
         <Text style={styles.loadingText}>Loading...</Text>

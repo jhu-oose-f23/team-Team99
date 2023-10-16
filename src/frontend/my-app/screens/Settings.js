@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 const Settings = ({ navigation }) => {
   const navigateToEditProfile = () => {
-    navigation.navigate("EditProfile");
+    // navigation.navigate("EditProfile");
   };
 
   const navigateToSecurity = () => {

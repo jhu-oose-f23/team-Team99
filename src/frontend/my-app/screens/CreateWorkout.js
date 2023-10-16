@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { List, Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
+import { createWorkout } from "../api";
 
 const styles = StyleSheet.create({
   container: {
@@ -42,7 +43,8 @@ const styles = StyleSheet.create({
   },
 });
 
-const CreateWorkout = ({ username }) => {
+const CreateWorkout = ({ route }) => {
+  const { username } = route.params;
   const [workoutName, setWorkoutName] = useState("");
   const [exerciseRows, setExerciseRows] = useState([]);
   const [workoutNameError, setWorkoutNameError] = useState("");
@@ -118,24 +120,13 @@ const CreateWorkout = ({ username }) => {
     if (!isValid) {
       return;
     }
-
-    // Make POST request
     const workout = {
       user: username,
       workout_name: workoutName,
       exercises: exerciseRows,
     };
-    const response = await fetch(
-      "https://gymconnectbackend.onrender.com/workouts",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(workout),
-      }
-    );
-    const responseData = await response.json();
+    await createWorkout(workout);
+
     // Reset all fields to blank
     setWorkoutName("");
     setExerciseRows([]);
