@@ -21,7 +21,7 @@ def get_connections(user):
   for connection in data:
     result.add(connection["user1"])
     result.add(connection["user2"])
-  result.remove(user)
+  result.discard(user)
   users = []
   for user in result:
     users.append(get_user(user))
