@@ -3,6 +3,9 @@ import { View, Text, Button } from "react-native";
 import { TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+import { fetchWorkouts } from "../api";
+import { fetchUser } from "../api";
+import { fetchConnections } from "../api";
 
 const styles = StyleSheet.create({
   container: {
@@ -90,59 +93,6 @@ const Profile = ({ navigation, username }) => {
   const [user, setUser] = useState({});
   const [connections, setConnections] = useState([]);
 
-  const fetchWorkouts = async (username) => {
-    const apiUrl = `https://gymconnectbackend.onrender.com/workouts/${username}`;
-    try {
-      const response = await fetch(apiUrl);
-      const responseData = await response.json();
-      // Add a unique id to each workout and each exercise so React doesn't complain when rendering a list of workouts
-      responseData.map((workout, workoutId) => {
-        workout.exercises = workout.exercises.map((exercise, exerciseId) => ({
-          ...exercise,
-          id: exerciseId,
-        }));
-        console.log(workout.exercises);
-        return {
-          ...workout,
-          id: workoutId,
-        };
-      });
-      console.log(responseData);
-      setWorkouts(responseData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchUser = async (username) => {
-    const apiUrl = `https://gymconnectbackend.onrender.com/user/${username}`;
-    try {
-      const response = await fetch(apiUrl);
-      const responseData = await response.json();
-      setUser(responseData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchConnections = async (username) => {
-    const apiUrl = `https://gymconnectbackend.onrender.com/connection/${username}`;
-
-    try {
-      const response = await fetch(apiUrl);
-      const responseData = await response.json();
-      setConnections(responseData);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const navigateToSettings = () => {
     console.log("here");
     // navigation.navigate("Settings");
@@ -151,9 +101,16 @@ const Profile = ({ navigation, username }) => {
   // useEffect doesn't rerender if you switch to this screen from the nav bar but useFocusEffect does
   useFocusEffect(
     React.useCallback(() => {
-      fetchWorkouts(username);
-      fetchUser(username);
-      fetchConnections(username);
+      const fetchProfileData = async () => {
+        const workoutsResponse = await fetchWorkouts(username);
+        setWorkouts(workoutsResponse);
+        const userResponse = await fetchUser(username);
+        setUser(userResponse);
+        const connectionsResponse = await fetchConnections(username);
+        setConnections(connectionsResponse);
+        setLoading(false);
+      };
+      fetchProfileData();
     }, [])
   );
 
