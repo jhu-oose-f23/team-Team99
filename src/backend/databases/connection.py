@@ -22,7 +22,10 @@ def get_connections(user):
     result.add(connection["user1"])
     result.add(connection["user2"])
   result.remove(user)
-  return list(result)
+  users = []
+  for user in result:
+    users.append(get_user(user))
+  return users
 
 def delete_connection(user1, user2):
   data = supabase.table("Connections").delete().eq("user1", user1).eq("user2", user2).execute()
