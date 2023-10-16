@@ -1,12 +1,53 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, Button, FlatList, TouchableOpacity} from "react-native";
-import { List, Colors } from "react-native-paper"; // You can use other styling libraries as well
+import {
+  View,
+  Text,
+  TextInput,
+  Button,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
+import { List, Colors } from "react-native-paper";
+import { useNavigation } from "@react-navigation/native";
 
-const CreateWorkout = () => {
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 16,
+    backgroundColor: "#f5f5f5",
+  },
+  errorText: {
+    color: "red",
+    marginBottom: 10,
+  },
+  row: {
+    flexDirection: "row",
+    marginBottom: 15,
+    backgroundColor: "#fff",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+  },
+  input: {
+    margin: 0,
+    marginBottom: 5,
+    backgroundColor: "#fff",
+    height: 40,
+  },
+  removeIcon: {
+    color: "red",
+    fontSize: 24,
+    marginLeft: 10,
+  },
+});
+
+const CreateWorkout = ({ username }) => {
   const [workoutName, setWorkoutName] = useState("");
   const [exerciseRows, setExerciseRows] = useState([]);
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
+  const navigation = useNavigation();
 
   useEffect(() => {
     // Initialize with one empty exercise row when the component loads
@@ -14,6 +55,13 @@ const CreateWorkout = () => {
   }, []);
 
   const addExerciseRow = () => {
+    if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
+      setExerciseError(
+        "Can't add another exercise unless all exercises are filled in"
+      );
+      return;
+    }
+    setExerciseError("");
     const newExercise = {
       name: "",
       sets: "",
@@ -34,6 +82,9 @@ const CreateWorkout = () => {
     setExerciseRows(updatedExercise);
   };
 
+  const isEmptyExercise = (exercise) =>
+    !exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim();
+
   const saveWorkout = async () => {
     // Input validation
     let isValid = true;
@@ -53,7 +104,7 @@ const CreateWorkout = () => {
     } else {
       setExerciseError("");
       for (const exercise of exerciseRows) {
-        if (!exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim()) {
+        if (isEmptyExercise(exercise)) {
           setExerciseError("All exercise fields must be filled");
           isValid = false;
           break; // Exit the loop after the first error
@@ -70,6 +121,7 @@ const CreateWorkout = () => {
 
     // Make POST request
     const workout = {
+      user: username,
       workout_name: workoutName,
       exercises: exerciseRows,
     };
@@ -78,55 +130,64 @@ const CreateWorkout = () => {
       {
         method: "POST",
         headers: {
-          "Content-Type": "application/json", // Set the content type to JSON
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(workout), // Convert data to JSON format
+        body: JSON.stringify(workout),
       }
     );
     const responseData = await response.json();
-    console.log(responseData);
+    // Reset all fields to blank
+    setWorkoutName("");
+    setExerciseRows([]);
+    navigation.navigate("Profile");
   };
 
   return (
-    <View style={{ flex: 1, padding: 16 }}>
-      <Text>Workout Name:</Text>
+    <View style={styles.container}>
       <TextInput
-        placeholder="Enter workout name"
+        style={styles.input}
+        mode="outlined"
+        placeholder="Workout name"
         value={workoutName}
         onChangeText={(text) => setWorkoutName(text)}
       />
-      {workoutNameError && <Text style={{ color: "red" }}>{workoutNameError}</Text>}
-      {exerciseError && <Text style={{ color: "red" }}>{exerciseError}</Text>}
+      {workoutNameError && (
+        <Text style={styles.errorText}>{workoutNameError}</Text>
+      )}
+      {exerciseError && <Text style={styles.errorText}>{exerciseError}</Text>}
 
-      <Button title="Add Exercise Row" onPress={addExerciseRow} />
+      <Button title="Add Exercise" onPress={addExerciseRow} />
 
       <FlatList
         data={exerciseRows}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
-          <View style={{ flexDirection: "row", marginBottom: 10 }}>
+          <View style={styles.row}>
             <TextInput
-              style={{ flex: 2, marginRight: 10 }}
+              style={[styles.input, { flex: 2, marginRight: 10 }]}
+              mode="outlined"
               placeholder="Exercise Name"
               value={item.name}
               onChangeText={(text) => updateExercise(index, "name", text)}
             />
             <TextInput
-              style={{ flex: 1, marginRight: 10 }}
+              style={[styles.input, { flex: 1, marginRight: 10 }]}
+              mode="outlined"
               placeholder="Sets"
               value={item.sets}
               onChangeText={(text) => updateExercise(index, "sets", text)}
               keyboardType="numeric"
             />
             <TextInput
-              style={{ flex: 1 }}
+              style={[styles.input, { flex: 1 }]}
+              mode="outlined"
               placeholder="Reps"
               value={item.reps}
               onChangeText={(text) => updateExercise(index, "reps", text)}
               keyboardType="numeric"
             />
             <TouchableOpacity onPress={() => removeExerciseRow(index)}>
-              <Text style={{ color: "red", fontSize: 20, marginLeft: 10 }}>-</Text>
+              <Text style={styles.removeIcon}>×</Text>
             </TouchableOpacity>
           </View>
         )}
