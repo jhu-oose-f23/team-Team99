@@ -3,72 +3,98 @@ import { View, Text, Button } from "react-native";
 import { TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { EvilIcons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
-import { fetchWorkouts } from "../api";
-import { fetchUser } from "../api";
-import { fetchConnections } from "../api";
+import { fetchWorkouts, fetchUser, fetchConnections } from "../api";
 
 const styles = StyleSheet.create({
   container: {
-    margin: 20,
+    flex: 1,
+    padding: 20,
+    backgroundColor: "#f7f8fa",
   },
-  section: {
+  userInfo: {
+    alignItems: "flex-end",
     marginBottom: 20,
   },
+  userDetail: {
+    fontSize: 18,
+    marginBottom: 5,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 20,
+  },
+  section: {
+    marginBottom: 15,
+  },
   button: {
-    backgroundColor: "#ddd",
-    padding: 10,
-    borderRadius: 5,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    backgroundColor: "#0099ff",
+    padding: 12,
+    borderRadius: 8,
     marginBottom: 10,
+  },
+  buttonText: {
+    color: "white",
+    fontWeight: "bold",
   },
   dropdown: {
     backgroundColor: "#eee",
     padding: 20,
     borderRadius: 5,
   },
-  tableContainer: {
-    // Style for the table container
-  },
   tableHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "lightgray",
+    borderBottomColor: "#ccc",
   },
   tableHeaderCell: {
     flex: 1,
     textAlign: "center",
     fontWeight: "bold",
+    color: "#444",
   },
   row: {
     flexDirection: "row",
     justifyContent: "space-between",
-    paddingVertical: 5,
-    paddingHorizontal: 10,
+    padding: 10,
     borderBottomWidth: 1,
-    borderBottomColor: "lightgray",
+    borderBottomColor: "#ccc",
   },
   cell: {
     flex: 1,
     textAlign: "center",
+    color: "#666",
+  },
+  loadingText: {
+    textAlign: "center",
+    fontSize: 18,
+    marginTop: 20,
   },
 });
 
 const ExpandableSection = ({ title, content }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const handlePress = () => {
-    setIsExpanded(!isExpanded);
-  };
-
   return (
     <View style={styles.section}>
-      <TouchableOpacity style={styles.button} onPress={handlePress}>
-        <Text>{title}</Text>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => setIsExpanded(!isExpanded)}
+      >
+        <Text style={styles.buttonText}>{title}</Text>
+        <EvilIcons
+          name={isExpanded ? "chevron-up" : "chevron-down"}
+          size={24}
+          color="white"
+        />
       </TouchableOpacity>
       {isExpanded && (
-        <View style={styles.tableContainer}>
+        <View>
           <View style={styles.tableHeader}>
             <Text style={styles.tableHeaderCell}>Exercise</Text>
             <Text style={styles.tableHeaderCell}>Sets</Text>
@@ -113,17 +139,17 @@ const Profile = ({ navigation, route }) => {
   );
 
   return (
-    <View>
-      <Text style={{ textAlign: "right" }}>
-        {user.first_name} {user.last_name}
-      </Text>
-      <Text style={{ textAlign: "right" }}>{username}</Text>
-      <Text style={{ textAlign: "right" }}>
-        {connections.length} Connections
-      </Text>
-      <Text>Workouts</Text>
+    <View style={styles.container}>
+      <View style={styles.userInfo}>
+        <Text style={[styles.userDetail, { fontSize: 20, fontWeight: "bold" }]}>
+          {user.first_name} {user.last_name}
+        </Text>
+        <Text style={styles.userDetail}>@{username}</Text>
+        <Text style={styles.userDetail}>{connections.length} Connections</Text>
+      </View>
+      <Text style={styles.sectionTitle}>Workouts</Text>
       {loading ? (
-        <Text>Loading...</Text>
+        <Text style={styles.loadingText}>Loading...</Text>
       ) : (
         <ScrollView>
           {workouts.map((workout, index) => (
