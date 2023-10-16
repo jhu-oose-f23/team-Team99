@@ -35,7 +35,7 @@ const Connections = ({ route, navigation }) => {
     React.useCallback(() => {
       const fetchConnectionsData = async () => {
         const connectionsResponse = await fetchConnections(username);
-        setConnections(connectionsResponse);
+        setConnections(connectionsResponse ? connectionsResponse : []);
         setLoading(false);
       };
       fetchConnectionsData();
@@ -43,31 +43,32 @@ const Connections = ({ route, navigation }) => {
   );
   return (
     <ScrollView style={styles.container}>
-      {connections.map((user, index) => (
-        <TouchableOpacity
-          onPress={() => navigateToProfile(user.username)}
-          style={styles.userContainer}
-          key={index}
-        >
-          <Image
-            source={require("../assets/profile.png")}
-            style={styles.profileImage}
-          />
-          <View style={styles.textStyle}>
-            <Text style={styles.username}>{"@" + user.username}</Text>
-            <Text>{`${user.first_name} ${user.last_name}`}</Text>
-          </View>
+      {connections &&
+        connections.map((user, index) => (
+          <TouchableOpacity
+            onPress={() => navigateToProfile(user.username)}
+            style={styles.userContainer}
+            key={index}
+          >
+            <Image
+              source={require("../assets/profile.png")}
+              style={styles.profileImage}
+            />
+            <View style={styles.textStyle}>
+              <Text style={styles.username}>{"@" + user.username}</Text>
+              <Text>{`${user.first_name} ${user.last_name}`}</Text>
+            </View>
 
-          <View style={styles.buttonStyle}>
-            <Button
-              style={[styles.button, isPressed ? styles.buttonPressed : null]}
-              onPress={disconnect}
-            >
-              Connected
-            </Button>
-          </View>
-        </TouchableOpacity>
-      ))}
+            <View style={styles.buttonStyle}>
+              <Button
+                style={[styles.button, isPressed ? styles.buttonPressed : null]}
+                onPress={disconnect}
+              >
+                Connected
+              </Button>
+            </View>
+          </TouchableOpacity>
+        ))}
     </ScrollView>
   );
 };

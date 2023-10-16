@@ -173,7 +173,7 @@ const Profile = ({ navigation, route }) => {
         </Text>
         <Text style={styles.userDetail}>@{username}</Text>
         <Text style={styles.userDetail}>
-          {profileData.connections} Connections
+          {profileData?.connections} Connections
         </Text>
       </View>
       <Text style={styles.sectionTitle}>Workouts</Text>

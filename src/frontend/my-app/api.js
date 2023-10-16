@@ -3,7 +3,8 @@ const BASE_URL = "https://gymconnectbackend.onrender.com";
 const fetchData = async (endpoint) => {
   try {
     const response = await fetch(`${BASE_URL}/${endpoint}`);
-    return await response.json();
+    const res = await response.json();
+    return res;
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -21,10 +22,19 @@ export const fetchWorkouts = async (username) => {
   }));
 };
 
-export const fetchUser = (username) => fetchData(`user/${username}`);
-
-export const fetchConnections = (username) =>
-  fetchData(`connection/${username}`);
+export const createWorkout = async (workout) => {
+  const response = await fetch(
+    "https://gymconnectbackend.onrender.com/workouts",
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(workout),
+    }
+  );
+  await response.json();
+};
 
 export const deleteWorkout = async (workoutId) => {
   console.log(workoutId);
@@ -38,3 +48,8 @@ export const deleteWorkout = async (workoutId) => {
     console.error("Error fetching data:", error);
   }
 };
+
+export const fetchUser = (username) => fetchData(`user/${username}`);
+
+export const fetchConnections = (username) =>
+  fetchData(`connection/${username}`);
