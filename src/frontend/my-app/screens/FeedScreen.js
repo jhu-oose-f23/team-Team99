@@ -1,20 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, Image, TouchableOpacity, TextInput } from "react-native";
 
-// const users = [
-//   {
-//     id: 4,
-//     name: "Lucas Brown",
-//     image: require("../assets/icon.png"),
-//   },
-//   {
-//     id: 5,
-//     name: "Emily Clark",
-//     image: require("../assets/icon.png"),
-//   },
-//   // ... Add more users as needed
-// ];
-
 const recommendations = [
   {
     id: 1,
