@@ -6,6 +6,8 @@ import Profile from "./screens/Profile";
 import CreateWorkout from "./screens/CreateWorkout";
 import BottomTabNavigator from "./BottomTabNavigator";
 import FeedScreen from "./screens/FeedScreen";
+import Login from "./screens/Login";
+import AuthenticationStack from "./AuthenticationStack";
 
 // Test username
 const username = "k1";
@@ -13,14 +15,26 @@ const username = "k1";
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const [userLoggedIn, setUserLoggedIn] = React.useState(false);
+
   return (
     <NavigationContainer>
-      <BottomTabNavigator username={username} />
-      {/* <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Profile" component={Profile} />
-        <Stack.Screen name="CreateWorkout" component={CreateWorkout} />
-        <Stack.Screen name="Feed" component={FeedScreen} />
-      </Stack.Navigator> */}
+      <Stack.Navigator>
+        {userLoggedIn ? (
+          <Stack.Screen
+            name="Main"
+            component={BottomTabNavigator}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            initialParams={{ setUserLoggedIn }}
+            options={{ headerShown: false }}
+          />
+        )}
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
