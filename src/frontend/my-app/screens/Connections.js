@@ -17,10 +17,12 @@ const Connections = ({ route, navigation }) => {
   const [isPressed, setIsPressed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [connections, setConnections] = useState([]);
-  const [connectedUsers, setConnectedUsers] = useState([]);
 
   const navigateToProfile = (navigateToUsername) => {
-    navigation.navigate("Profile", { username: navigateToUsername });
+    navigation.navigate("Profile", {
+      username: navigateToUsername,
+      loggedinUser: username,
+    });
   };
 
   const disconnect = () => {
@@ -32,19 +34,8 @@ const Connections = ({ route, navigation }) => {
   useFocusEffect(
     React.useCallback(() => {
       const fetchConnectionsData = async () => {
-        // TODO: update backend so GET connections returns an array of user objects instead of an array of usernames
         const connectionsResponse = await fetchConnections(username);
         setConnections(connectionsResponse);
-        setConnectedUsers([]);
-        await Promise.all(
-          connectionsResponse.map(async (connectionUsername) => {
-            const userResponse = await fetchUser(connectionUsername);
-            setConnectedUsers((connectedUsers) => [
-              ...connectedUsers,
-              userResponse,
-            ]);
-          })
-        );
         setLoading(false);
       };
       fetchConnectionsData();
@@ -52,7 +43,7 @@ const Connections = ({ route, navigation }) => {
   );
   return (
     <ScrollView style={styles.container}>
-      {connectedUsers.map((user, index) => (
+      {connections.map((user, index) => (
         <TouchableOpacity
           onPress={() => navigateToProfile(user.username)}
           style={styles.userContainer}

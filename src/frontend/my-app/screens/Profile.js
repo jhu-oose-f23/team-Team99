@@ -114,11 +114,20 @@ const ExpandableSection = ({ title, content }) => {
 };
 
 const Profile = ({ navigation, route }) => {
-  const { username } = route.params;
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
   const [connections, setConnections] = useState([]);
+
+  // If username != loggedinUser, this profile is for a different user than the logged in user
+  const { username, loggedinUser } = route.params;
+
+  const navigateToOwnProfile = () => {
+    navigation.navigate("Profile", {
+      username: loggedinUser,
+      loggedinUser: loggedinUser,
+    });
+  };
 
   // useEffect doesn't rerender if you switch to this screen from the nav bar but useFocusEffect does
   useFocusEffect(
@@ -137,6 +146,7 @@ const Profile = ({ navigation, route }) => {
       fetchProfileData();
     }, [username])
   );
+  console.log("hi");
 
   return (
     <View style={styles.container}>
@@ -160,6 +170,9 @@ const Profile = ({ navigation, route }) => {
             />
           ))}
         </ScrollView>
+      )}
+      {username != loggedinUser && (
+        <Button title="Back to my profile" onPress={navigateToOwnProfile} />
       )}
     </View>
   );

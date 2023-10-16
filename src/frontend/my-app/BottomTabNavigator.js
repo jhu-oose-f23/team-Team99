@@ -35,7 +35,7 @@ const BottomTabNavigator = ({ username }) => {
       <Tab.Screen
         name="Profile"
         component={Profile}
-        initialParams={{ username: username }}
+        initialParams={{ username: username, loggedinUser: username }}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-person" color={color} size={size} />
