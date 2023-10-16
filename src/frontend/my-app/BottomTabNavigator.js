@@ -14,19 +14,23 @@ const BottomTabNavigator = ({ username }) => {
       <Tab.Screen name="Feed" component={Feed} />
       <Tab.Screen
         name="Create"
-        children={() => <CreateWorkout username={username} />}
+        component={CreateWorkout}
+        initialParams={{ username: username }}
       />
       <Tab.Screen
         name="Profile"
-        children={() => <Profile username={username} />}
+        component={Profile}
+        initialParams={{ username: username }}
       />
       <Tab.Screen
         name="Connections"
-        children={() => <Connections username={username} />}
+        component={Connections}
+        initialParams={{ username: username }}
       />
       <Tab.Screen
         name="Settings"
-        children={() => <Settings username={username} />}
+        component={Settings}
+        initialParams={{ username: username }}
       />
     </Tab.Navigator>
   );

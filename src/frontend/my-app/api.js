@@ -9,7 +9,6 @@ export const fetchWorkouts = async (username) => {
         ...exercise,
         id: exerciseId,
       }));
-      console.log(workout.exercises);
       return {
         ...workout,
         id: workoutId,

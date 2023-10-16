@@ -9,17 +9,18 @@ import {
 } from "react-native";
 import Profile from "../assets/profile.png";
 import { Button } from "react-native-paper";
-import { useFocusEffect } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { fetchConnections, fetchUser } from "../api";
 
-const Connections = ({ username }) => {
+const Connections = ({ route, navigation }) => {
+  const username = route.params.username;
   const [isPressed, setIsPressed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [connections, setConnections] = useState([]);
   const [connectedUsers, setConnectedUsers] = useState([]);
 
-  const navigateToProfile = () => {
-    console.log("navigate to the clicked user's profile");
+  const navigateToProfile = (navigateToUsername) => {
+    navigation.navigate("Profile", { username: navigateToUsername });
   };
 
   const disconnect = () => {
@@ -44,8 +45,6 @@ const Connections = ({ username }) => {
             ]);
           })
         );
-        console.log(connectedUsers);
-
         setLoading(false);
       };
       fetchConnectionsData();
@@ -55,7 +54,7 @@ const Connections = ({ username }) => {
     <ScrollView style={styles.container}>
       {connectedUsers.map((user, index) => (
         <TouchableOpacity
-          onPress={navigateToProfile}
+          onPress={() => navigateToProfile(user.username)}
           style={styles.userContainer}
           key={index}
         >

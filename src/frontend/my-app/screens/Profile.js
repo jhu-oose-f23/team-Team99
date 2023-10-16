@@ -87,16 +87,12 @@ const ExpandableSection = ({ title, content }) => {
   );
 };
 
-const Profile = ({ navigation, username }) => {
+const Profile = ({ navigation, route }) => {
+  const { username } = route.params;
   const [workouts, setWorkouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
   const [connections, setConnections] = useState([]);
-
-  const navigateToSettings = () => {
-    console.log("here");
-    // navigation.navigate("Settings");
-  };
 
   // useEffect doesn't rerender if you switch to this screen from the nav bar but useFocusEffect does
   useFocusEffect(
@@ -107,11 +103,13 @@ const Profile = ({ navigation, username }) => {
         const userResponse = await fetchUser(username);
         setUser(userResponse);
         const connectionsResponse = await fetchConnections(username);
-        setConnections(connectionsResponse);
+        if (connectionsResponse) {
+          setConnections(connectionsResponse);
+        }
         setLoading(false);
       };
       fetchProfileData();
-    }, [])
+    }, [username])
   );
 
   return (

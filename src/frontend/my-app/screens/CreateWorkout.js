@@ -44,7 +44,6 @@ const CreateWorkout = ({ username }) => {
   };
 
   const saveWorkout = async () => {
-    console.log("hellos");
     // Input validation
     let isValid = true;
 
@@ -88,7 +87,6 @@ const CreateWorkout = ({ username }) => {
       workout_name: workoutName,
       exercises: exerciseRows,
     };
-    console.log(workout);
     const response = await fetch(
       "https://gymconnectbackend.onrender.com/workouts",
       {
@@ -100,7 +98,6 @@ const CreateWorkout = ({ username }) => {
       }
     );
     const responseData = await response.json();
-    console.log(responseData);
     // Reset all fields to blank
     setWorkoutName("");
     setExerciseRows([]);
