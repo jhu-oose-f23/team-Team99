@@ -243,11 +243,43 @@ DELETE /connection: delete the connection between two users, if they are connect
         "user2": "k1"
     }
 
-GET /connection/username: provide all the (usernames of) connections of a given user. Example (/connection/k1). Sample response below.
+GET /connection/username: provide all the connections of a given user. Example (/connection/k1). Sample response below.
 
     [
-        "k90",
-        "k4"
+        {
+            "birthdate": "2003-09-08",
+            "first_name": "Kyler",
+            "frequency": "Daily",
+            "gender": "M",
+            "goals": [
+                "lose weight",
+                "build muscle"
+            ],
+            "height": 75,
+            "last_name": "Murray",
+            "level": "Beginner",
+            "password": "cardinals",
+            "preferred_time": "Morning",
+            "username": "k90",
+            "weight": 170
+        },
+        {
+            "birthdate": "2003-09-08",
+            "first_name": "Kyler",
+            "frequency": "Daily",
+            "gender": "M",
+            "goals": [
+                "lose weight",
+                "build muscle"
+            ],
+            "height": 65,
+            "last_name": "Murray",
+            "level": "Beginner",
+            "password": "cardinals",
+            "preferred_time": "Morning",
+            "username": "k4",
+            "weight": 135
+        }
     ]
 
 
