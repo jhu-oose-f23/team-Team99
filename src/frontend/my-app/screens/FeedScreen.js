@@ -1,19 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, ScrollView, Image, TouchableOpacity, TextInput } from "react-native";
 
-const users = [
-  {
-    id: 4,
-    name: "Lucas Brown",
-    image: require("../assets/icon.png"),
-  },
-  {
-    id: 5,
-    name: "Emily Clark",
-    image: require("../assets/icon.png"),
-  },
-  // ... Add more users as needed
-];
+// const users = [
+//   {
+//     id: 4,
+//     name: "Lucas Brown",
+//     image: require("../assets/icon.png"),
+//   },
+//   {
+//     id: 5,
+//     name: "Emily Clark",
+//     image: require("../assets/icon.png"),
+//   },
+//   // ... Add more users as needed
+// ];
 
 const recommendations = [
   {
@@ -38,6 +38,8 @@ const FeedScreen = () => {
   const [connectionRequests, setConnectionRequests] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const sendConnectionRequest = (profileId) => {
       // Simulate a network request to send a connection request
@@ -47,9 +49,31 @@ const FeedScreen = () => {
     }, 1000);
   };
 
+  useEffect(() => {
+    fetch('https://gymconnectbackend.onrender.com/user')
+      .then((response) => response.json())
+      .then((responseData) => {
+        // Map the response data to combine the first and last names
+        const mappedUsers = responseData.map(user => ({
+          ...user,
+          name: `${user.first_name} ${user.last_name}`
+        }));
+        setUsers(mappedUsers);
+        console.log(mappedUsers);
+        setLoading(false);
+      })
+      .catch((error) => {
+        console.error('Error fetching data:', error);
+        setLoading(false);
+      });
+  }, []);
+
+
+
   const filteredUsers = users.filter(user => 
-    user.name.toLowerCase().includes(searchQuery.toLowerCase())
-  ); 
+    (user.name.toLowerCase().includes(searchQuery.toLowerCase()) || user.username.toLowerCase().includes(searchQuery.toLowerCase()))
+);
+
   return (
     <View style={{ flex: 1, padding: 10 }}>
       {/* Search Bar */}
@@ -91,10 +115,37 @@ const FeedScreen = () => {
         <>
           {/* Your Post component */}
           <View
-            style={{ backgroundColor: "#ffffff", padding: 10, marginBottom: 10 }}
-          >
-            {/* ... Rest of your Post code */}
+        style={{ backgroundColor: "#ffffff", padding: 10, marginBottom: 10 }}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+          }}
+        >
+          <Image
+            source={require("../assets/icon.png")}
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 30,
+            }}
+          />
+          <View style={{ padding: 5 }}>
+            <Text style={{ fontSize: 20, fontWeight: "bold" }}>Post Title</Text>
+            <Text>Post Author</Text>
           </View>
+        </View>
+        <Image
+          source={require("../assets/favicon.png")}
+          style={{
+            width: 300,
+            height: 300,
+            marginBottom: 10,
+          }}
+        />
+        <Text>Post content goes here...</Text>
+      </View>
 
           {/* Recommendations */}
           <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}>
