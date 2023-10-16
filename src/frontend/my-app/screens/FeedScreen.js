@@ -6,11 +6,13 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
+  StyleSheet
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { fetchRecommendations, postConnectionRequest } from "../api";
 
-const FeedScreen = ({ route }) => {
+const FeedScreen = ({ navigation, route }) => {
+  
   const [connectionRequests, setConnectionRequests] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -19,8 +21,23 @@ const FeedScreen = ({ route }) => {
   const [userData, setUserData] = useState({
     recommendations: [],
   });
+  
+  const username = route.params.username;
 
-  const { username } = route.params;
+  const resetToFeed = () => {
+    setIsSearchActive(false);
+    setSearchQuery("");
+  };
+  
+  const navigateToProfile = (navigateToUsername) => {
+    console.log("Navigating to profile of:", navigateToUsername);
+    navigation.navigate("Profile", {
+      username: navigateToUsername,
+      loggedinUser: username,
+    });
+  };
+  
+
 
   const sendConnectionRequest = async (profileId) => {
     await postConnectionRequest(
@@ -71,6 +88,13 @@ const FeedScreen = ({ route }) => {
   return (
     <View style={{ flex: 1, padding: 10 }}>
       {/* Search Bar */}
+      {isSearchActive && (
+    <TouchableOpacity 
+        style={styles.backButton} 
+        onPress={resetToFeed}>
+        <Text style={styles.backButtonText}>Back to Feed</Text>
+    </TouchableOpacity>
+)}
       <TextInput
         style={{
           borderColor: "#ccc",
@@ -83,34 +107,39 @@ const FeedScreen = ({ route }) => {
         onChangeText={setSearchQuery}
         placeholder="Search..."
         onFocus={() => setIsSearchActive(true)}
-        onBlur={() => setIsSearchActive(false)}
+        onBlur={() => setIsSearchActive(true)}
       />
 
       {/* Displaying content based on whether the search bar is active */}
       {isSearchActive ? (
         // Search Results for Users
         <ScrollView>
-          {filteredUsers.map((user) => (
-            <View
-              key={user.id}
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-                marginBottom: 15,
-              }}
-            >
-              <Image
-                source={user.image}
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 25,
-                  marginRight: 10,
-                }}
-              />
-              <Text>{user.name}</Text>
-            </View>
-          ))}
+    {filteredUsers.map((user) => (
+      <TouchableOpacity 
+        key={user.username}
+        activeOpacity={0.7}
+        onPress={() => navigateToProfile(user.username)}
+      >
+        <View
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            marginBottom: 15,
+          }}
+        >
+          <Image
+            source={user.image}
+            style={{
+              width: 50,
+              height: 50,
+              borderRadius: 25,
+              marginRight: 10,
+            }}
+          />
+          <Text>{user.name}</Text>
+        </View>
+      </TouchableOpacity>
+    ))}
         </ScrollView>
       ) : (
         <>
@@ -213,4 +242,19 @@ const FeedScreen = ({ route }) => {
   );
 };
 
+const styles = StyleSheet.create({
+  backButton: {
+    backgroundColor: "#f5f5f5",
+    padding: 10,
+    borderRadius: 5,
+    alignItems: "center",
+    marginBottom: 10,
+},
+backButtonText: {
+    fontWeight: "bold",
+},
+});
+
+
 export default FeedScreen;
+
