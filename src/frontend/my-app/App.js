@@ -12,7 +12,7 @@ import AuthenticationStack from "./AuthenticationStack";
 const Stack = createNativeStackNavigator();
 
 function App() {
-  const [userLoggedIn, setUserLoggedIn] = React.useState(false);
+  const [userLoggedIn, setUserLoggedIn] = React.useState("");
 
   return (
     <NavigationContainer>
@@ -21,6 +21,7 @@ function App() {
           <Stack.Screen
             name="Main"
             component={BottomTabNavigator}
+            initialParams={{ username: userLoggedIn }}
             options={{ headerShown: false }}
           />
         ) : (
