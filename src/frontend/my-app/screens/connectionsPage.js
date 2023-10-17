@@ -6,39 +6,87 @@ import { Button } from 'react-native-paper';
 const Connections = () => {
 
   const [connectedUsers, setConnectedUsers] = useState([]);
-  const [user, setUser] = useState('k1');
+  const [user, setUser] = useState('k3');
   const [requestsAvailable, setRequestsAvailable] = useState(false)
   const [connectionRequests, setConnectionRequests] = useState([])
-  const connnectionsAPI = 'https://gymconnectbackend.onrender.com/connection';
-  const requestAPI = 'https://gymconnectbackend.onrender.com/connection/request/'
+  
 
   const navigateToProfile = () => {
     console.log("navigate to the clicked user's profile")
   }
 
-  const acceptRequest = (username) => {
+  const acceptRequest = (username) => {  
+    const requestAPI = 'https://gymconnectbackend.onrender.com/connection/request'
 
-    // Delete the request from requests
-    
-    deleteAPI = requestAPI + username + "/" + user;
-    fetch(deleteAPI, {
-      method: 'DELETE',
-    })
-      .then(response => {
-        if (response.ok) {
+    data = {
+      // "source": username,
+      "source": "name",
+      "dest": user,
+    }
+
+    try {
+      fetch(requestAPI, 
+        {
+          method:'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+          body: JSON.stringify(data)},)
+      .then(response => response.json())
+      .then(responseData => {
+        console.log("The response is", responseData)
+        if (responseData) {
           console.log('connection deleted');
         } else {
-          console.error('delete failed');
+          console.error('delete failed', reponse);
         }
       })
-      .catch(error => {
-        console.error('Error:', error);
-      });
+    }
 
-    // Add the users to the connectedUsers
+    catch (error) {
+      console.error("There is an error accepting the connection", error);
+    }
     
-   
   }
+
+  // Reject request
+
+  const rejectRequest = (username) => {  
+
+    const requestAPI = 'https://gymconnectbackend.onrender.com/connection/request'
+
+    data = {
+      "source": username,
+      "dest": user,
+    }
+
+    try {
+      fetch(requestAPI, 
+        {
+          method:'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+
+          body: JSON.stringify(data)},)
+      .then(response => response.json())
+      .then(responseData => {
+        console.log("The response is", responseData)
+        if (responseData) {
+          console.log('connection deleted');
+        } else {
+          console.error('delete failed', reponse);
+        }
+      })
+    }
+
+    catch (error) {
+      console.error("There is an error accepting the connection", error);
+    }
+    
+  }
+
 
     // Function to fetch data from an API
   async function fetchData(apiEndpoint) {
@@ -113,30 +161,32 @@ const Connections = () => {
                   CONNECTION REQUESTS
               </Text>
             {connectionRequests.map((user) => (
-              <TouchableOpacity 
-                onPress={navigateToProfile}
-                style={styles.userContainerRequest} 
-                key={user.id}
-                >
-                
-                <Image 
-                  source={require ("../assets/profile.png") } 
-                  style={styles.profileImage} 
-                />
-                <View style={styles.textStyle}>
-                  <Text style={styles.username}>{"@" + user.username}</Text>
-                  <Text>{`${user.firstName} ${user.lastName}`}</Text>
-                </View>
+              <View  style={styles.userContainerRequest}>
 
-                <View style={styles.buttonStyle}>
-                  <Button
-                    style={[styles.button]}
-                    onPress={() => acceptRequest(user.username)}
-                    
-                  >Accept</Button>
-                </View>
+                <TouchableOpacity 
+                  onPress={navigateToProfile}
+                  style={styles.userContainerRequestMid}
+                  key={user.id}
+                  >
+                  
+                  <Image 
+                    source={require ("../assets/profile.png") } 
+                    style={styles.profileImage} 
+                  />
+                  <View style={styles.textStyle}>
+                    <Text style={styles.username}>{"@" + user.username}</Text>
+                    <Text>{`${user.firstName} ${user.lastName}`}</Text>
+                  </View>
+                </TouchableOpacity>
+                  <View style={styles.buttonStyle}>
+                    <Button
+                      style={[styles.button]}
+                      onPress={useEffect(() => {acceptRequest(user.username)},[])}
+                    >Accept</Button>
+                  </View>
+                  
                 
-              </TouchableOpacity>
+              </View>
             ))}
         </View>
       );
@@ -197,6 +247,8 @@ const styles = StyleSheet.create({
 
   buttonStyle: {
     justifyContent: "flext-end",
+    flexDirection: 'row',
+
   },
 
   userContainer: {
@@ -218,6 +270,15 @@ const styles = StyleSheet.create({
     borderWidth: 2,
   },
 
+  userContainerRequestMid: {
+    flexDirection: 'row',
+    flex: 0.9,
+    alignItems: 'center',
+    borderBlockColor: "lightgray",
+    backgroundColor: "lightgray",
+    borderWidth: 2,
+  },
+
   textStyle: {
     flex: 0.95,
   },  
@@ -234,6 +295,7 @@ const styles = StyleSheet.create({
   },
 
   button: {
+    
     borderRadius: 5,
     backgroundColor: "skyblue",
     alignSelf: 'flex-start'
