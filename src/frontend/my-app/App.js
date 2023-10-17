@@ -1,37 +1,37 @@
-// In App.js in a new project
-
 import * as React from "react";
 import { Button, View, Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import WorkoutDisplayScreen from './screens/WorkoutDisplay';
-import CreateWorkout from "./CreateWorkout";
-
-function HomeScreen({ navigation }) {
-  return (
-    <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
-      <Button
-        title="Go to WorkoutDisplay"
-        onPress={() => navigation.navigate("WorkoutDisplay")}
-      />
-      <Button
-        title="Create workout"
-        onPress={() => navigation.navigate("CreateWorkout")}
-      />
-    </View>
-  );
-}
+import Profile from "./screens/Profile";
+import CreateWorkout from "./screens/CreateWorkout";
+import BottomTabNavigator from "./BottomTabNavigator";
+import FeedScreen from "./screens/FeedScreen";
+import Login from "./screens/Login";
+import AuthenticationStack from "./AuthenticationStack";
 
 const Stack = createNativeStackNavigator();
 
 function App() {
+  const [userLoggedIn, setUserLoggedIn] = React.useState("");
+
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
-        <Stack.Screen name="Home" component={HomeScreen} />
-        <Stack.Screen name="WorkoutDisplay" component={WorkoutDisplayScreen} />
-        <Stack.Screen name="CreateWorkout" component={CreateWorkout} />
+      <Stack.Navigator>
+        {userLoggedIn ? (
+          <Stack.Screen
+            name="Main"
+            component={BottomTabNavigator}
+            initialParams={{ username: userLoggedIn }}
+            options={{ headerShown: false }}
+          />
+        ) : (
+          <Stack.Screen
+            name="Login"
+            component={Login}
+            initialParams={{ setUserLoggedIn }}
+            options={{ headerShown: false }}
+          />
+        )}
       </Stack.Navigator>
     </NavigationContainer>
   );
