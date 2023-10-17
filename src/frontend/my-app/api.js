@@ -1,3 +1,4 @@
+// TODO: make this a .env variable
 const BASE_URL = "https://gymconnectbackend.onrender.com";
 
 const fetchData = async (endpoint) => {
