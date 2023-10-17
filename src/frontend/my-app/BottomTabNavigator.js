@@ -10,7 +10,8 @@ import Connections from "./screens/Connections";
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabNavigator = ({ username }) => {
+const BottomTabNavigator = ({ route }) => {
+  const { username } = route.params;
   return (
     <Tab.Navigator>
       <Tab.Screen

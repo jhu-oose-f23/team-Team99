@@ -137,7 +137,7 @@ const Profile = ({ navigation, route }) => {
   });
 
   // If username != loggedinUser, this profile is for a different user than the logged in user
-  const { username, loggedinUser } = route.params;
+  const { username, loggedinUser} = route.params;
 
   const navigateToOwnProfile = () => {
     navigation.navigate("Profile", {
