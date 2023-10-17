@@ -11,6 +11,7 @@ import {
 import { List, Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { createWorkout, fetchWorkouts } from "../api";
+import { useFocusEffect } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
   container: {
@@ -61,6 +62,18 @@ const CreateWorkout = ({ route }) => {
     };
     getWorkouts();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Initialize with one empty exercise row when the component loads
+      addExerciseRow();
+      const getWorkouts = async () => {
+        const workoutsResponse = await fetchWorkouts(username);
+        setExistingWorkouts(workoutsResponse);
+      };
+      getWorkouts();
+    }, [])
+  );
 
   const addExerciseRow = () => {
     if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
