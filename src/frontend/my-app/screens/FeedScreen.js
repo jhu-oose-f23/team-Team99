@@ -6,13 +6,12 @@ import {
   Image,
   TouchableOpacity,
   TextInput,
-  StyleSheet
+  StyleSheet,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { fetchRecommendations, postConnectionRequest } from "../api";
 
 const FeedScreen = ({ navigation, route }) => {
-  
   const [connectionRequests, setConnectionRequests] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -21,14 +20,14 @@ const FeedScreen = ({ navigation, route }) => {
   const [userData, setUserData] = useState({
     recommendations: [],
   });
-  
+
   const username = route.params.username;
 
   const resetToFeed = () => {
     setIsSearchActive(false);
     setSearchQuery("");
   };
-  
+
   const navigateToProfile = (navigateToUsername) => {
     console.log("Navigating to profile of:", navigateToUsername);
     navigation.navigate("Profile", {
@@ -36,8 +35,6 @@ const FeedScreen = ({ navigation, route }) => {
       loggedinUser: username,
     });
   };
-  
-
 
   const sendConnectionRequest = async (profileId) => {
     await postConnectionRequest(
@@ -58,7 +55,6 @@ const FeedScreen = ({ navigation, route }) => {
           name: `${user.first_name} ${user.last_name}`,
         }));
         setUsers(mappedUsers);
-        console.log(mappedUsers);
         setLoading(false);
       })
       .catch((error) => {
@@ -89,12 +85,10 @@ const FeedScreen = ({ navigation, route }) => {
     <View style={{ flex: 1, padding: 10 }}>
       {/* Search Bar */}
       {isSearchActive && (
-    <TouchableOpacity 
-        style={styles.backButton} 
-        onPress={resetToFeed}>
-        <Text style={styles.backButtonText}>Back to Feed</Text>
-    </TouchableOpacity>
-)}
+        <TouchableOpacity style={styles.backButton} onPress={resetToFeed}>
+          <Text style={styles.backButtonText}>Back to Feed</Text>
+        </TouchableOpacity>
+      )}
       <TextInput
         style={{
           borderColor: "#ccc",
@@ -114,32 +108,32 @@ const FeedScreen = ({ navigation, route }) => {
       {isSearchActive ? (
         // Search Results for Users
         <ScrollView>
-    {filteredUsers.map((user) => (
-      <TouchableOpacity 
-        key={user.username}
-        activeOpacity={0.7}
-        onPress={() => navigateToProfile(user.username)}
-      >
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            marginBottom: 15,
-          }}
-        >
-          <Image
-            source={user.image}
-            style={{
-              width: 50,
-              height: 50,
-              borderRadius: 25,
-              marginRight: 10,
-            }}
-          />
-          <Text>{user.name}</Text>
-        </View>
-      </TouchableOpacity>
-    ))}
+          {filteredUsers.map((user) => (
+            <TouchableOpacity
+              key={user.username}
+              activeOpacity={0.7}
+              onPress={() => navigateToProfile(user.username)}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "center",
+                  marginBottom: 15,
+                }}
+              >
+                <Image
+                  source={user.image}
+                  style={{
+                    width: 50,
+                    height: 50,
+                    borderRadius: 25,
+                    marginRight: 10,
+                  }}
+                />
+                <Text>{user.name}</Text>
+              </View>
+            </TouchableOpacity>
+          ))}
         </ScrollView>
       ) : (
         <>
@@ -249,12 +243,10 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     alignItems: "center",
     marginBottom: 10,
-},
-backButtonText: {
+  },
+  backButtonText: {
     fontWeight: "bold",
-},
+  },
 });
 
-
 export default FeedScreen;
-

@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import { List, Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { createWorkout } from "../api";
+import { createWorkout, fetchWorkouts } from "../api";
+import { useFocusEffect } from "@react-navigation/native";
 
 const styles = StyleSheet.create({
   container: {
@@ -49,12 +50,30 @@ const CreateWorkout = ({ route }) => {
   const [exerciseRows, setExerciseRows] = useState([]);
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
+  const [existingWorkouts, setExistingWorkouts] = useState([]);
   const navigation = useNavigation();
 
   useEffect(() => {
     // Initialize with one empty exercise row when the component loads
     addExerciseRow();
+    const getWorkouts = async () => {
+      const workoutsResponse = await fetchWorkouts(username);
+      setExistingWorkouts(workoutsResponse);
+    };
+    getWorkouts();
   }, []);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      // Initialize with one empty exercise row when the component loads
+      addExerciseRow();
+      const getWorkouts = async () => {
+        const workoutsResponse = await fetchWorkouts(username);
+        setExistingWorkouts(workoutsResponse);
+      };
+      getWorkouts();
+    }, [])
+  );
 
   const addExerciseRow = () => {
     if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
@@ -99,6 +118,13 @@ const CreateWorkout = ({ route }) => {
       setWorkoutNameError("");
     }
 
+    if (
+      existingWorkouts.some((workout) => workout.workout_name === workoutName)
+    ) {
+      setWorkoutNameError("A workout with this name already exists");
+      isValid = false;
+    }
+
     // Validate exercise rows
     if (exerciseRows.length === 0) {
       setExerciseError("At least one exercise is required");
@@ -130,7 +156,10 @@ const CreateWorkout = ({ route }) => {
     // Reset all fields to blank
     setWorkoutName("");
     setExerciseRows([]);
-    navigation.navigate("Profile");
+    navigation.navigate("Profile", {
+      username: username,
+      loggedinUser: username,
+    });
   };
 
   return (
