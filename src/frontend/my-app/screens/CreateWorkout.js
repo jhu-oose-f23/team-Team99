@@ -62,8 +62,6 @@ const CreateWorkout = ({ route }) => {
     getWorkouts();
   }, []);
 
-  console.log(existingWorkouts);
-
   const addExerciseRow = () => {
     if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
       setExerciseError(

@@ -141,7 +141,7 @@ const Profile = ({ navigation, route }) => {
   });
 
   // If username != loggedinUser, this profile is for a different user than the logged in user
-  const { username, loggedinUser} = route.params;
+  const { username, loggedinUser } = route.params;
 
   const navigateToOwnProfile = () => {
     navigation.navigate("Profile", {
@@ -155,7 +155,6 @@ const Profile = ({ navigation, route }) => {
     React.useCallback(() => {
       const fetchProfileData = async () => {
         const workoutsResponse = await fetchWorkouts(username);
-        console.log(workoutsResponse);
         const userResponse = await fetchUser(username);
         const connectionsResponse = await fetchConnections(username);
         setProfileData({

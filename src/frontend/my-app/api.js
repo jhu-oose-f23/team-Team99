@@ -37,12 +37,10 @@ export const createWorkout = async (workout) => {
 };
 
 export const deleteWorkout = async (workoutId) => {
-  console.log(workoutId);
   const apiUrl = `https://gymconnectbackend.onrender.com/workouts/${workoutId}`;
   try {
     const response = await fetch(apiUrl, { method: "DELETE" });
     const responseData = await response.json();
-    console.log(responseData);
     return responseData;
   } catch (error) {
     console.error("Error fetching data:", error);
@@ -84,7 +82,6 @@ export const postConnectionRequest = async (source, dest) => {
     if (response.status === 422) {
       console.error("Validation Error:", responseData.errors);
     } else {
-      console.log(responseData);
       return responseData;
     }
   } catch (error) {
