@@ -130,7 +130,10 @@ const CreateWorkout = ({ route }) => {
     // Reset all fields to blank
     setWorkoutName("");
     setExerciseRows([]);
-    navigation.navigate("Profile");
+    navigation.navigate("Profile", {
+      username: username,
+      loggedinUser: username,
+    });
   };
 
   return (
