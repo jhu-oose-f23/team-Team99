@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { List, Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
-import { createWorkout } from "../api";
+import { createWorkout, fetchWorkouts } from "../api";
 
 const styles = StyleSheet.create({
   container: {
@@ -49,12 +49,20 @@ const CreateWorkout = ({ route }) => {
   const [exerciseRows, setExerciseRows] = useState([]);
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
+  const [existingWorkouts, setExistingWorkouts] = useState([]);
   const navigation = useNavigation();
 
   useEffect(() => {
     // Initialize with one empty exercise row when the component loads
     addExerciseRow();
+    const getWorkouts = async () => {
+      const workoutsResponse = await fetchWorkouts(username);
+      setExistingWorkouts(workoutsResponse);
+    };
+    getWorkouts();
   }, []);
+
+  console.log(existingWorkouts);
 
   const addExerciseRow = () => {
     if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
@@ -97,6 +105,13 @@ const CreateWorkout = ({ route }) => {
       isValid = false;
     } else {
       setWorkoutNameError("");
+    }
+
+    if (
+      existingWorkouts.some((workout) => workout.workout_name === workoutName)
+    ) {
+      setWorkoutNameError("A workout with this name already exists");
+      isValid = false;
     }
 
     // Validate exercise rows
