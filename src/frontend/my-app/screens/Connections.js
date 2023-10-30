@@ -17,7 +17,7 @@ const Connections = ({ route, navigation }) => {
   const [isPressed, setIsPressed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [connections, setConnections] = useState([]);
-  const [requests, setRequests] = useState([]);
+  const [Requests, setRequests] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
 
   const navigateToProfile = (navigateToUsername) => {
@@ -26,6 +26,7 @@ const Connections = ({ route, navigation }) => {
       loggedinUser: username,
     });
   };
+
 
   const acceptConn = (src, dst) => {
         const acceptConnection = async () => {
@@ -40,7 +41,7 @@ const Connections = ({ route, navigation }) => {
 
 
   const disconnect = (src, dst) => {
-    
+
   }
 
   useFocusEffect(
@@ -52,8 +53,8 @@ const Connections = ({ route, navigation }) => {
       fetchUsers();
     }, [])
   )
-    
-  const getRequestedUsersMetadata = () => allUsers.filter(item => requests.includes(item.username));
+  
+  // const getRequestedUsersMetadata = () => allUsers.filter(item => requests.includes(item.username));
   
   useFocusEffect(
     React.useCallback(() => {
@@ -70,7 +71,9 @@ const Connections = ({ route, navigation }) => {
     React.useCallback(()=> {
       const fetchRequests = async () => {
         fetchConnectionRequest(username).then((data)=> {
-            setRequests(data);
+          const requestUsersMetadata = allUsers.filter(item => data.includes(item.username));
+          console.log("the data is", allUsers)  
+          setRequests(requestUsersMetadata);
         });
       }
       fetchRequests();
@@ -82,11 +85,15 @@ const Connections = ({ route, navigation }) => {
 
     const RenderRequests = () => {
 
-      const UsersRequests = getRequestedUsersMetadata();
+      // const UsersRequests = getRequestedUsersMetadata();
+      console.log("The requests are", Requests);
       return (
           <>
-          {UsersRequests &&
-            UsersRequests.map((user, index) => (
+          {Requests.length > 0 && 
+            <Text style={{fontSize: 20}}>Connection Requests</Text>}
+
+          {Requests &&
+            Requests.map((user, index) => (
               <TouchableOpacity
                 onPress={() => navigateToProfile(user.username)}
                 style={styles.userContainer}
@@ -119,7 +126,6 @@ const Connections = ({ route, navigation }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={{fontSize: 20}}>Connection Requests</Text>
       <RenderRequests/>
 
       <Text style={{fontSize: 20}}>Active Connections</Text>
