@@ -89,3 +89,41 @@ export const postConnectionRequest = async (source, dest) => {
     console.error("Error sending connection request:", error);
   }
 };
+
+export const fetchConnectionRequest = (dst) => {
+  return fetchData(`connection/request/${dst}`)
+}
+
+export const fetchAllUsers = () => fetchData('user');
+
+export const PutConnectionRequest = async (source, dst) => {
+  const apiURL = `https://gymconnectbackend.onrender.com/connection/request`;
+
+  console.log("src", source)
+  console.log("dst", dst)
+
+  const requestBody = {
+    source: source,
+    dest: dst,
+  };
+
+    const response = await fetch(apiURL, 
+      {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.status == 200) {
+        return response.json();
+      }
+
+      else {
+        console.error("Accepting connection failed!!", response.status)
+        return 0;
+      }
+}
+
+

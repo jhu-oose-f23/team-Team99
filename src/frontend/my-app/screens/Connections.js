@@ -10,13 +10,15 @@ import {
 import Profile from "../assets/profile.png";
 import { Button } from "react-native-paper";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { fetchConnections, fetchUser } from "../api";
+import { fetchConnections, fetchConnectionRequest, PutConnectionRequest, fetchUser, fetchAllUsers} from "../api";
 
 const Connections = ({ route, navigation }) => {
   const username = route.params.username;
   const [isPressed, setIsPressed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [connections, setConnections] = useState([]);
+  const [requests, setRequests] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
 
   const navigateToProfile = (navigateToUsername) => {
     navigation.navigate("Profile", {
@@ -25,12 +27,34 @@ const Connections = ({ route, navigation }) => {
     });
   };
 
-  const disconnect = () => {
-    if (isPressed) setIsPressed(false);
-    else setIsPressed(true);
-    console.log("Make disconnection");
+  const acceptConn = (src, dst) => {
+        const acceptConnection = async () => {
+          const data = PutConnectionRequest(src, dst)
+          if (!data) {
+            console.log("Accepting connection failed!", data)
+          }
+        };
+
+        acceptConnection();
   };
 
+
+  const disconnect = (src, dst) => {
+    
+  }
+
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchUsers = async () => {
+        const usersResponse = await fetchAllUsers();
+        setAllUsers(usersResponse ? usersResponse : [])
+      }
+      fetchUsers();
+    }, [])
+  )
+    
+  const getRequestedUsersMetadata = () => allUsers.filter(item => requests.includes(item.username));
+  
   useFocusEffect(
     React.useCallback(() => {
       const fetchConnectionsData = async () => {
@@ -41,8 +65,64 @@ const Connections = ({ route, navigation }) => {
       fetchConnectionsData();
     }, [])
   );
+
+  useFocusEffect( 
+    React.useCallback(()=> {
+      const fetchRequests = async () => {
+        fetchConnectionRequest(username).then((data)=> {
+            setRequests(data);
+        });
+      }
+      fetchRequests();
+
+    }, [])
+  )
+
+
+
+    const RenderRequests = () => {
+
+      const UsersRequests = getRequestedUsersMetadata();
+      return (
+          <>
+          {UsersRequests &&
+            UsersRequests.map((user, index) => (
+              <TouchableOpacity
+                onPress={() => navigateToProfile(user.username)}
+                style={styles.userContainer}
+                key={index}
+              >
+                <Image
+                  source={require("../assets/profile.png")}
+                  style={styles.profileImage}
+                />
+                <View style={styles.textStyle}>
+                  <Text style={styles.username}>{"@" + user.username}</Text>
+                  <Text>{`${user.first_name} ${user.last_name}`}</Text>
+                </View>
+
+                <View style={styles.buttonStyle}>
+                  <Button
+                    style={[styles.button, isPressed ? styles.buttonPressed : null]}
+                    onPress={() => acceptConn(user.username, username)}
+                  >
+                    Connected
+                  </Button>
+                </View>
+              </TouchableOpacity>
+            ))}
+            </>
+      )
+
+    }
+
+
   return (
     <ScrollView style={styles.container}>
+      <Text style={{fontSize: 20}}>Connection Requests</Text>
+      <RenderRequests/>
+
+      <Text style={{fontSize: 20}}>Active Connections</Text>
       {connections &&
         connections.map((user, index) => (
           <TouchableOpacity
@@ -62,7 +142,7 @@ const Connections = ({ route, navigation }) => {
             <View style={styles.buttonStyle}>
               <Button
                 style={[styles.button, isPressed ? styles.buttonPressed : null]}
-                onPress={disconnect}
+                onPress={() => disconnect(user.username, username)}
               >
                 Connected
               </Button>
@@ -70,6 +150,7 @@ const Connections = ({ route, navigation }) => {
           </TouchableOpacity>
         ))}
     </ScrollView>
+
   );
 };
 
