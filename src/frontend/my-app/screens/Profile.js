@@ -102,12 +102,14 @@ const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
         <View>
           <View style={styles.tableHeader}>
             <Text style={styles.tableHeaderCell}>Exercise</Text>
+            <Text style={styles.tableHeaderCell}>Weight</Text>
             <Text style={styles.tableHeaderCell}>Sets</Text>
             <Text style={styles.tableHeaderCell}>Reps</Text>
           </View>
           {content.exercises.map((item) => (
             <View style={styles.row} key={item.id}>
               <Text style={styles.cell}>{item.name}</Text>
+              <Text style={styles.cell}>{item.weight}</Text>
               <Text style={styles.cell}>{item.sets}</Text>
               <Text style={styles.cell}>{item.reps}</Text>
             </View>
@@ -144,7 +146,6 @@ const Profile = ({ navigation, route }) => {
 
   // If username != loggedinUser, this profile is for a different user than the logged in user
   const { username, loggedinUser } = route.params;
-
   const navigateToOwnProfile = () => {
     navigation.navigate("Profile", {
       username: loggedinUser,
@@ -192,7 +193,6 @@ const Profile = ({ navigation, route }) => {
                 height: 100,
                 marginRight: 10,
               }}
-              allowDelete={username == loggedinUser}
             />
             <View>
               <Text
@@ -214,7 +214,7 @@ const Profile = ({ navigation, route }) => {
           {loading ? (
             <Text style={styles.loadingText}>Loading...</Text>
           ) : (
-            <ScrollView>
+            <ScrollView scrollEnabled={true} style={{ height: 400 }}>
               {profileData.workouts.map((workout, index) => (
                 <ExpandableSection
                   key={workout.id}
@@ -228,6 +228,7 @@ const Profile = ({ navigation, route }) => {
                       ),
                     });
                   }}
+                  allowDelete={username === loggedinUser}
                 />
               ))}
             </ScrollView>

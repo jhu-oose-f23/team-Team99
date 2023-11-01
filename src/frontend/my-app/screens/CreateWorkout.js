@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { List, Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { createWorkout, fetchWorkouts } from "../api";
 import { useFocusEffect } from "@react-navigation/native";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const styles = StyleSheet.create({
   container: {
@@ -53,20 +53,25 @@ const CreateWorkout = ({ route }) => {
   const [existingWorkouts, setExistingWorkouts] = useState([]);
   const navigation = useNavigation();
 
-  useEffect(() => {
-    // Initialize with one empty exercise row when the component loads
-    addExerciseRow();
-    const getWorkouts = async () => {
-      const workoutsResponse = await fetchWorkouts(username);
-      setExistingWorkouts(workoutsResponse);
-    };
-    getWorkouts();
-  }, []);
+  const [open, setOpen] = useState([]);
+  const [selectedExerciseValue, setSelectedExerciseValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: "Bench Press", value: "Bench Press" },
+    { label: "Bicep Curl", value: "Bicep Curl" },
+    { label: "Pull Up", value: "Pull Up" },
+    { label: "Chin Up", value: "Chin Up" },
+    { label: "Tricep Dip", value: "Tricep Dip" },
+    { label: "Seated Row", value: "Seated Row" },
+    { label: "Overhead Press", value: "Overhead Press" },
+    { label: "Bent over Rows", value: "Bent over Rows" },
+    { label: "Squat", value: "Squat" },
+    { label: "Romanian Deadlift", value: "Romanian Deadlift" },
+    { label: "Skullcrushers", value: "Skullcrushers" },
+  ]);
 
   useFocusEffect(
     React.useCallback(() => {
       // Initialize with one empty exercise row when the component loads
-      addExerciseRow();
       const getWorkouts = async () => {
         const workoutsResponse = await fetchWorkouts(username);
         setExistingWorkouts(workoutsResponse);
@@ -76,13 +81,6 @@ const CreateWorkout = ({ route }) => {
   );
 
   const addExerciseRow = () => {
-    if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
-      setExerciseError(
-        "Can't add another exercise unless all exercises are filled in"
-      );
-      return;
-    }
-    setExerciseError("");
     const newExercise = {
       name: "",
       sets: "",
@@ -102,6 +100,12 @@ const CreateWorkout = ({ route }) => {
     updatedExercise[index][field] = value;
     setExerciseRows(updatedExercise);
   };
+
+  useEffect(() => {
+    if (exerciseRows.length >= 1 && !exerciseRows.some(isEmptyExercise)) {
+      setExerciseError("");
+    }
+  }, [exerciseRows]);
 
   const isEmptyExercise = (exercise) =>
     !exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim();
@@ -132,12 +136,11 @@ const CreateWorkout = ({ route }) => {
     } else {
       setExerciseError("");
       for (const exercise of exerciseRows) {
-        if (isEmptyExercise(exercise)) {
-          setExerciseError("All exercise fields must be filled");
+        if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
+          setExerciseError(
+            "Can't add another exercise unless all exercises are filled in"
+          );
           isValid = false;
-          break; // Exit the loop after the first error
-        } else {
-          setExerciseError("");
         }
       }
     }
@@ -165,7 +168,13 @@ const CreateWorkout = ({ route }) => {
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
+        style={{
+          margin: 0,
+          marginBottom: 5,
+          backgroundColor: "#fff",
+          height: 50,
+          padding: 10,
+        }}
         mode="outlined"
         placeholder="Workout name"
         value={workoutName}
@@ -181,14 +190,79 @@ const CreateWorkout = ({ route }) => {
       <FlatList
         data={exerciseRows}
         keyExtractor={(item, index) => index.toString()}
+        CellRendererComponent={({ children, index, style, ...props }) => {
+          return (
+            <View
+              style={[style, { zIndex: -1 * index }]}
+              index={index}
+              {...props}
+            >
+              {children}
+            </View>
+          );
+        }}
         renderItem={({ item, index }) => (
-          <View style={styles.row}>
+          <View
+            style={{
+              flexDirection: "row",
+              marginBottom: 15,
+              backgroundColor: "#fff",
+              padding: 10,
+              borderRadius: 5,
+              alignItems: "center",
+            }}
+          >
+            <View
+              style={[
+                styles.input,
+                // { flex: 2, minHeight: open[index] ? 250 : 0 },
+                { flex: 2 },
+              ]}
+            >
+              <DropDownPicker
+                open={open[index]}
+                value={item.name}
+                items={items}
+                setOpen={(o) => {
+                  const updatedOpen = [...open];
+                  // Check if open[index] is defined
+                  if (open.length > index) {
+                    updatedOpen[index] = o;
+                  } else {
+                    updatedOpen.push(o);
+                  }
+                  setOpen(updatedOpen);
+                }}
+                onOpen={() => {
+                  // Close all other dropdowns
+                  const updatedOpen = [...open];
+                  updatedOpen.forEach((o, i) => {
+                    updatedOpen[i] = false;
+                  });
+                  updatedOpen[index] = true;
+                  setOpen(updatedOpen);
+                }}
+                setValue={(v) => updateExercise(index, "name", v())}
+                placeholder="Exercise"
+                placeholderStyle={{
+                  color: "#C7C7CD",
+                  marginBottom: 8,
+                }}
+                style={{
+                  borderWidth: 0,
+                }}
+                dropDownContainerStyle={{
+                  borderWidth: 0,
+                }}
+              />
+            </View>
             <TextInput
-              style={[styles.input, { flex: 2, marginRight: 10 }]}
+              style={[styles.input, { flex: 1, marginRight: 10 }]}
               mode="outlined"
-              placeholder="Exercise Name"
-              value={item.name}
-              onChangeText={(text) => updateExercise(index, "name", text)}
+              placeholder="Weight"
+              value={item.weight}
+              onChangeText={(text) => updateExercise(index, "weight", text)}
+              keyboardType="numeric"
             />
             <TextInput
               style={[styles.input, { flex: 1, marginRight: 10 }]}
@@ -207,7 +281,7 @@ const CreateWorkout = ({ route }) => {
               keyboardType="numeric"
             />
             <TouchableOpacity onPress={() => removeExerciseRow(index)}>
-              <Text style={styles.removeIcon}>×</Text>
+              <Text style={styles.removeIcon}>x</Text>
             </TouchableOpacity>
           </View>
         )}
