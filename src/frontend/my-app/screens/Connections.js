@@ -12,6 +12,7 @@ import { Button } from "react-native-paper";
 // import { useEffect } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { fetchConnections, fetchConnectionRequest, PutConnectionRequest, fetchUser, fetchAllUsers, deleteConnection} from "../api";
+import { navigateToProfile } from "../Helpers";
 
 
 const Connections = ({ route, navigation }) => {
@@ -188,7 +189,9 @@ const Connections = ({ route, navigation }) => {
       {connections &&
         connections.map((user, index) => (
           <TouchableOpacity
-            onPress={() => navigateToProfile(user.username)}
+            onPress={() =>
+              navigateToProfile(navigation, user.username, username)
+            }
             style={styles.userContainer}
             key={index}
           >
