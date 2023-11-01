@@ -67,26 +67,18 @@ const Connections = ({ route, navigation }) => {
         const usersResponse = await fetchAllUsers();
         console.log("The all users is ",usersResponse)
         setAllUsers(usersResponse ? usersResponse : [])
+        console.log("this is all users", allUsers)
       }
       fetchUsers();
-    }, [])
-  )
-  
-  // const getRequestedUsersMetadata = () => allUsers.filter(item => requests.includes(item.username));
-  
-  useFocusEffect(
-    React.useCallback(() => {
+
       const fetchConnectionsData = async () => {
         const connectionsResponse = await fetchConnections(username);
         setConnections(connectionsResponse ? connectionsResponse : []);
         setLoading(false);
       };
-      fetchConnectionsData();
-    }, [])
-  );
 
-  useFocusEffect( 
-    React.useCallback(()=> {
+      fetchConnectionsData();
+
       const fetchRequests = async () => {
         fetchConnectionRequest(username).then((data)=> {
           const requestUsersMetadata = allUsers.filter(item => data.includes(item.username));
@@ -95,9 +87,34 @@ const Connections = ({ route, navigation }) => {
         });
       }
       fetchRequests();
-
     }, [])
   )
+  
+  
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     const fetchConnectionsData = async () => {
+  //       const connectionsResponse = await fetchConnections(username);
+  //       setConnections(connectionsResponse ? connectionsResponse : []);
+  //       setLoading(false);
+  //     };
+  //     fetchConnectionsData();
+  //   }, [])
+  // );
+
+  // useFocusEffect( 
+  //   React.useCallback(()=> {
+  //     const fetchRequests = async () => {
+  //       fetchConnectionRequest(username).then((data)=> {
+  //         const requestUsersMetadata = allUsers.filter(item => data.includes(item.username));
+  //         // console.log("All users in the codes are", allUsers) 
+  //         setRequests(requestUsersMetadata);
+  //       });
+  //     }
+  //     fetchRequests();
+
+  //   }, [])
+  // )
 
 
 
