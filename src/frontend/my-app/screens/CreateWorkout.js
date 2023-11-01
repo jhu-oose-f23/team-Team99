@@ -257,7 +257,15 @@ const CreateWorkout = ({ route }) => {
               />
             </View>
             <TextInput
-              style={[styles.input, { flex: 2, marginRight: 10 }]}
+              style={[styles.input, { flex: 1, marginRight: 10 }]}
+              mode="outlined"
+              placeholder="Weight"
+              value={item.weight}
+              onChangeText={(text) => updateExercise(index, "weight", text)}
+              keyboardType="numeric"
+            />
+            <TextInput
+              style={[styles.input, { flex: 1, marginRight: 10 }]}
               mode="outlined"
               placeholder="Sets"
               value={item.sets}

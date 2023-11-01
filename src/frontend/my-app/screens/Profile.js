@@ -102,12 +102,14 @@ const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
         <View>
           <View style={styles.tableHeader}>
             <Text style={styles.tableHeaderCell}>Exercise</Text>
+            <Text style={styles.tableHeaderCell}>Weight</Text>
             <Text style={styles.tableHeaderCell}>Sets</Text>
             <Text style={styles.tableHeaderCell}>Reps</Text>
           </View>
           {content.exercises.map((item) => (
             <View style={styles.row} key={item.id}>
               <Text style={styles.cell}>{item.name}</Text>
+              <Text style={styles.cell}>{item.weight}</Text>
               <Text style={styles.cell}>{item.sets}</Text>
               <Text style={styles.cell}>{item.reps}</Text>
             </View>
