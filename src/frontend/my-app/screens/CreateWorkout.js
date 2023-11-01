@@ -113,11 +113,7 @@ const CreateWorkout = ({ route }) => {
   };
 
   useEffect(() => {
-    if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
-      setExerciseError(
-        "Can't add another exercise unless all exercises are filled in"
-      );
-    } else {
+    if (exerciseRows.length >= 1 && !exerciseRows.some(isEmptyExercise)) {
       setExerciseError("");
     }
   }, [exerciseRows]);
@@ -151,12 +147,11 @@ const CreateWorkout = ({ route }) => {
     } else {
       setExerciseError("");
       for (const exercise of exerciseRows) {
-        if (isEmptyExercise(exercise)) {
-          setExerciseError("All exercise fields must be filled");
+        if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
+          setExerciseError(
+            "Can't add another exercise unless all exercises are filled in"
+          );
           isValid = false;
-          break; // Exit the loop after the first error
-        } else {
-          setExerciseError("");
         }
       }
     }
@@ -180,7 +175,6 @@ const CreateWorkout = ({ route }) => {
       loggedinUser: username,
     });
   };
-  console.log(open);
 
   return (
     <View style={styles.container}>
@@ -231,6 +225,7 @@ const CreateWorkout = ({ route }) => {
                   setOpen(updatedOpen);
                 }}
                 onOpen={() => {
+                  console.log(open[index]);
                   // Close all other dropdowns
                   const updatedOpen = [...open];
                   updatedOpen.forEach((o, i) => {
@@ -249,6 +244,7 @@ const CreateWorkout = ({ route }) => {
                   borderWidth: 0,
                   zIndex: open[index] ? 5000 : 1,
                 }}
+                zIndex={!open[index] ? 5000 : 1}
               />
             </View>
             <TextInput
