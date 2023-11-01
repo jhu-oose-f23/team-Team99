@@ -7,8 +7,10 @@ const loginApiUrl = "https://gymconnectbackend.onrender.com/user/login";
 const Login = ({ navigation, route }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false); 
   const { setUserLoggedIn } = useContext(UserContext);
   const handleLogin = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch(loginApiUrl, {
         method: "POST",
@@ -45,6 +47,8 @@ const Login = ({ navigation, route }) => {
       }
     } catch (error) {
       console.error("Error during login:", error);
+    } finally { 
+      setIsLoading(false);
     }
   };
 
@@ -67,7 +71,11 @@ const Login = ({ navigation, route }) => {
         onChangeText={(text) => setPassword(text)}
       />
 
-      <Button title="Login" onPress={handleLogin} />
+      <Button
+        title="Login"
+        onPress={handleLogin}
+        disabled={isLoading} // Disable the button while loading
+      />
     </View>
   );
 };
