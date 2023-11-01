@@ -1,7 +1,7 @@
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import React from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
-import { Avatar, Badge } from "react-native-elements";
+import { Avatar } from "react-native-elements";
 
 const Leaderboard = ({ navigation, route }) => {
   const username = route.params.username;

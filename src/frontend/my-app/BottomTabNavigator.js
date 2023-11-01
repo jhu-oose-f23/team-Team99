@@ -1,7 +1,7 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons"; // Importing the Ionicons set, but you can use other sets
-import { createNativeStackNavigator } from "@react-navigation/native-stack"; // Import the Stack Navigator
+import { Ionicons } from "@expo/vector-icons";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Feed from "./screens/FeedScreen";
 import CreateWorkout from "./screens/CreateWorkout";
@@ -61,7 +61,7 @@ const BottomTabNavigator = ({ route }) => {
         initialParams={{ username: username }}
         options={{
           tabBarIcon: ({ color, size }) => (
-            <Ionicons name="ios-add-circle" color={color} size={size} />
+            <Ionicons name="trophy" color={color} size={size} />
           ),
         }}
       />

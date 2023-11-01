@@ -1,7 +1,7 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Icon, Card } from "react-native-elements";
-import { Ionicons } from "@expo/vector-icons"; // Import the Ionicons set
+import { Ionicons } from "@expo/vector-icons";
 
 const leaderboards = [
   { id: 1, name: "Deadlift", icon: "trophy" },
