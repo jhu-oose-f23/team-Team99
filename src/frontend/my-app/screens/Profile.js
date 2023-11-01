@@ -9,6 +9,7 @@ import {
   fetchUser,
   fetchConnections,
   deleteWorkout,
+  postConnectionRequest
 } from "../api";
 
 const styles = StyleSheet.create({
@@ -130,14 +131,6 @@ const ExpandableSection = ({ title, content, onDelete }) => {
   );
 };
 
-const handleConnectionRequest = async (usernameToConnect) => {
-  try {
-    await sendConnectionRequest(usernameToConnect); 
-    setConnectionRequests([...connectionRequests, usernameToConnect]);
-  } catch (error) {
-    console.error("Error sending connection request:", error);
-  }
-};
 
 
 
@@ -153,6 +146,15 @@ const Profile = ({ navigation, route }) => {
     connections: 0,
     loading: true,
   });
+
+  const sendConnectionRequest = async () => {
+    try {
+        await postConnectionRequest(loggedinUser, username); 
+        setConnectionRequests((prevRequests) => [...prevRequests, username]);
+    } catch (error) {
+        console.error("Error sending connection request:", error);
+    }
+  };
 
   // If username != loggedinUser, this profile is for a different user than the logged in user
   const { username, loggedinUser } = route.params;
@@ -217,7 +219,7 @@ const Profile = ({ navigation, route }) => {
                 borderRadius: 5,
                 marginTop: 10,
               }}
-              onPress={() => handleConnectionRequest(username)}
+              onPress={sendConnectionRequest}
               disabled={connectionRequests.includes(username)}
             >
               <Text style={{ color: "#fff" }}>
