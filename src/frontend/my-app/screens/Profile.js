@@ -137,7 +137,6 @@ const Profile = ({ navigation, route }) => {
       last_name: "",
     },
     connections: 0,
-    loading: true,
   });
 
   // If username != loggedinUser, this profile is for a different user than the logged in user
@@ -154,15 +153,19 @@ const Profile = ({ navigation, route }) => {
   useFocusEffect(
     React.useCallback(() => {
       const fetchProfileData = async () => {
-        const workoutsResponse = await fetchWorkouts(username);
-        const userResponse = await fetchUser(username);
-        const connectionsResponse = await fetchConnections(username);
+        setLoading(true);
+        const [workoutsResponse, userResponse, connectionsResponse] =
+          await Promise.all([
+            fetchWorkouts(username),
+            fetchUser(username),
+            fetchConnections(username),
+          ]);
         setProfileData({
           workouts: workoutsResponse,
           user: userResponse,
           connections: connectionsResponse?.length || 0,
-          loading: false,
         });
+        setLoading(false);
       };
       fetchProfileData();
     }, [username])
@@ -170,58 +173,65 @@ const Profile = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          ...styles.userInfo,
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <Image
-          source={require("../assets/profile.png")}
-          style={{
-            width: 100,
-            height: 100,
-            marginRight: 10,
-          }}
-        />
+      {loading === false && (
         <View>
-          <Text
-            style={[styles.userDetail, { fontSize: 20, fontWeight: "bold" }]}
+          <View
+            style={{
+              ...styles.userInfo,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
           >
-            {profileData.user.first_name} {profileData.user.last_name}
-          </Text>
-          <Text style={styles.userDetail}>@{username}</Text>
-          <Text style={styles.userDetail}>
-            {profileData.connections} Connections
-          </Text>
-        </View>
-      </View>
-
-      <Text style={styles.sectionTitle}>Workouts</Text>
-      {profileData.loading ? (
-        <Text style={styles.loadingText}>Loading...</Text>
-      ) : (
-        <ScrollView>
-          {profileData.workouts.map((workout, index) => (
-            <ExpandableSection
-              key={workout.id}
-              title={workout.workout_name}
-              content={workout}
-              onDelete={(workoutId) => {
-                setProfileData({
-                  ...profileData,
-                  workouts: profileData.workouts.filter(
-                    (workout) => workout.id != workoutId
-                  ),
-                });
+            <Image
+              source={require("../assets/profile.png")}
+              style={{
+                width: 100,
+                height: 100,
+                marginRight: 10,
               }}
             />
-          ))}
-        </ScrollView>
-      )}
-      {username != loggedinUser && (
-        <Button title="Back to my profile" onPress={navigateToOwnProfile} />
+            <View>
+              <Text
+                style={[
+                  styles.userDetail,
+                  { fontSize: 20, fontWeight: "bold" },
+                ]}
+              >
+                {profileData.user.first_name} {profileData.user.last_name}
+              </Text>
+              <Text style={styles.userDetail}>@{username}</Text>
+              <Text style={styles.userDetail}>
+                {profileData.connections} Connections
+              </Text>
+            </View>
+          </View>
+
+          <Text style={styles.sectionTitle}>Workouts</Text>
+          {loading ? (
+            <Text style={styles.loadingText}>Loading...</Text>
+          ) : (
+            <ScrollView>
+              {profileData.workouts.map((workout, index) => (
+                <ExpandableSection
+                  key={workout.id}
+                  title={workout.workout_name}
+                  content={workout}
+                  onDelete={(workoutId) => {
+                    setProfileData({
+                      ...profileData,
+                      workouts: profileData.workouts.filter(
+                        (workout) => workout.id != workoutId
+                      ),
+                    });
+                  }}
+                />
+              ))}
+            </ScrollView>
+          )}
+          {username != loggedinUser && (
+            <Button title="Back to my profile" onPress={navigateToOwnProfile} />
+          )}
+        </View>
       )}
     </View>
   );
