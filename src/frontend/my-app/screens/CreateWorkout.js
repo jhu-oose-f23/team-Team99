@@ -8,10 +8,10 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
-import { List, Colors } from "react-native-paper";
 import { useNavigation } from "@react-navigation/native";
 import { createWorkout, fetchWorkouts } from "../api";
 import { useFocusEffect } from "@react-navigation/native";
+import DropDownPicker from "react-native-dropdown-picker";
 
 const styles = StyleSheet.create({
   container: {
@@ -52,6 +52,17 @@ const CreateWorkout = ({ route }) => {
   const [exerciseError, setExerciseError] = useState("");
   const [existingWorkouts, setExistingWorkouts] = useState([]);
   const navigation = useNavigation();
+
+  const [open, setOpen] = useState([]);
+  const [selectedExerciseValue, setSelectedExerciseValue] = useState(null);
+  const [items, setItems] = useState([
+    { label: "Bench Press", value: "Bench Press" },
+    { label: "Bicep Curl", value: "Bicep Curl" },
+    { label: "Pull Up", value: "Pull Up" },
+    { label: "Chin Up", value: "Chin Up" },
+    { label: "Tricep Dip", value: "Tricep Dip" },
+    { label: "Seated Row", value: "Seated Row" },
+  ]);
 
   useEffect(() => {
     // Initialize with one empty exercise row when the component loads
@@ -161,11 +172,18 @@ const CreateWorkout = ({ route }) => {
       loggedinUser: username,
     });
   };
+  console.log(open);
 
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.input}
+        style={{
+          margin: 0,
+          marginBottom: 5,
+          backgroundColor: "#fff",
+          height: 50,
+          padding: 10,
+        }}
         mode="outlined"
         placeholder="Workout name"
         value={workoutName}
@@ -182,16 +200,48 @@ const CreateWorkout = ({ route }) => {
         data={exerciseRows}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item, index }) => (
-          <View style={styles.row}>
+          <View style={[styles.row]}>
+            <View
+              style={[
+                styles.input,
+                { flex: 2, minHeight: open[index] ? 250 : 0 },
+              ]}
+            >
+              <DropDownPicker
+                open={open[index]}
+                value={item.name}
+                items={items}
+                setOpen={(o) => {
+                  const updatedOpen = [...open];
+                  // Check if open[index] is defined
+                  if (open.length > index) {
+                    updatedOpen[index] = o;
+                  } else {
+                    updatedOpen.push(o);
+                  }
+                  setOpen(updatedOpen);
+                }}
+                onOpen={() => {
+                  // Close all other dropdowns
+                  const updatedOpen = [...open];
+                  updatedOpen.forEach((o, i) => {
+                    updatedOpen[i] = false;
+                  });
+                  updatedOpen[index] = true;
+                  setOpen(updatedOpen);
+                }}
+                setValue={(v) => updateExercise(index, "name", v())}
+                placeholder=""
+                style={{
+                  borderWidth: 0,
+                }}
+                dropDownContainerStyle={{
+                  borderWidth: 0,
+                }}
+              />
+            </View>
             <TextInput
               style={[styles.input, { flex: 2, marginRight: 10 }]}
-              mode="outlined"
-              placeholder="Exercise Name"
-              value={item.name}
-              onChangeText={(text) => updateExercise(index, "name", text)}
-            />
-            <TextInput
-              style={[styles.input, { flex: 1, marginRight: 10 }]}
               mode="outlined"
               placeholder="Sets"
               value={item.sets}

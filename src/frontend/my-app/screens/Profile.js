@@ -144,7 +144,6 @@ const Profile = ({ navigation, route }) => {
 
   // If username != loggedinUser, this profile is for a different user than the logged in user
   const { username, loggedinUser } = route.params;
-
   const navigateToOwnProfile = () => {
     navigation.navigate("Profile", {
       username: loggedinUser,
@@ -192,7 +191,6 @@ const Profile = ({ navigation, route }) => {
                 height: 100,
                 marginRight: 10,
               }}
-              allowDelete={username == loggedinUser}
             />
             <View>
               <Text
@@ -228,6 +226,7 @@ const Profile = ({ navigation, route }) => {
                       ),
                     });
                   }}
+                  allowDelete={username === loggedinUser}
                 />
               ))}
             </ScrollView>
