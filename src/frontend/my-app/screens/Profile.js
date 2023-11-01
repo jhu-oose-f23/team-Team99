@@ -212,7 +212,7 @@ const Profile = ({ navigation, route }) => {
           {loading ? (
             <Text style={styles.loadingText}>Loading...</Text>
           ) : (
-            <ScrollView>
+            <ScrollView scrollEnabled={true} style={{ height: 400 }}>
               {profileData.workouts.map((workout, index) => (
                 <ExpandableSection
                   key={workout.id}
