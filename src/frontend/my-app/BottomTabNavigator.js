@@ -1,14 +1,35 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons"; // Importing the Ionicons set, but you can use other sets
+import { createNativeStackNavigator } from "@react-navigation/native-stack"; // Import the Stack Navigator
 
 import Feed from "./screens/FeedScreen";
 import CreateWorkout from "./screens/CreateWorkout";
+import Leaderboards from "./screens/Leaderboards";
+import Leaderboard from "./screens/Leaderboard";
 import Profile from "./screens/Profile";
 import Settings from "./screens/Settings";
 import Connections from "./screens/Connections";
 
 const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+const LeaderboardStack = ({ route }) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="Leaderboards"
+      component={Leaderboards}
+      initialParams={{ username: route.params.username }}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="Leaderboard"
+      component={Leaderboard}
+      initialParams={{ username: route.params.username }}
+      // options={{ headerShown: false }}
+    />
+  </Stack.Navigator>
+);
 
 const BottomTabNavigator = ({ route }) => {
   const { username } = route.params;
@@ -27,6 +48,16 @@ const BottomTabNavigator = ({ route }) => {
       <Tab.Screen
         name="Create"
         component={CreateWorkout}
+        initialParams={{ username: username }}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="ios-add-circle" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="LeaderboardStack"
+        component={LeaderboardStack}
         initialParams={{ username: username }}
         options={{
           tabBarIcon: ({ color, size }) => (
