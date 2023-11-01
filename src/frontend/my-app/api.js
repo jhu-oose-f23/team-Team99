@@ -1,6 +1,12 @@
 // TODO: make this a .env variable
 const BASE_URL = "https://gymconnectbackend.onrender.com";
 
+
+export const fetchConnectionRequestSource = async (src) => {
+  const connectionRequests = await fetchData(`connection/request/out/${src}`);
+  return connectionRequests
+}
+
 const fetchData = async (endpoint) => {
   try {
     const response = await fetch(`${BASE_URL}/${endpoint}`);

@@ -9,7 +9,8 @@ import {
   fetchUser,
   fetchConnections,
   deleteWorkout,
-  postConnectionRequest
+  postConnectionRequest,
+  fetchConnectionRequestSource,
 } from "../api";
 
 const styles = StyleSheet.create({
@@ -147,18 +148,22 @@ const Profile = ({ navigation, route }) => {
     loading: true,
   });
 
-  const sendConnectionRequest = async () => {
-    try {
-        await postConnectionRequest(loggedinUser, username); 
-        setConnectionRequests((prevRequests) => [...prevRequests, username]);
-    } catch (error) {
-        console.error("Error sending connection request:", error);
-    }
-  };
 
+  
+  
   // If username != loggedinUser, this profile is for a different user than the logged in user
   const { username, loggedinUser } = route.params;
-
+  
+  const sendConnectionRequest = async (profileId) => {
+    await postConnectionRequest(
+      loggedinUser,
+      profileId,
+    );
+    const fetchedConnectionRequests = await fetchConnectionRequestSource(loggedinUser);
+    if (fetchedConnectionRequests != null) { 
+      setConnectionRequests(fetchedConnectionRequests);
+    }
+  };
   const navigateToOwnProfile = () => {
     navigation.navigate("Profile", {
       username: loggedinUser,
@@ -170,6 +175,10 @@ const Profile = ({ navigation, route }) => {
   useFocusEffect(
     React.useCallback(() => {
       const fetchProfileData = async () => {
+        const fetchedConnectionRequests = await fetchConnectionRequestSource(loggedinUser);
+        if (fetchedConnectionRequests != null) { 
+          setConnectionRequests(fetchedConnectionRequests);
+        }
         const workoutsResponse = await fetchWorkouts(username);
         const userResponse = await fetchUser(username);
         const connectionsResponse = await fetchConnections(username);
@@ -219,7 +228,7 @@ const Profile = ({ navigation, route }) => {
                 borderRadius: 5,
                 marginTop: 10,
               }}
-              onPress={sendConnectionRequest}
+              onPress={() => sendConnectionRequest(username)}
               disabled={connectionRequests.includes(username)}
             >
               <Text style={{ color: "#fff" }}>

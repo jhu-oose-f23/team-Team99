@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { fetchRecommendations, postConnectionRequest } from "../api";
+import { fetchRecommendations, postConnectionRequest, fetchConnectionRequestSource } from "../api";
 
 const FeedScreen = ({ navigation, route }) => {
   const [connectionRequests, setConnectionRequests] = useState([]);
@@ -21,15 +21,14 @@ const FeedScreen = ({ navigation, route }) => {
     recommendations: [],
   });
 
+  
   const username = route.params.username;
-
   const resetToFeed = () => {
     setIsSearchActive(false);
     setSearchQuery("");
   };
 
   const navigateToProfile = (navigateToUsername) => {
-    console.log("Navigating to profile of:", navigateToUsername);
     navigation.navigate("Profile", {
       username: navigateToUsername,
       loggedinUser: username,
@@ -39,9 +38,9 @@ const FeedScreen = ({ navigation, route }) => {
   const sendConnectionRequest = async (profileId) => {
     await postConnectionRequest(
       username,
-      userData.recommendations[profileId].username
+      profileId
     );
-    setConnectionRequests((prevRequests) => [...prevRequests, profileId]);
+    setConnectionRequests([...connectionRequests, profileId]);
   };
 
   // Get Search Results
@@ -72,6 +71,10 @@ const FeedScreen = ({ navigation, route }) => {
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
+        const fetchedConnectionRequests = await fetchConnectionRequestSource(username);
+        if (fetchedConnectionRequests != null) { 
+          setConnectionRequests(fetchedConnectionRequests);
+        }
         const recommendationsResponse = await fetchRecommendations(username);
         setUserData({
           recommendations: recommendationsResponse,
@@ -211,18 +214,18 @@ const FeedScreen = ({ navigation, route }) => {
                 </Text>
                 <TouchableOpacity
                   style={{
-                    backgroundColor: connectionRequests.includes(index)
+                    backgroundColor: connectionRequests.includes(profile.username)
                       ? "green"
                       : "#007bff",
                     padding: 5,
                     borderRadius: 5,
                     marginTop: 10,
                   }}
-                  onPress={() => sendConnectionRequest(index)}
-                  disabled={connectionRequests.includes(index)}
+                  onPress={() => sendConnectionRequest(profile.username)}
+                  disabled={connectionRequests.includes(profile.username)}
                 >
                   <Text style={{ color: "#fff" }}>
-                    {connectionRequests.includes(index)
+                    {connectionRequests.includes(profile.username)
                       ? "Request Sent"
                       : "Connect"}
                   </Text>
