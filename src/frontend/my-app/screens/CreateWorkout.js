@@ -243,7 +243,11 @@ const CreateWorkout = ({ route }) => {
                   setOpen(updatedOpen);
                 }}
                 setValue={(v) => updateExercise(index, "name", v())}
-                placeholder=""
+                placeholder="Exercise"
+                placeholderStyle={{
+                  color: "#C7C7CD",
+                  marginBottom: 8,
+                }}
                 style={{
                   borderWidth: 0,
                 }}
