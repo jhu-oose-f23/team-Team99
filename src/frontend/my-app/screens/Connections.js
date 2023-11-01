@@ -9,8 +9,10 @@ import {
 } from "react-native";
 import Profile from "../assets/profile.png";
 import { Button } from "react-native-paper";
+import { useEffect } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { fetchConnections, fetchConnectionRequest, PutConnectionRequest, fetchUser, fetchAllUsers} from "../api";
+import { fetchConnections, fetchConnectionRequest, PutConnectionRequest, fetchUser, fetchAllUsers, deleteConnection} from "../api";
+
 
 const Connections = ({ route, navigation }) => {
   const username = route.params.username;
@@ -19,6 +21,7 @@ const Connections = ({ route, navigation }) => {
   const [connections, setConnections] = useState([]);
   const [Requests, setRequests] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
+  const [deleteThisConnection, setDeleteThisConnection] = useState('')
 
   const navigateToProfile = (navigateToUsername) => {
     navigation.navigate("Profile", {
@@ -26,7 +29,6 @@ const Connections = ({ route, navigation }) => {
       loggedinUser: username,
     });
   };
-
 
   const acceptConn = (src, dst) => {
         const acceptConnection = async () => {
@@ -40,7 +42,22 @@ const Connections = ({ route, navigation }) => {
   };
 
 
-  const disconnect = (src, dst) => {
+  const rejectConn = (src, dst) => {
+    const rejectConnection = () => {
+      const data = deleteConnection(src, dst)
+      if (!data) {
+        console.log("Accepting connection failed!", data)
+      }
+      else {
+        console.log("Accepting connection success", data)
+      }
+    };
+
+    rejectConnection();
+  }
+
+
+  const disconnect = (src, dst) => {    // ToDo: implement disconnection
 
   }
 
@@ -48,6 +65,7 @@ const Connections = ({ route, navigation }) => {
     React.useCallback(() => {
       const fetchUsers = async () => {
         const usersResponse = await fetchAllUsers();
+        console.log("The all users is ",usersResponse)
         setAllUsers(usersResponse ? usersResponse : [])
       }
       fetchUsers();
@@ -72,7 +90,7 @@ const Connections = ({ route, navigation }) => {
       const fetchRequests = async () => {
         fetchConnectionRequest(username).then((data)=> {
           const requestUsersMetadata = allUsers.filter(item => data.includes(item.username));
-          console.log("the data is", allUsers)  
+          console.log("All users in the codes are", allUsers) 
           setRequests(requestUsersMetadata);
         });
       }
@@ -113,9 +131,15 @@ const Connections = ({ route, navigation }) => {
                     style={[styles.button, isPressed ? styles.buttonPressed : null]}
                     onPress={() => acceptConn(user.username, username)}
                   >
-                    Connected
+                    Accept
                   </Button>
                 </View>
+                <View>
+                  <Button 
+                    onPress={() => rejectConn(user.username, username)}>Reject</Button>
+                </View>
+
+                
               </TouchableOpacity>
             ))}
             </>
