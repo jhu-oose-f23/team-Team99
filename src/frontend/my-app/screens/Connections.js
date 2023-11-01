@@ -11,19 +11,13 @@ import Profile from "../assets/profile.png";
 import { Button } from "react-native-paper";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { fetchConnections, fetchUser } from "../api";
+import { navigateToProfile } from "../Helpers";
 
 const Connections = ({ route, navigation }) => {
   const username = route.params.username;
   const [isPressed, setIsPressed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [connections, setConnections] = useState([]);
-
-  const navigateToProfile = (navigateToUsername) => {
-    navigation.navigate("Profile", {
-      username: navigateToUsername,
-      loggedinUser: username,
-    });
-  };
 
   const disconnect = () => {
     if (isPressed) setIsPressed(false);
@@ -46,7 +40,9 @@ const Connections = ({ route, navigation }) => {
       {connections &&
         connections.map((user, index) => (
           <TouchableOpacity
-            onPress={() => navigateToProfile(user.username)}
+            onPress={() =>
+              navigateToProfile(navigation, user.username, username)
+            }
             style={styles.userContainer}
             key={index}
           >

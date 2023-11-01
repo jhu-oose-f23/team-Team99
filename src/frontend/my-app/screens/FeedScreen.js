@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { fetchRecommendations, postConnectionRequest } from "../api";
+import { navigateToProfile } from "../Helpers";
 
 const FeedScreen = ({ navigation, route }) => {
   const [connectionRequests, setConnectionRequests] = useState([]);
@@ -26,14 +27,6 @@ const FeedScreen = ({ navigation, route }) => {
   const resetToFeed = () => {
     setIsSearchActive(false);
     setSearchQuery("");
-  };
-
-  const navigateToProfile = (navigateToUsername) => {
-    console.log("Navigating to profile of:", navigateToUsername);
-    navigation.navigate("Profile", {
-      username: navigateToUsername,
-      loggedinUser: username,
-    });
   };
 
   const sendConnectionRequest = async (profileId) => {
@@ -112,7 +105,9 @@ const FeedScreen = ({ navigation, route }) => {
             <TouchableOpacity
               key={user.username}
               activeOpacity={0.7}
-              onPress={() => navigateToProfile(user.username)}
+              onPress={() =>
+                navigateToProfile(navigation, user.username, username)
+              }
             >
               <View
                 style={{
@@ -194,15 +189,22 @@ const FeedScreen = ({ navigation, route }) => {
                   width: 180,
                 }}
               >
-                <Image
-                  source={require("../assets/icon.png")}
-                  style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 30,
-                    marginBottom: 10,
-                  }}
-                />
+                <TouchableOpacity
+                  onPress={() =>
+                    navigateToProfile(navigation, profile.username, username)
+                  }
+                >
+                  <Image
+                    source={require("../assets/icon.png")}
+                    style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 30,
+                      marginBottom: 10,
+                    }}
+                  />
+                </TouchableOpacity>
+
                 <Text style={{ fontSize: 16, fontWeight: "bold" }}>
                   @{profile.username}
                 </Text>
