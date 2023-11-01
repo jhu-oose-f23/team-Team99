@@ -1,15 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-
+import UserContext from "../UserContext";
 // Define the Supabase API URL for login
 const loginApiUrl = "https://gymconnectbackend.onrender.com/user/login";
 
 const Login = ({ navigation, route }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const { setUserLoggedIn } = route.params;
-
+  const { setUserLoggedIn } = useContext(UserContext);
   const handleLogin = async () => {
     try {
       const response = await fetch(loginApiUrl, {
