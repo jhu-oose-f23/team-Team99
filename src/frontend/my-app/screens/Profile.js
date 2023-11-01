@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
 });
 
 // content is a Workout object
-const ExpandableSection = ({ title, content, onDelete }) => {
+const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false);
   return (
     <View style={styles.section}>
@@ -112,16 +112,19 @@ const ExpandableSection = ({ title, content, onDelete }) => {
               <Text style={styles.cell}>{item.reps}</Text>
             </View>
           ))}
-          <TouchableOpacity
-            onPress={() => {
-              deleteWorkout(content.id);
-              // Callback to remove this workout from Profile's state
-              onDelete(content.id);
-            }}
-            style={{ alignSelf: "flex-end", marginRight: 10 }}
-          >
-            <FontAwesome name="trash-o" size={30} color="black" />
-          </TouchableOpacity>
+          {/* Only show delete button if allowDelete is true */}
+          {allowDelete && (
+            <TouchableOpacity
+              onPress={() => {
+                deleteWorkout(content.id);
+                // Callback to remove this workout from Profile's state
+                onDelete(content.id);
+              }}
+              style={{ alignSelf: "flex-end", marginRight: 10 }}
+            >
+              <FontAwesome name="trash-o" size={30} color="black" />
+            </TouchableOpacity>
+          )}
         </View>
       )}
     </View>
@@ -216,6 +219,7 @@ const Profile = ({ navigation, route }) => {
                   ),
                 });
               }}
+              allowDelete={username == loggedinUser}
             />
           ))}
         </ScrollView>
