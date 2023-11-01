@@ -62,6 +62,11 @@ const CreateWorkout = ({ route }) => {
     { label: "Chin Up", value: "Chin Up" },
     { label: "Tricep Dip", value: "Tricep Dip" },
     { label: "Seated Row", value: "Seated Row" },
+    { label: "Overhead Press", value: "Overhead Press" },
+    { label: "Bent over Rows", value: "Bent over Rows" },
+    { label: "Squat", value: "Squat" },
+    { label: "Romanian Deadlift", value: "Romanian Deadlift" },
+    { label: "Skullcrushers", value: "Skullcrushers" },
   ]);
 
   useEffect(() => {
@@ -204,7 +209,8 @@ const CreateWorkout = ({ route }) => {
             <View
               style={[
                 styles.input,
-                { flex: 2, minHeight: open[index] ? 250 : 0 },
+                // { flex: 2, minHeight: open[index] ? 250 : 0 },
+                { flex: 2 },
               ]}
             >
               <DropDownPicker
@@ -234,9 +240,11 @@ const CreateWorkout = ({ route }) => {
                 placeholder=""
                 style={{
                   borderWidth: 0,
+                  zIndex: open[index] ? 5000 : 1,
                 }}
                 dropDownContainerStyle={{
                   borderWidth: 0,
+                  zIndex: open[index] ? 5000 : 1,
                 }}
               />
             </View>
