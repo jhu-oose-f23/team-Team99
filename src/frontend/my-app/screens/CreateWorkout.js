@@ -92,13 +92,6 @@ const CreateWorkout = ({ route }) => {
   );
 
   const addExerciseRow = () => {
-    if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
-      setExerciseError(
-        "Can't add another exercise unless all exercises are filled in"
-      );
-      return;
-    }
-    setExerciseError("");
     const newExercise = {
       name: "",
       sets: "",
@@ -118,6 +111,16 @@ const CreateWorkout = ({ route }) => {
     updatedExercise[index][field] = value;
     setExerciseRows(updatedExercise);
   };
+
+  useEffect(() => {
+    if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
+      setExerciseError(
+        "Can't add another exercise unless all exercises are filled in"
+      );
+    } else {
+      setExerciseError("");
+    }
+  }, [exerciseRows]);
 
   const isEmptyExercise = (exercise) =>
     !exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim();
