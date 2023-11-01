@@ -51,7 +51,7 @@ POST /workouts: Creates a new workout in database. Sample request body is below:
         {
             "name": "bench",
             "reps": 10,
-            "sets": 3
+            "sets": 3,
         },
         {
             "name": "squat",

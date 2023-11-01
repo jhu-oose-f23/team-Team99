@@ -1,5 +1,6 @@
 import os
 from supabase import create_client, Client
+from collections import defaultdict
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
@@ -32,3 +33,14 @@ def delete_workout(id):
 def get_user_workouts(user):
   data = supabase.table("Workouts").select("*").eq("user", user).execute()
   return data.data
+
+def get_leaderboard(exercise):
+  data = supabase.table("Workouts").select("*").execute().data
+  pairs = list()
+  for d in data:
+    print(d)
+    for e in d["exercises"]:
+      if e["name"].lower() == exercise.lower():
+        pairs.append((d["user"], e["weight"]))
+  # print(pairs)
+  return [("l_james", 350), ("dhop", 300), ("k1", 250), ("travis", 200), ("twsift", 150)]
