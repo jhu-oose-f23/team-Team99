@@ -3,6 +3,7 @@ import { View, Text, Button } from "react-native";
 import { TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
 import { EvilIcons, FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+// Add these at the top with your other imports
 import {
   fetchWorkouts,
   fetchUser,
@@ -85,6 +86,7 @@ const styles = StyleSheet.create({
 // content is a Workout object
 const ExpandableSection = ({ title, content, onDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false);
+
   return (
     <View style={styles.section}>
       <TouchableOpacity
@@ -128,7 +130,19 @@ const ExpandableSection = ({ title, content, onDelete }) => {
   );
 };
 
+const handleConnectionRequest = async (usernameToConnect) => {
+  try {
+    await sendConnectionRequest(usernameToConnect); 
+    setConnectionRequests([...connectionRequests, usernameToConnect]);
+  } catch (error) {
+    console.error("Error sending connection request:", error);
+  }
+};
+
+
+
 const Profile = ({ navigation, route }) => {
+  const [connectionRequests, setConnectionRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [profileData, setProfileData] = useState({
     workouts: [],
@@ -186,16 +200,35 @@ const Profile = ({ navigation, route }) => {
           }}
         />
         <View>
-          <Text
-            style={[styles.userDetail, { fontSize: 20, fontWeight: "bold" }]}
-          >
+          <Text style={[styles.userDetail, { fontSize: 20, fontWeight: "bold" }]}>
             {profileData.user.first_name} {profileData.user.last_name}
           </Text>
           <Text style={styles.userDetail}>@{username}</Text>
           <Text style={styles.userDetail}>
             {profileData.connections} Connections
           </Text>
+          {username != loggedinUser && (
+            <TouchableOpacity
+              style={{
+                backgroundColor: connectionRequests.includes(username)
+                  ? "green"
+                  : "#007bff",
+                padding: 5,
+                borderRadius: 5,
+                marginTop: 10,
+              }}
+              onPress={() => handleConnectionRequest(username)}
+              disabled={connectionRequests.includes(username)}
+            >
+              <Text style={{ color: "#fff" }}>
+                {connectionRequests.includes(username)
+                  ? "Request Sent"
+                  : "Connect"}
+              </Text>
+            </TouchableOpacity>
+        )}
         </View>
+
       </View>
 
       <Text style={styles.sectionTitle}>Workouts</Text>
