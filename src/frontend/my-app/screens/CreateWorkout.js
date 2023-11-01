@@ -69,20 +69,9 @@ const CreateWorkout = ({ route }) => {
     { label: "Skullcrushers", value: "Skullcrushers" },
   ]);
 
-  useEffect(() => {
-    // Initialize with one empty exercise row when the component loads
-    addExerciseRow();
-    const getWorkouts = async () => {
-      const workoutsResponse = await fetchWorkouts(username);
-      setExistingWorkouts(workoutsResponse);
-    };
-    getWorkouts();
-  }, []);
-
   useFocusEffect(
     React.useCallback(() => {
       // Initialize with one empty exercise row when the component loads
-      addExerciseRow();
       const getWorkouts = async () => {
         const workoutsResponse = await fetchWorkouts(username);
         setExistingWorkouts(workoutsResponse);
@@ -201,8 +190,28 @@ const CreateWorkout = ({ route }) => {
       <FlatList
         data={exerciseRows}
         keyExtractor={(item, index) => index.toString()}
+        CellRendererComponent={({ children, index, style, ...props }) => {
+          return (
+            <View
+              style={[style, { zIndex: -1 * index }]}
+              index={index}
+              {...props}
+            >
+              {children}
+            </View>
+          );
+        }}
         renderItem={({ item, index }) => (
-          <View style={[styles.row]}>
+          <View
+            style={{
+              flexDirection: "row",
+              marginBottom: 15,
+              backgroundColor: "#fff",
+              padding: 10,
+              borderRadius: 5,
+              alignItems: "center",
+            }}
+          >
             <View
               style={[
                 styles.input,
@@ -225,7 +234,6 @@ const CreateWorkout = ({ route }) => {
                   setOpen(updatedOpen);
                 }}
                 onOpen={() => {
-                  console.log(open[index]);
                   // Close all other dropdowns
                   const updatedOpen = [...open];
                   updatedOpen.forEach((o, i) => {
@@ -238,13 +246,10 @@ const CreateWorkout = ({ route }) => {
                 placeholder=""
                 style={{
                   borderWidth: 0,
-                  zIndex: open[index] ? 5000 : 1,
                 }}
                 dropDownContainerStyle={{
                   borderWidth: 0,
-                  zIndex: open[index] ? 5000 : 1,
                 }}
-                zIndex={!open[index] ? 5000 : 1}
               />
             </View>
             <TextInput
@@ -264,7 +269,7 @@ const CreateWorkout = ({ route }) => {
               keyboardType="numeric"
             />
             <TouchableOpacity onPress={() => removeExerciseRow(index)}>
-              <Text style={styles.removeIcon}>×</Text>
+              <Text style={styles.removeIcon}>x</Text>
             </TouchableOpacity>
           </View>
         )}
