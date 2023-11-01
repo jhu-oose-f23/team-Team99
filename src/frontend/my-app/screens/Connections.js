@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   ScrollView,
@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import Profile from "../assets/profile.png";
 import { Button } from "react-native-paper";
-import { useEffect } from "react";
+// import { useEffect } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import { fetchConnections, fetchConnectionRequest, PutConnectionRequest, fetchUser, fetchAllUsers, deleteConnection} from "../api";
 
@@ -22,6 +22,7 @@ const Connections = ({ route, navigation }) => {
   const [Requests, setRequests] = useState([]);
   const [allUsers, setAllUsers] = useState([]);
   const [deleteThisConnection, setDeleteThisConnection] = useState('')
+  const [requestsUsernames, setRequestsUsernames] = useState([])
 
   const navigateToProfile = (navigateToUsername) => {
     navigation.navigate("Profile", {
@@ -40,7 +41,6 @@ const Connections = ({ route, navigation }) => {
 
         acceptConnection();
   };
-
 
   const rejectConn = (src, dst) => {
     const rejectConnection = () => {
@@ -61,15 +61,62 @@ const Connections = ({ route, navigation }) => {
 
   }
 
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     const usersResponse = await fetchAllUsers();
+  //     setAllUsers(usersResponse ? usersResponse : [])
+  //     console.log("this is all users", allUsers)
+  //   }
+  //   fetchUsers();
+  // }, [])
+
+  // useEffect(() => {
+  //   console.log("Inside a use effect", allUsers)
+
+  //   const fetchRequests = async () => {
+  //     await fetchConnectionRequest(username).then((data)=> {
+       
+  //       const requestUsersMetadata = allUsers.filter(item => data.includes(item.username));
+  //       setRequests(requestUsersMetadata);
+ 
+  //       console.log("All request available", Requests)
+        
+        
+  //     });
+  //   }
+  //   fetchRequests();
+
+  // }, [allUsers])
+
+
+
+
+
   useFocusEffect(
     React.useCallback(() => {
+
       const fetchUsers = async () => {
         const usersResponse = await fetchAllUsers();
-        console.log("The all users is ",usersResponse)
         setAllUsers(usersResponse ? usersResponse : [])
         console.log("this is all users", allUsers)
       }
       fetchUsers();
+
+      const fetchRequests = async () => {
+      await fetchConnectionRequest(username).then((data)=> {
+
+        setRequestsUsernames(data ? data: [])
+       
+        const requestUsersMetadata = allUsers.filter(item => data.includes(item.username));
+        setRequests(requestUsersMetadata);
+ 
+        console.log("All request available", Requests)
+        
+        
+      });
+    }
+
+    fetchRequests();
 
       const fetchConnectionsData = async () => {
         const connectionsResponse = await fetchConnections(username);
@@ -79,49 +126,17 @@ const Connections = ({ route, navigation }) => {
 
       fetchConnectionsData();
 
-      const fetchRequests = async () => {
-        fetchConnectionRequest(username).then((data)=> {
-          const requestUsersMetadata = allUsers.filter(item => data.includes(item.username));
-          console.log("All users in the codes are", allUsers) 
-          setRequests(requestUsersMetadata);
-        });
-      }
-      fetchRequests();
     }, [])
   )
-  
-  
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     const fetchConnectionsData = async () => {
-  //       const connectionsResponse = await fetchConnections(username);
-  //       setConnections(connectionsResponse ? connectionsResponse : []);
-  //       setLoading(false);
-  //     };
-  //     fetchConnectionsData();
-  //   }, [])
-  // );
 
-  // useFocusEffect( 
-  //   React.useCallback(()=> {
-  //     const fetchRequests = async () => {
-  //       fetchConnectionRequest(username).then((data)=> {
-  //         const requestUsersMetadata = allUsers.filter(item => data.includes(item.username));
-  //         // console.log("All users in the codes are", allUsers) 
-  //         setRequests(requestUsersMetadata);
-  //       });
-  //     }
-  //     fetchRequests();
-
-  //   }, [])
-  // )
+  useEffect(() => {
+    const requestUsersMetadata = allUsers.filter(item => requestsUsernames.includes(item.username));
+    setRequests(requestUsersMetadata);
+  }, [allUsers, requestsUsernames])
 
 
+  const RenderRequests = () => {
 
-    const RenderRequests = () => {
-
-      // const UsersRequests = getRequestedUsersMetadata();
-      console.log("The requests are", Requests);
       return (
           <>
           {Requests.length > 0 && 
