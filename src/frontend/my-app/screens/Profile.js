@@ -147,7 +147,7 @@ const Profile = ({ navigation, route }) => {
     connections: 0,
     loading: true,
   });
-
+  const connectionUsernames = [];
 
   
   
@@ -182,6 +182,9 @@ const Profile = ({ navigation, route }) => {
         const workoutsResponse = await fetchWorkouts(username);
         const userResponse = await fetchUser(username);
         const connectionsResponse = await fetchConnections(username);
+        const loggedInConnectionReponse = await fetchConnections(loggedinUser);
+        const connectionUsernames = loggedInConnectionReponse.map(user => user.username);
+        console.log("THIS IS THE CONNECTION RESPONSE",connectionUsernames)
         setProfileData({
           workouts: workoutsResponse,
           user: userResponse,
@@ -192,7 +195,6 @@ const Profile = ({ navigation, route }) => {
       fetchProfileData();
     }, [username])
   );
-
   return (
     <View style={styles.container}>
       <View
@@ -232,9 +234,12 @@ const Profile = ({ navigation, route }) => {
               disabled={connectionRequests.includes(username)}
             >
               <Text style={{ color: "#fff" }}>
-                {connectionRequests.includes(username)
-                  ? "Request Sent"
-                  : "Connect"}
+                {connectionUsernames.includes(username) ? "Connected" :
+                  (
+                    connectionRequests.includes(username)
+                      ? "Request Sent"
+                      : "Connect"
+                  )}
               </Text>
             </TouchableOpacity>
         )}
