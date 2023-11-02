@@ -49,5 +49,5 @@ def get_exercises():
   exercises = set()
   for d in data:
     for e in d["exercises"]:
-      exercises.add(e["name"])
+      exercises.add(e["name"].lower())
   return list(exercises)
