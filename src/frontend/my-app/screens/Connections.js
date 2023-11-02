@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import Profile from "../assets/profile.png";
 import { Button } from "react-native-paper";
-// import { useEffect } from "react";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import {
   fetchConnections,
@@ -54,36 +53,6 @@ const Connections = ({ route, navigation }) => {
 
     rejectConnection();
   };
-
-  const disconnect = (src, dst) => {
-    // ToDo: implement disconnection
-  };
-
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     const usersResponse = await fetchAllUsers();
-  //     setAllUsers(usersResponse ? usersResponse : [])
-  //     console.log("this is all users", allUsers)
-  //   }
-  //   fetchUsers();
-  // }, [])
-
-  // useEffect(() => {
-  //   console.log("Inside a use effect", allUsers)
-
-  //   const fetchRequests = async () => {
-  //     await fetchConnectionRequest(username).then((data)=> {
-
-  //       const requestUsersMetadata = allUsers.filter(item => data.includes(item.username));
-  //       setRequests(requestUsersMetadata);
-
-  //       console.log("All request available", Requests)
-
-  //     });
-  //   }
-  //   fetchRequests();
-
-  // }, [allUsers])
 
   useFocusEffect(
     React.useCallback(() => {
@@ -257,20 +226,3 @@ const styles = StyleSheet.create({
 });
 
 export default Connections;
-
-const users = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    username: "johndoe",
-    profilePicture: Profile,
-  },
-  {
-    id: 2,
-    firstName: "Jane",
-    lastName: "Smith",
-    username: "janesmith",
-    profilePicture: Profile,
-  },
-];
