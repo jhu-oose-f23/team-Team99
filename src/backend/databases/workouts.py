@@ -44,3 +44,11 @@ def get_leaderboard(exercise):
         pairs.append((d["user"], e["weight"]))
   # print(pairs)
   return [("l_james", 350), ("dhop", 300), ("k1", 250), ("travis", 200), ("twsift", 150)]
+
+def get_exercises():
+  data = supabase.table("Workouts").select("*").execute().data
+  exercises = set()
+  for d in data:
+    for e in d["exercises"]:
+      exercises.add(e["name"])
+  return list(exercises)

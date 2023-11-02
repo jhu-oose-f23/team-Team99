@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
-from databases.workouts import get_all_workouts, add_workout, delete_all_workouts, get_user_workouts, delete_workout, get_leaderboard
+from databases.workouts import get_all_workouts, add_workout, delete_all_workouts, get_user_workouts, delete_workout, get_leaderboard, get_exercises
 from schemas import WorkoutSchema
 
 blp = Blueprint("workouts", __name__, description="Operations on workouts")
@@ -58,6 +58,16 @@ class Workout(MethodView):
   @blp.response(200)
   def get(self, exercise):
     data = get_leaderboard(exercise)
+    response = make_response(data)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+  
+
+@blp.route("/workouts/leaderboard")
+class Workout(MethodView):
+  @blp.response(200)
+  def get(self):
+    data = get_exercises()
     response = make_response(data)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
