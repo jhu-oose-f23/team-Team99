@@ -29,7 +29,6 @@ const Connections = ({ route, navigation }) => {
   const [allUsers, setAllUsers] = useState([]);
   const [deleteThisConnection, setDeleteThisConnection] = useState("");
   const [requestsUsernames, setRequestsUsernames] = useState([]);
-
   const acceptConn = (src, dst) => {
     const acceptConnection = async () => {
       const data = PutConnectionRequest(src, dst);
@@ -37,7 +36,11 @@ const Connections = ({ route, navigation }) => {
         console.log("Accepting connection failed!", data);
       }
     };
-
+    const newRequests = Requests.filter((item) => item.username !== src);
+    setRequests(newRequests);
+    // Get user metadata and add to connections
+    const acceptedConnection = allUsers.filter((u) => u.username === src);
+    setConnections([...connections, ...acceptedConnection]);
     acceptConnection();
   };
 
@@ -50,7 +53,8 @@ const Connections = ({ route, navigation }) => {
         console.log("Accepting connection success", data);
       }
     };
-
+    const newRequests = Requests.filter((item) => item.username !== src);
+    setRequests(newRequests);
     rejectConnection();
   };
 
@@ -59,7 +63,6 @@ const Connections = ({ route, navigation }) => {
       const fetchUsers = async () => {
         const usersResponse = await fetchAllUsers();
         setAllUsers(usersResponse ? usersResponse : []);
-        console.log("this is all users", allUsers);
       };
       fetchUsers();
 
@@ -71,8 +74,6 @@ const Connections = ({ route, navigation }) => {
             data.includes(item.username)
           );
           setRequests(requestUsersMetadata);
-
-          console.log("All request available", Requests);
         });
       };
 
