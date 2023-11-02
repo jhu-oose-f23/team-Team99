@@ -1,7 +1,7 @@
 from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
-from databases.conn_request import create_request, delete_request, get_requests, accept_connection
+from databases.conn_request import create_request, delete_request, accept_connection, get_inc_requests, get_out_requests
 from schemas import ConnectionRequestSchema, ConnectionSchema
 
 blp = Blueprint("connection requests", __name__, description="Operations on connection requests")
@@ -42,7 +42,18 @@ class ConnectionRequest(MethodView):
 class ConnectionRequest(MethodView):
   @blp.response(200, ConnectionRequestSchema)
   def get(self, dest):
-    result = get_requests(dest)
+    result = get_inc_requests(dest)
+    if type(result) == str:
+      abort(404, message=result)
+    response = make_response(result)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+  
+@blp.route("/connection/request/out/<string:source>")
+class ConnectionRequest(MethodView):
+  @blp.response(200, ConnectionRequestSchema)
+  def get(self, source):
+    result = get_out_requests(source)
     if type(result) == str:
       abort(404, message=result)
     response = make_response(result)
