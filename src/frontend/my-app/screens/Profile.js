@@ -147,8 +147,8 @@ const Profile = ({ navigation, route }) => {
     connections: 0,
     loading: true,
   });
-  const connectionUsernames = [];
 
+  const [connectionUsernames, setConnectionUsernames] = useState([]);
   
   
   // If username != loggedinUser, this profile is for a different user than the logged in user
@@ -171,6 +171,17 @@ const Profile = ({ navigation, route }) => {
     });
   };
 
+  const getButtonLabel = () => {
+    if (connectionUsernames.includes(username)) {
+      return "Connected";
+    } else if (connectionRequests.includes(username)) {
+      return "Request Sent";
+    } else {
+      return "Connect";
+    }
+  };
+  
+
   // useEffect doesn't rerender if you switch to this screen from the nav bar but useFocusEffect does
   useFocusEffect(
     React.useCallback(() => {
@@ -183,8 +194,7 @@ const Profile = ({ navigation, route }) => {
         const userResponse = await fetchUser(username);
         const connectionsResponse = await fetchConnections(username);
         const loggedInConnectionReponse = await fetchConnections(loggedinUser);
-        const connectionUsernames = loggedInConnectionReponse.map(user => user.username);
-        console.log("THIS IS THE CONNECTION RESPONSE",connectionUsernames)
+        const connectionUsernames = setConnectionUsernames(loggedInConnectionReponse.map(user => user.username))
         setProfileData({
           workouts: workoutsResponse,
           user: userResponse,
@@ -195,6 +205,7 @@ const Profile = ({ navigation, route }) => {
       fetchProfileData();
     }, [username])
   );
+
   return (
     <View style={styles.container}>
       <View
@@ -220,7 +231,7 @@ const Profile = ({ navigation, route }) => {
           <Text style={styles.userDetail}>
             {profileData.connections} Connections
           </Text>
-          {username != loggedinUser && (
+          {username != loggedinUser && !connectionUsernames.includes(username) && (
             <TouchableOpacity
               style={{
                 backgroundColor: connectionRequests.includes(username)
@@ -233,14 +244,9 @@ const Profile = ({ navigation, route }) => {
               onPress={() => sendConnectionRequest(username)}
               disabled={connectionRequests.includes(username)}
             >
-              <Text style={{ color: "#fff" }}>
-                {connectionUsernames.includes(username) ? "Connected" :
-                  (
-                    connectionRequests.includes(username)
-                      ? "Request Sent"
-                      : "Connect"
-                  )}
-              </Text>
+            <Text style={{ color: "#fff" }}>
+              {getButtonLabel()}
+            </Text>
             </TouchableOpacity>
         )}
         </View>
