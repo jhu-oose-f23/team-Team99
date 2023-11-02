@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   ScrollView,
@@ -10,43 +10,150 @@ import {
 import Profile from "../assets/profile.png";
 import { Button } from "react-native-paper";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
-import { fetchConnections, fetchUser } from "../api";
+import {
+  fetchConnections,
+  fetchConnectionRequest,
+  PutConnectionRequest,
+  fetchUser,
+  fetchAllUsers,
+  deleteConnection,
+} from "../api";
+import { navigateToProfile } from "../Helpers";
 
 const Connections = ({ route, navigation }) => {
   const username = route.params.username;
   const [isPressed, setIsPressed] = useState(false);
   const [loading, setLoading] = useState(true);
   const [connections, setConnections] = useState([]);
-
-  const navigateToProfile = (navigateToUsername) => {
-    navigation.navigate("Profile", {
-      username: navigateToUsername,
-      loggedinUser: username,
-    });
+  const [Requests, setRequests] = useState([]);
+  const [allUsers, setAllUsers] = useState([]);
+  const [deleteThisConnection, setDeleteThisConnection] = useState("");
+  const [requestsUsernames, setRequestsUsernames] = useState([]);
+  const acceptConn = (src, dst) => {
+    const acceptConnection = async () => {
+      const data = PutConnectionRequest(src, dst);
+      if (!data) {
+        console.log("Accepting connection failed!", data);
+      }
+    };
+    const newRequests = Requests.filter((item) => item.username !== src);
+    setRequests(newRequests);
+    // Get user metadata and add to connections
+    const acceptedConnection = allUsers.filter((u) => u.username === src);
+    setConnections([...connections, ...acceptedConnection]);
+    acceptConnection();
   };
 
-  const disconnect = () => {
-    if (isPressed) setIsPressed(false);
-    else setIsPressed(true);
-    console.log("Make disconnection");
+  const rejectConn = (src, dst) => {
+    const rejectConnection = () => {
+      const data = deleteConnection(src, dst);
+      if (!data) {
+        console.log("Accepting connection failed!", data);
+      } else {
+        console.log("Accepting connection success", data);
+      }
+    };
+    const newRequests = Requests.filter((item) => item.username !== src);
+    setRequests(newRequests);
+    rejectConnection();
   };
 
   useFocusEffect(
     React.useCallback(() => {
+      const fetchUsers = async () => {
+        const usersResponse = await fetchAllUsers();
+        setAllUsers(usersResponse ? usersResponse : []);
+      };
+      fetchUsers();
+
+      const fetchRequests = async () => {
+        await fetchConnectionRequest(username).then((data) => {
+          setRequestsUsernames(data ? data : []);
+
+          const requestUsersMetadata = allUsers.filter((item) =>
+            data.includes(item.username)
+          );
+          setRequests(requestUsersMetadata);
+        });
+      };
+
+      fetchRequests();
+
       const fetchConnectionsData = async () => {
         const connectionsResponse = await fetchConnections(username);
         setConnections(connectionsResponse ? connectionsResponse : []);
         setLoading(false);
       };
+
       fetchConnectionsData();
     }, [])
   );
+
+  useEffect(() => {
+    const requestUsersMetadata = allUsers.filter((item) =>
+      requestsUsernames.includes(item.username)
+    );
+    setRequests(requestUsersMetadata);
+  }, [allUsers, requestsUsernames]);
+
+  const RenderRequests = () => {
+    return (
+      <>
+        {Requests.length > 0 && (
+          <Text style={{ fontSize: 20 }}>Connection Requests</Text>
+        )}
+
+        {Requests &&
+          Requests.map((user, index) => (
+            <TouchableOpacity
+              onPress={() =>
+                navigateToProfile(navigation, user.username, username)
+              }
+              style={styles.userContainer}
+              key={index}
+            >
+              <Image
+                source={require("../assets/profile.png")}
+                style={styles.profileImage}
+              />
+              <View style={styles.textStyle}>
+                <Text style={styles.username}>{"@" + user.username}</Text>
+                <Text>{`${user.first_name} ${user.last_name}`}</Text>
+              </View>
+
+              <View style={styles.buttonStyle}>
+                <Button
+                  style={[
+                    styles.button,
+                    isPressed ? styles.buttonPressed : null,
+                  ]}
+                  onPress={() => acceptConn(user.username, username)}
+                >
+                  Accept
+                </Button>
+              </View>
+              <View>
+                <Button onPress={() => rejectConn(user.username, username)}>
+                  Reject
+                </Button>
+              </View>
+            </TouchableOpacity>
+          ))}
+      </>
+    );
+  };
+
   return (
     <ScrollView style={styles.container}>
+      <RenderRequests />
+
+      <Text style={{ fontSize: 20 }}>Active Connections</Text>
       {connections &&
         connections.map((user, index) => (
           <TouchableOpacity
-            onPress={() => navigateToProfile(user.username)}
+            onPress={() =>
+              navigateToProfile(navigation, user.username, username)
+            }
             style={styles.userContainer}
             key={index}
           >
@@ -62,7 +169,7 @@ const Connections = ({ route, navigation }) => {
             <View style={styles.buttonStyle}>
               <Button
                 style={[styles.button, isPressed ? styles.buttonPressed : null]}
-                onPress={disconnect}
+                onPress={() => disconnect(user.username, username)}
               >
                 Connected
               </Button>
@@ -120,20 +227,3 @@ const styles = StyleSheet.create({
 });
 
 export default Connections;
-
-const users = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    username: "johndoe",
-    profilePicture: Profile,
-  },
-  {
-    id: 2,
-    firstName: "Jane",
-    lastName: "Smith",
-    username: "janesmith",
-    profilePicture: Profile,
-  },
-];

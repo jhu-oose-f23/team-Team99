@@ -1,6 +1,12 @@
 // TODO: make this a .env variable
 const BASE_URL = "https://gymconnectbackend.onrender.com";
 
+
+export const fetchConnectionRequestSource = async (src) => {
+  const connectionRequests = await fetchData(`connection/request/out/${src}`);
+  return connectionRequests
+}
+
 const fetchData = async (endpoint) => {
   try {
     const response = await fetch(`${BASE_URL}/${endpoint}`);
@@ -89,3 +95,94 @@ export const postConnectionRequest = async (source, dest) => {
     console.error("Error sending connection request:", error);
   }
 };
+
+export const fetchLeaderboardList = async () => {
+  try {
+    const leaderboardList = await fetchData(`workouts/leaderboard`);
+    const transformedLeaderboardList = leaderboardList.map((item, index) => ({
+      id: index,
+      name: item,
+      icon: "trophy",
+    }));
+    // console.log(transformedLeaderboard);
+    return transformedLeaderboardList;
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+  }
+};
+
+export const fetchLeaderboard = async (exercise) => {
+  try {
+    console.log(exercise);
+    const leaderboard = await fetchData(`workouts/leaderboard/${exercise}`);
+    const transformedLeaderboard = leaderboard.map((item, index) => ({
+      username: item[0],
+      score: item[1],
+    }));
+    // console.log(transformedLeaderboard);
+    return transformedLeaderboard;
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+  }
+};
+
+export const fetchConnectionRequest = (dst) => {
+  return fetchData(`connection/request/${dst}`)
+}
+
+export const fetchAllUsers = () => fetchData('user');
+
+export const deleteConnection = async (source, dst) => {
+  const apiURL = `https://gymconnectbackend.onrender.com/connection/request`;
+
+  const requestBody = {
+    source: source,
+    dest: dst,
+  };
+
+    const response = await fetch(apiURL, 
+      {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.status == 200) {
+        return response.json();
+      }
+
+      else {
+        console.error("Rejecting connection failed!!", response.status)
+        return 0;
+      }
+
+}
+
+export const PutConnectionRequest = async (source, dst) => {
+  const apiURL = `https://gymconnectbackend.onrender.com/connection/request`;
+
+  const requestBody = {
+    source: source,
+    dest: dst,
+  };
+
+    const response = await fetch(apiURL, 
+      {
+        method: 'PUT',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.status == 200) {
+        return response.json();
+      }
+
+      else {
+        console.error("Accepting connection failed!!", response.status)
+        return 0;
+      }
+}
