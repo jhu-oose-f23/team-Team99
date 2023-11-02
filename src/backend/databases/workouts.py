@@ -36,14 +36,13 @@ def get_user_workouts(user):
 
 def get_leaderboard(exercise):
   data = supabase.table("Workouts").select("*").execute().data
-  pairs = list()
+  pairs = defaultdict(list)
   for d in data:
-    print(d)
     for e in d["exercises"]:
       if e["name"].lower() == exercise.lower():
-        pairs.append((d["user"], e["weight"]))
-  # print(pairs)
-  return [("l_james", 350), ("dhop", 300), ("k1", 250), ("travis", 200), ("twsift", 150)]
+        pairs[d["user"]].append(e["weight"])
+  leaders = [(username, max(weights)) for username, weights in pairs.items()]
+  return sorted(leaders, key=lambda x: x[1], reverse=True)
 
 def get_exercises():
   data = supabase.table("Workouts").select("*").execute().data

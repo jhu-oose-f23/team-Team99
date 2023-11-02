@@ -62,7 +62,6 @@ class Workout(MethodView):
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
   
-
 @blp.route("/workouts/leaderboard")
 class Workout(MethodView):
   @blp.response(200)
