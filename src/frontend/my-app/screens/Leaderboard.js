@@ -1,23 +1,26 @@
+import React, { useState, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
-import React from "react";
 import { View, Text, StyleSheet, FlatList } from "react-native";
 import { Avatar } from "react-native-elements";
+import { fetchLeaderboard } from "../api";
 
 const Leaderboard = ({ navigation, route }) => {
   const username = route.params.username;
   const name = route.params.name;
+  const [leaderboard, setLeaderboard] = useState([]);
 
-  // Sample data for the leaderboard. Replace this with your actual data source.
-  const leaderboardData = [
-    { username: "User1", score: 500 },
-    { username: "User2", score: 600 },
-    { username: "shaq", score: 700 },
-    { username: "User4", score: 800 },
-    { username: "User5", score: 900 },
-  ];
-
-  // Sort the leaderboard data by score in descending order
-  leaderboardData.sort((a, b) => b.score - a.score);
+  // Get Leaderboard
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        const leaderboardResponse = await fetchLeaderboard(name);
+        console.log(leaderboardResponse);
+        setLeaderboard(leaderboardResponse);
+      };
+      fetchData();
+    }, [username])
+  );
 
   const renderItem = ({ item, index }) => (
     <View
@@ -35,7 +38,7 @@ const Leaderboard = ({ navigation, route }) => {
       />
       <View style={styles.userInfo}>
         <Text style={styles.username}>{item.username}</Text>
-        <Text style={styles.score}>Score: {item.score}</Text>
+        <Text style={styles.score}>Weight: {item.score}</Text>
       </View>
       <Text style={styles.rank}>
         {index === 0 && (
@@ -55,7 +58,7 @@ const Leaderboard = ({ navigation, route }) => {
     <View style={styles.container}>
       <Text style={styles.header}>{name} Leaderboard</Text>
       <FlatList
-        data={leaderboardData}
+        data={leaderboard}
         renderItem={renderItem}
         keyExtractor={(item) => item.username}
       />

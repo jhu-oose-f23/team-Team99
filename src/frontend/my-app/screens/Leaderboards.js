@@ -1,19 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Icon, Card } from "react-native-elements";
 import { Ionicons } from "@expo/vector-icons";
-
-const leaderboards = [
-  { id: 1, name: "Deadlift", icon: "trophy" },
-  { id: 2, name: "Bench Press", icon: "trophy" },
-  // Add more leaderboards as needed
-];
+import { fetchLeaderboardList } from "../api";
 
 const Leaderboards = ({ navigation, route }) => {
+  const [leaderboardList, setLeaderboardList] = useState([]);
+
+  const username = route.params.username;
+
+  // Get Leaderboard List
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        const leaderboardListResponse = await fetchLeaderboardList();
+        console.log(leaderboardListResponse);
+        setLeaderboardList(leaderboardListResponse);
+      };
+      fetchData();
+    }, [username])
+  );
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Popular Leaderboards</Text>
-      {leaderboards.map((leaderboard) => (
+      {leaderboardList.map((leaderboard) => (
         <TouchableOpacity
           key={leaderboard.id}
           style={styles.listItem}

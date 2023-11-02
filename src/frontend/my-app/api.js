@@ -89,3 +89,33 @@ export const postConnectionRequest = async (source, dest) => {
     console.error("Error sending connection request:", error);
   }
 };
+
+export const fetchLeaderboardList = async () => {
+  try {
+    const leaderboardList = await fetchData(`workouts/leaderboard`);
+    const transformedLeaderboardList = leaderboardList.map((item, index) => ({
+      id: index,
+      name: item,
+      icon: "trophy",
+    }));
+    // console.log(transformedLeaderboard);
+    return transformedLeaderboardList;
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+  }
+};
+
+export const fetchLeaderboard = async (exercise) => {
+  try {
+    console.log(exercise);
+    const leaderboard = await fetchData(`workouts/leaderboard/${exercise}`);
+    const transformedLeaderboard = leaderboard.map((item, index) => ({
+      username: item[0],
+      score: item[1],
+    }));
+    // console.log(transformedLeaderboard);
+    return transformedLeaderboard;
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+  }
+};
