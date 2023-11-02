@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
 });
 
 // content is a Workout object
-const ExpandableSection = ({ title, content, onDelete }) => {
+const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
@@ -116,24 +116,24 @@ const ExpandableSection = ({ title, content, onDelete }) => {
               <Text style={styles.cell}>{item.reps}</Text>
             </View>
           ))}
-          <TouchableOpacity
-            onPress={() => {
-              deleteWorkout(content.id);
-              // Callback to remove this workout from Profile's state
-              onDelete(content.id);
-            }}
-            style={{ alignSelf: "flex-end", marginRight: 10 }}
-          >
-            <FontAwesome name="trash-o" size={30} color="black" />
-          </TouchableOpacity>
+          {/* Only show delete button if allowDelete is true */}
+          {allowDelete && (
+            <TouchableOpacity
+              onPress={() => {
+                deleteWorkout(content.id);
+                // Callback to remove this workout from Profile's state
+                onDelete(content.id);
+              }}
+              style={{ alignSelf: "flex-end", marginRight: 10 }}
+            >
+              <FontAwesome name="trash-o" size={30} color="black" />
+            </TouchableOpacity>
+          )}
         </View>
       )}
     </View>
   );
 };
-
-
-
 
 const Profile = ({ navigation, route }) => {
   const [connectionRequests, setConnectionRequests] = useState([]);
@@ -145,22 +145,19 @@ const Profile = ({ navigation, route }) => {
       last_name: "",
     },
     connections: 0,
-    loading: true,
   });
 
   const [connectionUsernames, setConnectionUsernames] = useState([]);
-  
-  
+
   // If username != loggedinUser, this profile is for a different user than the logged in user
   const { username, loggedinUser } = route.params;
-  
+
   const sendConnectionRequest = async (profileId) => {
-    await postConnectionRequest(
-      loggedinUser,
-      profileId,
+    await postConnectionRequest(loggedinUser, profileId);
+    const fetchedConnectionRequests = await fetchConnectionRequestSource(
+      loggedinUser
     );
-    const fetchedConnectionRequests = await fetchConnectionRequestSource(loggedinUser);
-    if (fetchedConnectionRequests != null) { 
+    if (fetchedConnectionRequests != null) {
       setConnectionRequests(fetchedConnectionRequests);
     }
   };
@@ -180,27 +177,41 @@ const Profile = ({ navigation, route }) => {
       return "Connect";
     }
   };
-  
 
   // useEffect doesn't rerender if you switch to this screen from the nav bar but useFocusEffect does
   useFocusEffect(
     React.useCallback(() => {
       const fetchProfileData = async () => {
-        const fetchedConnectionRequests = await fetchConnectionRequestSource(loggedinUser);
-        if (fetchedConnectionRequests != null) { 
+        setLoading(true);
+        const fetchedConnectionRequests = await fetchConnectionRequestSource(
+          loggedinUser
+        );
+        if (fetchedConnectionRequests != null) {
           setConnectionRequests(fetchedConnectionRequests);
         }
-        const workoutsResponse = await fetchWorkouts(username);
-        const userResponse = await fetchUser(username);
-        const connectionsResponse = await fetchConnections(username);
-        const loggedInConnectionReponse = await fetchConnections(loggedinUser);
-        const connectionUsernames = setConnectionUsernames(loggedInConnectionReponse.map(user => user.username))
+
+        const [
+          workoutsResponse,
+          userResponse,
+          connectionsResponse,
+          loggedInConnectionReponse,
+        ] = await Promise.all([
+          fetchWorkouts(username),
+          fetchUser(username),
+          fetchConnections(username),
+          fetchConnections(loggedinUser),
+        ]);
+
+        const connectionUsernames = setConnectionUsernames(
+          loggedInConnectionReponse.map((user) => user.username)
+        );
+
         setProfileData({
           workouts: workoutsResponse,
           user: userResponse,
           connections: connectionsResponse?.length || 0,
-          loading: false,
         });
+        setLoading(false);
       };
       fetchProfileData();
     }, [username])
@@ -224,37 +235,37 @@ const Profile = ({ navigation, route }) => {
           }}
         />
         <View>
-          <Text style={[styles.userDetail, { fontSize: 20, fontWeight: "bold" }]}>
+          <Text
+            style={[styles.userDetail, { fontSize: 20, fontWeight: "bold" }]}
+          >
             {profileData.user.first_name} {profileData.user.last_name}
           </Text>
           <Text style={styles.userDetail}>@{username}</Text>
           <Text style={styles.userDetail}>
             {profileData.connections} Connections
           </Text>
-          {username != loggedinUser && !connectionUsernames.includes(username) && (
-            <TouchableOpacity
-              style={{
-                backgroundColor: connectionRequests.includes(username)
-                  ? "green"
-                  : "#007bff",
-                padding: 5,
-                borderRadius: 5,
-                marginTop: 10,
-              }}
-              onPress={() => sendConnectionRequest(username)}
-              disabled={connectionRequests.includes(username)}
-            >
-            <Text style={{ color: "#fff" }}>
-              {getButtonLabel()}
-            </Text>
-            </TouchableOpacity>
-        )}
+          {username != loggedinUser &&
+            !connectionUsernames.includes(username) && (
+              <TouchableOpacity
+                style={{
+                  backgroundColor: connectionRequests.includes(username)
+                    ? "green"
+                    : "#007bff",
+                  padding: 5,
+                  borderRadius: 5,
+                  marginTop: 10,
+                }}
+                onPress={() => sendConnectionRequest(username)}
+                disabled={connectionRequests.includes(username)}
+              >
+                <Text style={{ color: "#fff" }}>{getButtonLabel()}</Text>
+              </TouchableOpacity>
+            )}
         </View>
-
       </View>
 
       <Text style={styles.sectionTitle}>Workouts</Text>
-      {profileData.loading ? (
+      {loading ? (
         <Text style={styles.loadingText}>Loading...</Text>
       ) : (
         <ScrollView>
@@ -271,6 +282,7 @@ const Profile = ({ navigation, route }) => {
                   ),
                 });
               }}
+              allowDelete={username == loggedinUser}
             />
           ))}
         </ScrollView>
