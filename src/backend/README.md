@@ -101,6 +101,38 @@ GET /workouts/username: Get workouts for a specific user (example: /workouts/k1)
         }
     ]
 
+GET /workouts/leaderboard: get all the exercises that appear in any workout. Sample response:
+
+    [
+        "squat", 
+        "bench press", 
+        skullcrushers"
+    ]
+
+GET /workouts/leaderboard/username (example /workouts/leaderboard/skullcrushers). Sample response:
+
+    [
+        [
+            "k1",
+            300
+        ],
+        [
+            "ud40",
+            300
+        ],
+        [
+            "travis",
+            300
+        ],
+        [
+            "dhop",
+            70
+        ],
+        [
+            "tswift",
+            70
+        ]
+    ]
 
 POST /user: add new user to the database. Sample request body is below:
 
