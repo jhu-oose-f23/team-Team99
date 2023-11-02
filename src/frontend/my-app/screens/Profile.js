@@ -219,76 +219,84 @@ const Profile = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <View
-        style={{
-          ...styles.userInfo,
-          flexDirection: "row",
-          alignItems: "center",
-        }}
-      >
-        <Image
-          source={require("../assets/profile.png")}
-          style={{
-            width: 100,
-            height: 100,
-            marginRight: 10,
-          }}
-        />
+      {loading && <Text style={styles.loadingText}>Loading...</Text>}
+      {loading === false && (
         <View>
-          <Text
-            style={[styles.userDetail, { fontSize: 20, fontWeight: "bold" }]}
+          <View
+            style={{
+              ...styles.userInfo,
+              flexDirection: "row",
+              alignItems: "center",
+            }}
           >
-            {profileData.user.first_name} {profileData.user.last_name}
-          </Text>
-          <Text style={styles.userDetail}>@{username}</Text>
-          <Text style={styles.userDetail}>
-            {profileData.connections} Connections
-          </Text>
-          {username != loggedinUser &&
-            !connectionUsernames.includes(username) && (
-              <TouchableOpacity
-                style={{
-                  backgroundColor: connectionRequests.includes(username)
-                    ? "green"
-                    : "#007bff",
-                  padding: 5,
-                  borderRadius: 5,
-                  marginTop: 10,
-                }}
-                onPress={() => sendConnectionRequest(username)}
-                disabled={connectionRequests.includes(username)}
-              >
-                <Text style={{ color: "#fff" }}>{getButtonLabel()}</Text>
-              </TouchableOpacity>
-            )}
-        </View>
-      </View>
-
-      <Text style={styles.sectionTitle}>Workouts</Text>
-      {loading ? (
-        <Text style={styles.loadingText}>Loading...</Text>
-      ) : (
-        <ScrollView>
-          {profileData.workouts.map((workout, index) => (
-            <ExpandableSection
-              key={workout.id}
-              title={workout.workout_name}
-              content={workout}
-              onDelete={(workoutId) => {
-                setProfileData({
-                  ...profileData,
-                  workouts: profileData.workouts.filter(
-                    (workout) => workout.id != workoutId
-                  ),
-                });
+            <Image
+              source={require("../assets/profile.png")}
+              style={{
+                width: 100,
+                height: 100,
+                marginRight: 10,
               }}
-              allowDelete={username == loggedinUser}
             />
-          ))}
-        </ScrollView>
-      )}
-      {username != loggedinUser && (
-        <Button title="Back to my profile" onPress={navigateToOwnProfile} />
+            <View>
+              <Text
+                style={[
+                  styles.userDetail,
+                  { fontSize: 20, fontWeight: "bold" },
+                ]}
+              >
+                {profileData.user.first_name} {profileData.user.last_name}
+              </Text>
+              <Text style={styles.userDetail}>@{username}</Text>
+              <Text style={styles.userDetail}>
+                {profileData.connections} Connections
+              </Text>
+              {username != loggedinUser &&
+                !connectionUsernames.includes(username) && (
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: connectionRequests.includes(username)
+                        ? "green"
+                        : "#007bff",
+                      padding: 5,
+                      borderRadius: 5,
+                      marginTop: 10,
+                    }}
+                    onPress={() => sendConnectionRequest(username)}
+                    disabled={connectionRequests.includes(username)}
+                  >
+                    <Text style={{ color: "#fff" }}>{getButtonLabel()}</Text>
+                  </TouchableOpacity>
+                )}
+            </View>
+          </View>
+
+          <Text style={styles.sectionTitle}>Workouts</Text>
+          {loading ? (
+            <Text style={styles.loadingText}>Loading...</Text>
+          ) : (
+            <ScrollView>
+              {profileData.workouts.map((workout, index) => (
+                <ExpandableSection
+                  key={workout.id}
+                  title={workout.workout_name}
+                  content={workout}
+                  onDelete={(workoutId) => {
+                    setProfileData({
+                      ...profileData,
+                      workouts: profileData.workouts.filter(
+                        (workout) => workout.id != workoutId
+                      ),
+                    });
+                  }}
+                  allowDelete={username == loggedinUser}
+                />
+              ))}
+            </ScrollView>
+          )}
+          {username != loggedinUser && (
+            <Button title="Back to my profile" onPress={navigateToOwnProfile} />
+          )}
+        </View>
       )}
     </View>
   );
