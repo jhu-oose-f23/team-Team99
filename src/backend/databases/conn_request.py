@@ -36,9 +36,13 @@ def delete_request(source, dest):
   data = supabase.table("Connection_Requests").delete().eq("source", source).eq("dest", dest).execute()
   return data.data[0] if data.data else "Request does not exist"
 
-def get_requests(dest):
+def get_inc_requests(dest):
   data = supabase.table("Connection_Requests").select("*").eq("dest", dest).execute().data
   return [data["source"] for data in data]
+
+def get_out_requests(source):
+  data = supabase.table("Connection_Requests").select("*").eq("source", source).execute().data
+  return [data["dest"] for data in data]
 
 def accept_connection(source, dest):
   if not check_requests(source, dest):

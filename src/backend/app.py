@@ -7,6 +7,7 @@ from resources.connection import blp as ConnectionBlueprint
 from resources.conn_request import blp as ConnectionRequestBlueprint
 
 app = Flask(__name__)
+
 CORS(app)
 
 app.config["PROPAGATE_EXCEPTIONS"] = True

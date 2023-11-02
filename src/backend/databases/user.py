@@ -27,6 +27,8 @@ def login_user(username, password):
   return data[0] if data else None
 
 def get_recommendations(username):
+  if not get_user(username):
+    return []
   users = [u["username"] for u in supabase.table("Users").select("username").neq("username", username).execute().data]
   result = []
   for u in users:
@@ -34,7 +36,11 @@ def get_recommendations(username):
       continue
     sim_score = calculate_similarity(username, u)
     result.append({"username": u, "percent": sim_score/6.5 * 100 })
-  return sorted(result, reverse=True, key=lambda x: (x["percent"], x["username"]))[:5]
+  second = get_second_connections(username)
+  res = sorted(result, reverse=True, key=lambda x: (x["percent"], x["username"]))[:5]
+  for each in second:
+    res.append({"username": each, "percent": 50})
+  return res
 
 def jaccard_similarity(x, y):
     intersection = len(set(x).intersection(y))
@@ -85,8 +91,31 @@ def calculate_age(birthDate):
 
 def check_connection(user1, user2):
   if not get_user(user1) or not get_user(user2):
-    return "One or both of the users doesn't exist"
+    return False
   data = supabase.table("Connections").select("*").eq("user1", user1).eq("user2", user2).execute().data
   if not data:
     data = supabase.table("Connections").select("*").eq("user1", user2).eq("user2", user1).execute().data
   return True if data else False
+
+def get_second_connections(user):
+  first_connections = get_connections(user)
+  second_connections = set()
+  for first_connection in first_connections:
+    their_con = get_connections(first_connection["username"])
+    second_connections.update([x["username"] for x in their_con])
+  second_connections.discard(user)
+  for each in first_connections:
+    second_connections.discard(each["username"])
+  return list(second_connections)
+
+def get_connections(user):
+  data = supabase.table("Connections").select("*").eq("user1", user).execute().data + supabase.table("Connections").select("*").eq("user2", user).execute().data
+  result = set()
+  for connection in data:
+    result.add(connection["user1"])
+    result.add(connection["user2"])
+  result.discard(user)
+  users = []
+  for user in result:
+    users.append(get_user(user))
+  return users
