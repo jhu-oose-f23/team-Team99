@@ -62,6 +62,15 @@ class Workout(MethodView):
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
   
+@blp.route("/workouts/leaderboard/<string:exercise>/<string:username>")
+class Workout(MethodView):
+  @blp.response(200)
+  def get(self, exercise):
+    data = get_leaderboard(exercise)
+    response = make_response(data)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+  
 @blp.route("/workouts/leaderboard")
 class Workout(MethodView):
   @blp.response(200)

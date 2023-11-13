@@ -56,3 +56,5 @@ class User(MethodView):
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
+  
+
