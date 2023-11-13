@@ -65,7 +65,7 @@ class Workout(MethodView):
 @blp.route("/workouts/leaderboard/<string:exercise>/<string:username>")
 class Workout(MethodView):
   @blp.response(200)
-  def get(self, exercise):
+  def get(self, exercise, username):
     data = get_leaderboard(exercise)
     response = make_response(data)
     response.headers['Access-Control-Allow-Origin'] = '*'
