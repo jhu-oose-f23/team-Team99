@@ -160,6 +160,34 @@ export const deleteConnection = async (source, dst) => {
 
 }
 
+export const removeExistingConnection = async (usr1, usr2) => {
+  const apiURL = `https://gymconnectbackend.onrender.com/connection`;
+
+  const requestBody = {
+    user1: usr1,
+    user2: usr2,
+  };
+
+    const response = await fetch(apiURL, 
+      {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.status == 200) {
+        return response.json();
+      }
+
+      else {
+        console.error("Deleting connection failed!!", response.status)
+        return 0;
+      }
+
+}
+
 export const PutConnectionRequest = async (source, dst) => {
   const apiURL = `https://gymconnectbackend.onrender.com/connection/request`;
 
