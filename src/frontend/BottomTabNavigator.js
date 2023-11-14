@@ -5,8 +5,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Feed from "./screens/FeedScreen";
 import CreateWorkout from "./screens/CreateWorkout";
-import Leaderboards from "./screens/Leaderboards";
-import Leaderboard from "./screens/Leaderboard";
+import LeaderboardOverview from "./screens/LeaderboardsOverview";
+import LeaderboardTabs from "./screens/Leaderboard";
 import Profile from "./screens/Profile";
 import Settings from "./screens/Settings";
 import Connections from "./screens/Connections";
@@ -17,14 +17,14 @@ const Stack = createNativeStackNavigator();
 const LeaderboardStack = ({ route }) => (
   <Stack.Navigator>
     <Stack.Screen
-      name="Leaderboards"
-      component={Leaderboards}
+      name="LeaderboardOverview"
+      component={LeaderboardOverview}
       initialParams={{ username: route.params.username }}
       options={{ headerShown: false }}
     />
     <Stack.Screen
       name="Leaderboard"
-      component={Leaderboard}
+      component={LeaderboardTabs}
       initialParams={{ username: route.params.username }}
       // options={{ headerShown: false }}
     />
