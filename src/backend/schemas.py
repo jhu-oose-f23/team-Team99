@@ -38,3 +38,7 @@ class ConnectionRequestSchema(Schema):
     source = fields.Str(required=True)
     dest = fields.Str(required=True)
     requested_on = fields.Str(dump_only=True)
+
+class IssueSchema(Schema):
+    username = fields.Str(required=True)
+    body = fields.Str(required=True)
