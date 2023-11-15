@@ -101,6 +101,30 @@ import { useNavigation } from "@react-navigation/native";
     </Modal>
   );
 
+  const accountItems = [
+    {
+      icon: "person-outline",
+      text: "Edit Profile",
+      action: navigateToEditProfile,
+    },
+    { icon: "security", text: "Security", action: navigateToSecurity },
+    {
+      icon: "notifications-none",
+      text: "Notifications",
+      action: navigateToNotifications,
+    },
+    { icon: "lock-outline", text: "Privacy", action: navigateToPrivacy },
+  ];
+
+  const supportItems = [
+    { icon: "help-outline", text: "Help & Support", action: navigateToSupport },
+    {
+      icon: "info-outline",
+      text: "Terms and Policies",
+      action: navigateToTermsAndPolicies,
+    },
+  ];
+
   const actionsItems = [
     {
       icon: "outlined-flag",
@@ -139,6 +163,46 @@ import { useNavigation } from "@react-navigation/native";
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <ScrollView style={{ marginHorizontal: 12 }}>
+
+        {/* Account Settings */}
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Account</Text>
+          <View
+            style={{
+              borderRadius: 12,
+              backgroundColor: COLORS.gray,
+            }}
+          >
+            {accountItems.map((item, index) => (
+              <React.Fragment key={index}>
+                {renderSettingsItem(item)}
+              </React.Fragment>
+            ))}
+          </View>
+        </View>
+
+        {/* Support and About settings */}
+
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>
+            Support & About{" "}
+          </Text>
+          <View
+            style={{
+              borderRadius: 12,
+              backgroundColor: COLORS.gray,
+            }}
+          >
+            {supportItems.map((item, index) => (
+              <React.Fragment key={index}>
+                {renderSettingsItem(item)}
+              </React.Fragment>
+            ))}
+          </View>
+        </View>
+
+        {/* Actions Settings */}
+
         <View style={{ marginBottom: 12 }}>
           <View style={{ borderRadius: 12, backgroundColor: COLORS.gray }}>
             {actionsItems.map((item, index) => (
