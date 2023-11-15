@@ -4,7 +4,7 @@ from flask import make_response
 
 from schemas import CalendarSchema
 
-from databases.calendar import get_calendar, post_calendar
+from databases.calendar import get_calendar, post_calendar, update_calendar
 
 blp = Blueprint("calendar", __name__, description="Operations on calendars")
 
@@ -30,3 +30,16 @@ class Calendar(MethodView):
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
+
+  @blp.arguments(CalendarSchema)
+  @blp.response(201, CalendarSchema)
+  def put(self, data):
+    result = update_calendar(data["username"], data["schedule"])
+    if result == None:
+      abort(404, message="Calendar is not valid or user does not exist")
+    response = make_response(result)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
+
+
