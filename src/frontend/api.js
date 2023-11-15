@@ -124,6 +124,23 @@ export const fetchLeaderboard = async (exercise) => {
   }
 };
 
+export const fetchLeaderboardUser = async (exercise, user) => {
+  try {
+    console.log(exercise);
+    const leaderboard = await fetchData(
+      `workouts/leaderboard/${exercise}/${user}`
+    );
+    const transformedLeaderboard = leaderboard.map((item, index) => ({
+      username: item[0],
+      score: item[1],
+    }));
+    // console.log(transformedLeaderboard);
+    return transformedLeaderboard;
+  } catch (error) {
+    console.error("Error fetching leaderboard:", error);
+  }
+};
+
 export const fetchConnectionRequest = (dst) => {
   return fetchData(`connection/request/${dst}`);
 };
