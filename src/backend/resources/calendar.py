@@ -37,6 +37,8 @@ class Calendar(MethodView):
     result = update_calendar(data["username"], data["schedule"])
     if result == None:
       abort(404, message="Calendar is not valid or user does not exist")
+    if result == "Overlap":
+      abort(404, message="Workouts overlap")
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response

@@ -38,6 +38,10 @@ def update_calendar(username, schedule):
   # get the existing schedule
   data = get_calendar(username)["schedule"]
 
+  # check if any workouts overlap
+  if not check_overlaps(data, schedule):
+    return "Overlap"
+
   # combine the new schedule with existing
   data.extend(schedule)
   
@@ -101,3 +105,12 @@ def create_or_update_db(new_sched, username):
   else:
     data = supabase.table("Calendars").update({"schedule": new_sched}).eq("username", username).execute().data
   return data[0]
+
+def check_overlaps(existing_schedule, new_schedule):
+  for workout in new_schedule:
+    for existing in existing_schedule:
+      if workout["day"] == existing["day"]:
+        if workout["start_hour"] < existing["end_hour"] and workout["end_hour"] > existing["start_hour"]:
+          return False
+  return True
+
