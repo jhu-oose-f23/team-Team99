@@ -1,45 +1,50 @@
 import React from "react";
-import { ScrollView, View, Text, StyleSheet } from "react-native";
+import { ScrollView, View, Text, StyleSheet, Dimensions } from "react-native";
+const { width: screenWidth } = Dimensions.get("window"); // Get the width of the screen
 
-const ScheduleGrid = ({ schedule, username }) => {
+const ScheduleGrid = ({ schedule }) => {
   // Define all days of the week
   const daysOfWeek = [
-    "Sunday",
     "Monday",
     "Tuesday",
     "Wednesday",
     "Thursday",
     "Friday",
     "Saturday",
+    "Sunday",
   ];
 
-  // Helper function to check if the slot is active
-  const isActiveSlot = (day, hour) => {
-    return schedule.some(
-      (activity) =>
-        activity.day === day &&
-        hour >= activity.start_hour &&
-        hour < activity.end_hour
-    );
+  const shortFormDays = {
+    Monday: "Mon",
+    Tuesday: "Tue",
+    Wednesday: "Wed",
+    Thursday: "Thu",
+    Friday: "Fri",
+    Saturday: "Sat",
+    Sunday: "Sun",
   };
 
-  // Helper function to find the activity name for a slot
-  const getActivityName = (day, hour) => {
+  // Helper function to check if the slot is active and find the activity name for a slot
+  const isActiveSlotAndGetActivityName = (day, hour) => {
     const activity = schedule.find(
       (activity) =>
         activity.day === day &&
         hour >= activity.start_hour &&
         hour < activity.end_hour
     );
-    return activity ? activity.name : "";
+    const active = activity !== undefined;
+    const activityName = active ? activity.name : "";
+    return { active, activityName };
   };
 
   // Render the time slots for each day
   const renderTimeSlots = (day) => {
     return Array.from({ length: 48 }, (_, index) => {
       const hour = index / 2;
-      const active = isActiveSlot(day, hour);
-      const activityName = getActivityName(day, hour);
+      const { active, activityName } = isActiveSlotAndGetActivityName(
+        day,
+        hour
+      );
 
       return (
         <View
@@ -56,7 +61,7 @@ const ScheduleGrid = ({ schedule, username }) => {
   const renderDayColumns = () => {
     return daysOfWeek.map((day) => (
       <View key={day} style={styles.dayColumn}>
-        <Text style={styles.dayHeader}>{day}</Text>
+        <Text style={styles.dayHeader}>{shortFormDays[day]}</Text>
         {renderTimeSlots(day)}
       </View>
     ));
@@ -71,11 +76,13 @@ const ScheduleGrid = ({ schedule, username }) => {
 
 const styles = StyleSheet.create({
   scrollView: {
-    backgroundColor: "#fff",
+    flexDirection: "row", // Lay out children in a row
   },
   dayColumn: {
     borderWidth: 1,
     borderColor: "#ddd",
+    flex: 1,
+    width: 56,
   },
   dayHeader: {
     textAlign: "center",
