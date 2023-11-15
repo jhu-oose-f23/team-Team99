@@ -12,18 +12,20 @@ import React, { useState, useEffect } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../constants/themes";
 import { MaterialIcons } from "@expo/vector-icons";
+import { createIssue } from "../api";
 
-const Settings = () => {
+const Settings = ({ route }) => {
+  const { username } = route.params;
   const logout = () => {
     console.log("Logout");
   };
   const [modalVisible, setModalVisible] = useState(false);
   const [issue, setIssue] = useState("");
-
-  const reportProblem = () => {
-    setModalVisible(true);
+  const handleSubmit = async () => {
+    setIssue("");
+    setModalVisible(!modalVisible);
+    const res = await createIssue(issue, username);
   };
-
   const renderReportModal = () => (
     <Modal
       animationType="slide"
@@ -46,7 +48,7 @@ const Settings = () => {
           />
           <TouchableOpacity
             style={styles.button}
-            onPress={() => setModalVisible(!modalVisible)}
+            onPress={() => handleSubmit()}
           >
             <Text style={styles.buttonText}>Submit</Text>
           </TouchableOpacity>
@@ -59,7 +61,7 @@ const Settings = () => {
     {
       icon: "outlined-flag",
       text: "Report a problem",
-      action: reportProblem,
+      action: () => setModalVisible(true),
     },
     { icon: "logout", text: "Log out", action: logout },
   ];
@@ -111,10 +113,11 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)", // Semi-transparent background
   },
   modalView: {
+    justifyContent: "center",
+    alignItems: "center",
     margin: 20,
     backgroundColor: "white",
     borderRadius: 20,
@@ -137,7 +140,7 @@ const styles = StyleSheet.create({
   textInput: {
     height: 100,
     width: "100%",
-    borderColor: COLORS.lightGray, // assuming this is defined in your COLORS constant
+    borderColor: COLORS.gray2, // assuming this is defined in your COLORS constant
     borderWidth: 1,
     padding: 10,
     marginBottom: 20,

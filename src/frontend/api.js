@@ -178,15 +178,19 @@ export const PutConnectionRequest = async (source, dst) => {
   }
 };
 
-export const createIssue = async (issue) => {
+export const createIssue = async (issue, username) => {
   const response = await fetch("https://gymconnectbackend.onrender.com/issue", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(issue),
+    body: JSON.stringify({
+      username,
+      body: issue,
+    }),
   });
-  await response.json();
+  const res = await response.json();
+  return res;
 };
 
 // Calendar API
