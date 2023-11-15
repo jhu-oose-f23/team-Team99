@@ -4,7 +4,7 @@ from flask import make_response
 
 from schemas import CalendarSchema
 
-from databases.calendar import get_calendar, post_calendar, update_calendar
+from databases.calendar import get_calendar, post_calendar, update_calendar, delete_calendar_workout
 
 blp = Blueprint("calendar", __name__, description="Operations on calendars")
 
@@ -40,6 +40,13 @@ class Calendar(MethodView):
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
-
-
-
+  
+  @blp.arguments(CalendarSchema)
+  @blp.response(201, CalendarSchema)
+  def delete(self, data):
+    result = delete_calendar_workout(data["username"], data["schedule"])
+    if result == None:
+      abort(404, message="User does not exist")
+    response = make_response(result)
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response

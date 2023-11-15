@@ -46,6 +46,16 @@ def update_calendar(username, schedule):
 
   return create_or_update_db(new_schedule, username)
 
+def delete_calendar_workout(username, schedule):
+  if not get_user(username):
+    return None
+
+  # get the existing schedule
+  data = get_calendar(username)["schedule"]
+
+  # remove the workout from the schedule
+  new_schedule = remove_workout(schedule, data)
+  return create_or_update_db(new_schedule, username)
 
 '''
   Helper functions
@@ -62,6 +72,16 @@ def check_calendar(schedule):
     if workout["day"] not in days:
       return False
   return True
+
+def remove_workout(to_remove, schedule):
+  all_workouts = set([(s["day"], s["start_hour"], s["end_hour"], s["name"]) for s in schedule])
+  serialize_removal = [(t["day"], t["start_hour"], t["end_hour"], t["name"]) for t in to_remove]
+  for s in serialize_removal:
+    all_workouts.discard(s)
+  new_schedule = [
+    {"day": s[0], "start_hour": s[1], "end_hour": s[2], "name": s[3]} for s in all_workouts
+  ]
+  return new_schedule
 
 def remove_duplicates(schedule):
   removed_duplicates = set([(s["day"], s["start_hour"], s["end_hour"], s["name"]) for s in schedule])
