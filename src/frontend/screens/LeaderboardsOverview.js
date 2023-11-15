@@ -23,7 +23,7 @@ const Leaderboards = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Popular Leaderboards</Text>
+      {/* <Text style={styles.header}>Popular Leaderboards</Text> */}
       {leaderboardList.map((leaderboard) => (
         <TouchableOpacity
           key={leaderboard.id}

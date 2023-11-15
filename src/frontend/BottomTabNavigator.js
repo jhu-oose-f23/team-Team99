@@ -89,7 +89,7 @@ const BottomTabNavigator = ({ route }) => {
         }}
       />
       <Tab.Screen
-        name="LeaderboardStack"
+        name="Leaderboards"
         component={LeaderboardStack}
         initialParams={{ username: username }}
         options={{
