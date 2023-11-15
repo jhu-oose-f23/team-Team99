@@ -47,3 +47,7 @@ class PostSchema(Schema):
     username = fields.Str(required=True)
     body = fields.Str(required=True)
     date_time = fields.Str(dump_only=True)
+
+class CalendarSchema(Schema):
+    schedule = fields.List(fields.Dict(), required=True)
+    username = fields.Str(required=True)
