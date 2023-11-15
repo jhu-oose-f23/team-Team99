@@ -45,11 +45,60 @@ const styles = StyleSheet.create({
   },
 });
 
+const times = [
+  { label: "12:00 AM", value: 0 },
+  { label: "12:30 AM", value: 0.5 },
+  { label: "1:00 AM", value: 1 },
+  { label: "1:30 AM", value: 1.5 },
+  { label: "2:00 AM", value: 2 },
+  { label: "2:30 AM", value: 2.5 },
+  { label: "3:00 AM", value: 3 },
+  { label: "3:30 AM", value: 3.5 },
+  { label: "4:00 AM", value: 4 },
+  { label: "4:30 AM", value: 4.5 },
+  { label: "5:00 AM", value: 5 },
+  { label: "5:30 AM", value: 5.5 },
+  { label: "6:00 AM", value: 6 },
+  { label: "6:30 AM", value: 6.5 },
+  { label: "7:00 AM", value: 7 },
+  { label: "7:30 AM", value: 7.5 },
+  { label: "8:00 AM", value: 8 },
+  { label: "8:30 AM", value: 8.5 },
+  { label: "9:00 AM", value: 9 },
+  { label: "9:30 AM", value: 9.5 },
+  { label: "10:00 AM", value: 10 },
+  { label: "10:30 AM", value: 10.5 },
+  { label: "11:00 AM", value: 11 },
+  { label: "11:30 AM", value: 11.5 },
+  { label: "12:00 PM", value: 12 },
+  { label: "12:30 PM", value: 12.5 },
+  { label: "1:00 PM", value: 13 },
+  { label: "1:30 PM", value: 13.5 },
+  { label: "2:00 PM", value: 14 },
+  { label: "2:30 PM", value: 14.5 },
+  { label: "3:00 PM", value: 15 },
+  { label: "3:30 PM", value: 15.5 },
+  { label: "4:00 PM", value: 16 },
+  { label: "4:30 PM", value: 16.5 },
+  { label: "5:00 PM", value: 17 },
+  { label: "5:30 PM", value: 17.5 },
+  { label: "6:00 PM", value: 18 },
+  { label: "6:30 PM", value: 18.5 },
+  { label: "7:00 PM", value: 19 },
+  { label: "7:30 PM", value: 19.5 },
+  { label: "8:00 PM", value: 20 },
+  { label: "8:30 PM", value: 20.5 },
+  { label: "9:00 PM", value: 21 },
+  { label: "9:30 PM", value: 21.5 },
+  { label: "10:00 PM", value: 22 },
+  { label: "10:30 PM", value: 22.5 },
+  { label: "11:00 PM", value: 23 },
+  { label: "11:30 PM", value: 23.5 },
+];
+
 const CreateWorkout = ({ route }) => {
   const { username } = route.params;
   const [workoutName, setWorkoutName] = useState("");
-  const [workoutStartTime, setWorkoutStartTime] = useState(0);
-  const [workoutEndTime, setWorkoutEndTime] = useState(0);
   const [exerciseRows, setExerciseRows] = useState([]);
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
@@ -68,6 +117,16 @@ const CreateWorkout = ({ route }) => {
     { label: "Saturday", value: "Saturday" },
     { label: "Sunday", value: "Sunday" },
   ]);
+
+  // Start time dropdown
+  const [workoutStartTime, setWorkoutStartTime] = useState(-1);
+  const [startTimeOpen, setStartTimeOpen] = useState(false);
+  const [startTimeItems, setStartTimeItems] = useState(times);
+
+  // End time dropdown
+  const [workoutEndTime, setWorkoutEndTime] = useState(-1);
+  const [endTimeOpen, setEndTimeOpen] = useState(false);
+  const [endTimeItems, setEndTimeItems] = useState(times);
 
   const [open, setOpen] = useState([]);
   const [selectedExerciseValue, setSelectedExerciseValue] = useState(null);
@@ -138,6 +197,21 @@ const CreateWorkout = ({ route }) => {
       setWorkoutNameError("");
     }
 
+    // Check if start time is before end time
+    if (workoutStartTime >= workoutEndTime) {
+      setWorkoutNameError("Start time must be before end time");
+      isValid = false;
+    }
+
+    // Cannot add time if day is not filled in
+    if (
+      !workoutDay.trim() &&
+      (workoutStartTime != -1 || workoutEndTime != -1)
+    ) {
+      setWorkoutNameError("Must select a day if adding a time");
+      isValid = false;
+    }
+
     if (
       existingWorkouts.some((workout) => workout.workout_name === workoutName)
     ) {
@@ -190,23 +264,24 @@ const CreateWorkout = ({ route }) => {
           zIndex: 100,
         }}
       >
-        <TextInput
-          style={{
-            margin: 0,
-            marginBottom: 8, // increased for better spacing
-            backgroundColor: "#fff",
-            height: 50,
-            padding: 10,
-            borderRadius: 10,
-            borderWidth: 1, // specify border width for outlined mode
-            flex: 1,
-            borderColor: "white",
-          }}
-          mode="outlined"
-          placeholder="Workout Name"
-          value={workoutName}
-          onChangeText={(text) => setWorkoutName(text)}
-        />
+        <View style={{ flex: 1 }}>
+          <TextInput
+            style={{
+              margin: 0,
+              backgroundColor: "#fff",
+              padding: 10,
+              borderRadius: 10,
+              borderWidth: 1, // specify border width for outlined mode
+              flex: 1,
+              borderColor: "white",
+            }}
+            mode="outlined"
+            placeholder="Workout Name"
+            value={workoutName}
+            onChangeText={(text) => setWorkoutName(text)}
+          />
+        </View>
+
         <View style={{ flex: 1 }}>
           <DropDownPicker
             open={dayOpen}
@@ -237,42 +312,58 @@ const CreateWorkout = ({ route }) => {
         style={{
           flexDirection: "row",
           gap: 4,
+          zIndex: 50,
+          marginTop: 5,
         }}
       >
-        <TextInput
-          style={{
-            margin: 0,
-            marginBottom: 8, // increased for better spacing
-            backgroundColor: "#fff",
-            borderColor: "white",
-            height: 50,
-            padding: 10,
-            borderRadius: 10,
-            borderWidth: 1, // specify border width for outlined mode
-            flex: 1,
-          }}
-          mode="outlined"
-          placeholder="Start Time"
-          value={workoutName}
-          onChangeText={(text) => setWorkoutStartTime(text)}
-        />
         <View style={{ flex: 1 }}>
-          <TextInput
-            style={{
-              margin: 0,
-              marginBottom: 8, // increased for better spacing
-              backgroundColor: "#fff",
-              borderColor: "white",
-              height: 50,
-              padding: 10,
-              borderRadius: 10,
-              borderWidth: 1, // specify border width for outlined mode
-              flex: 1,
+          <DropDownPicker
+            open={startTimeOpen}
+            listMode="SCROLLVIEW"
+            value={workoutStartTime}
+            items={times}
+            setOpen={setStartTimeOpen}
+            setValue={(v) => setWorkoutStartTime(v())}
+            placeholder="Start Time"
+            placeholderStyle={{
+              color: "#C7C7CD",
+              marginBottom: 8,
             }}
-            mode="outlined"
+            style={{
+              borderWidth: 0,
+            }}
+            dropDownContainerStyle={{
+              borderWidth: 0,
+              maxHeight: 2000,
+            }}
+            containerStyle={{
+              maxHeight: 2000,
+            }}
+          />
+        </View>
+        <View style={{ flex: 1 }}>
+          <DropDownPicker
+            open={endTimeOpen}
+            listMode="SCROLLVIEW"
+            value={workoutEndTime}
+            items={times}
+            setOpen={setEndTimeOpen}
+            setValue={(v) => setWorkoutEndTime(v())}
             placeholder="End Time"
-            value={workoutName}
-            onChangeText={(text) => setWorkoutEndTime(text)}
+            placeholderStyle={{
+              color: "#C7C7CD",
+              marginBottom: 8,
+            }}
+            style={{
+              borderWidth: 0,
+            }}
+            dropDownContainerStyle={{
+              borderWidth: 0,
+              maxHeight: 2000,
+            }}
+            containerStyle={{
+              maxHeight: 2000,
+            }}
           />
         </View>
       </View>
