@@ -1,20 +1,10 @@
 import React from "react";
-import { ScrollView, View, Text, StyleSheet, Dimensions } from "react-native";
+import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
+
 const { width: screenWidth } = Dimensions.get("window"); // Get the width of the screen
 
 const ScheduleGrid = ({ schedule }) => {
-  // Define all days of the week
-  const daysOfWeek = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday",
-  ];
-
-  const shortFormDays = {
+  const daysOfWeek = {
     Monday: "Mon",
     Tuesday: "Tue",
     Wednesday: "Wed",
@@ -40,10 +30,11 @@ const ScheduleGrid = ({ schedule }) => {
   // Render the time slots for each day
   const renderTimeSlots = (day) => {
     return Array.from({ length: 48 }, (_, index) => {
-      const hour = index / 2;
+      const hour = Math.floor(index / 2);
+      const minutes = index % 2 === 0 ? "00" : "30";
       const { active, activityName } = isActiveSlotAndGetActivityName(
         day,
-        hour
+        hour + minutes * 0.01 // Convert minutes into a decimal for comparison
       );
 
       return (
@@ -57,32 +48,55 @@ const ScheduleGrid = ({ schedule }) => {
     });
   };
 
+  // Render the time labels on the left side
+  const renderTimeLabels = () => {
+    return Array.from({ length: 48 }, (_, index) => {
+      const hour = Math.floor(index / 2);
+      const minutes = index % 2 === 0 ? "00" : "30";
+      return (
+        <View key={index} style={styles.timeLabel}>
+          <Text style={{ fontSize: 10 }}>{`${hour}:${minutes}`}</Text>
+        </View>
+      );
+    });
+  };
+
   // Render the columns for all days
   const renderDayColumns = () => {
-    return daysOfWeek.map((day) => (
+    return Object.entries(daysOfWeek).map(([day, dayShort]) => (
       <View key={day} style={styles.dayColumn}>
-        <Text style={styles.dayHeader}>{shortFormDays[day]}</Text>
+        <Text style={styles.dayHeader}>{dayShort}</Text>
         {renderTimeSlots(day)}
       </View>
     ));
   };
 
   return (
-    <ScrollView horizontal style={styles.scrollView}>
-      {renderDayColumns()}
-    </ScrollView>
+    <View style={styles.container}>
+      <View style={styles.timeColumn}>{renderTimeLabels()}</View>
+      <ScrollView horizontal style={styles.scrollView}>
+        {renderDayColumns()}
+      </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flexDirection: "row",
+  },
   scrollView: {
-    flexDirection: "row", // Lay out children in a row
+    backgroundColor: "#fff",
+    width: screenWidth - 50, // Subtract the width of the time column
+  },
+  timeColumn: {
+    paddingTop: 18, // Align with the day headers
   },
   dayColumn: {
     borderWidth: 1,
     borderColor: "#ddd",
     flex: 1,
-    width: 56,
+    width: (screenWidth - 50) / 7, // Adjust the width for seven days minus the time column
   },
   dayHeader: {
     textAlign: "center",
@@ -102,6 +116,13 @@ const styles = StyleSheet.create({
   },
   activityName: {
     fontSize: 10,
+  },
+  timeLabel: {
+    width: 50, // Width for the time column
+    height: 20, // Align with the time slots
+    justifyContent: "center",
+    alignItems: "flex-end",
+    paddingRight: 5, // Padding to align text to the right
   },
 });
 
