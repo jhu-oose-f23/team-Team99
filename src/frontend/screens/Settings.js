@@ -1,77 +1,66 @@
-import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import React from "react";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  ScrollView,
+  Modal,
+  TextInput,
+  StyleSheet,
+} from "react-native";
+import React, { useState, useEffect } from "react";
+
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../constants/themes";
 import { MaterialIcons } from "@expo/vector-icons";
 
-const Settings = ({ navigation }) => {
-  const navigateToEditProfile = () => {
-    // navigation.navigate("EditProfile");
-  };
-
-  const navigateToSecurity = () => {
-    console.log("Security function");
-  };
-
-  const navigateToNotifications = () => {
-    console.log("Notifications function");
-  };
-
-  const navigateToPrivacy = () => {
-    console.log("Privacy function");
-  };
-
-  const navigateToSupport = () => {
-    console.log("Support function");
-  };
-
-  const navigateToTermsAndPolicies = () => {
-    console.log("Terms and Policies function");
-  };
-
-  const navigateToReportProblem = () => {
-    console.log("Report a problem");
-  };
-
-  const addAccount = () => {
-    console.log("Aadd account ");
-  };
-
+const Settings = () => {
   const logout = () => {
     console.log("Logout");
   };
+  const [modalVisible, setModalVisible] = useState(false);
+  const [issue, setIssue] = useState("");
 
-  const accountItems = [
-    {
-      icon: "person-outline",
-      text: "Edit Profile",
-      action: navigateToEditProfile,
-    },
-    { icon: "security", text: "Security", action: navigateToSecurity },
-    {
-      icon: "notifications-none",
-      text: "Notifications",
-      action: navigateToNotifications,
-    },
-    { icon: "lock-outline", text: "Privacy", action: navigateToPrivacy },
-  ];
+  const reportProblem = () => {
+    setModalVisible(true);
+  };
 
-  const supportItems = [
-    { icon: "help-outline", text: "Help & Support", action: navigateToSupport },
-    {
-      icon: "info-outline",
-      text: "Terms and Policies",
-      action: navigateToTermsAndPolicies,
-    },
-  ];
+  const renderReportModal = () => (
+    <Modal
+      animationType="slide"
+      transparent={true}
+      visible={modalVisible}
+      onRequestClose={() => {
+        setModalVisible(!modalVisible);
+      }}
+    >
+      <View style={styles.centeredView}>
+        <View style={styles.modalView}>
+          <Text style={styles.modalText}>Report an Issue</Text>
+          <TextInput
+            placeholder="Describe the issue"
+            style={styles.textInput}
+            onChangeText={setIssue}
+            value={issue}
+            multiline
+            numberOfLines={4}
+          />
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => setModalVisible(!modalVisible)}
+          >
+            <Text style={styles.buttonText}>Submit</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </Modal>
+  );
 
   const actionsItems = [
     {
       icon: "outlined-flag",
       text: "Report a problem",
-      action: navigateToReportProblem,
+      action: reportProblem,
     },
-    { icon: "people-outline", text: "Add Account", action: addAccount },
     { icon: "logout", text: "Log out", action: logout },
   ];
 
@@ -95,66 +84,16 @@ const Settings = ({ navigation }) => {
           fontSize: 16,
         }}
       >
-        {text}{" "}
+        {text}
       </Text>
     </TouchableOpacity>
   );
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-        backgroundColor: COLORS.white,
-      }}
-    >
+    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <ScrollView style={{ marginHorizontal: 12 }}>
-        {/* Account Settings */}
         <View style={{ marginBottom: 12 }}>
-          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Account</Text>
-          <View
-            style={{
-              borderRadius: 12,
-              backgroundColor: COLORS.gray,
-            }}
-          >
-            {accountItems.map((item, index) => (
-              <React.Fragment key={index}>
-                {renderSettingsItem(item)}
-              </React.Fragment>
-            ))}
-          </View>
-        </View>
-
-        {/* Support and About settings */}
-
-        <View style={{ marginBottom: 12 }}>
-          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>
-            Support & About{" "}
-          </Text>
-          <View
-            style={{
-              borderRadius: 12,
-              backgroundColor: COLORS.gray,
-            }}
-          >
-            {supportItems.map((item, index) => (
-              <React.Fragment key={index}>
-                {renderSettingsItem(item)}
-              </React.Fragment>
-            ))}
-          </View>
-        </View>
-
-        {/* Actions Settings */}
-
-        <View style={{ marginBottom: 12 }}>
-          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Actions</Text>
-          <View
-            style={{
-              borderRadius: 12,
-              backgroundColor: COLORS.gray,
-            }}
-          >
+          <View style={{ borderRadius: 12, backgroundColor: COLORS.gray }}>
             {actionsItems.map((item, index) => (
               <React.Fragment key={index}>
                 {renderSettingsItem(item)}
@@ -162,9 +101,60 @@ const Settings = ({ navigation }) => {
             ))}
           </View>
         </View>
+        {renderReportModal()}
       </ScrollView>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0,0,0,0.5)", // Semi-transparent background
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+    ...FONTS.semiBold, // assuming this is defined in your FONTS constant
+  },
+  textInput: {
+    height: 100,
+    width: "100%",
+    borderColor: COLORS.lightGray, // assuming this is defined in your COLORS constant
+    borderWidth: 1,
+    padding: 10,
+    marginBottom: 20,
+    ...FONTS.regular, // assuming this is defined in your FONTS constant
+    textAlignVertical: "top",
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+    backgroundColor: COLORS.primary, // assuming this is defined in your COLORS constant
+  },
+  buttonText: {
+    color: "white",
+    ...FONTS.bold, // assuming this is defined in your FONTS constant
+    textAlign: "center",
+  },
+});
 
 export default Settings;
