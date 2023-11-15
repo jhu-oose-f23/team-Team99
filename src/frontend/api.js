@@ -236,9 +236,12 @@ export const updateCalendar = async (username, calendar) => {
     },
     body: JSON.stringify(calendar),
   });
-  console.log(JSON.stringify(calendar));
+  if (response.status === 404) {
+    return 404;
+  }
   try {
     const res = await response.json();
+    return res;
   } catch (e) {
     console.log(e);
   }
