@@ -36,13 +36,16 @@ const LeaderboardStack = ({ route }) => (
   </Stack.Navigator>
 );
 
-const SettingsNavigation = ({username}) => {
+const SettingsNavigation = ({route}) => {
   return (
     <Stack.Navigator>
     <Stack.Screen name="Settings" 
       component={Settings} 
-      initialParams={{username: username}}/>
-    <Stack.Screen name="Edit Profile" component={EditProfile} />
+      initialParams={{username: route.params.username}}/>
+    <Stack.Screen name="Edit Profile" 
+      component={EditProfile}
+      initialParams={{username: route.params.username}}
+       />
     <Stack.Screen name="Privacy" component={Privacy}/>
     <Stack.Screen name="Notifications" component={Notifications}/>
     <Stack.Screen name="Terms and Policies" component={TermsAndPolicies}/>
