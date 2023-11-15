@@ -29,13 +29,12 @@ const ScheduleGrid = ({ schedule }) => {
 
   // Render the time slots for each day
   const renderTimeSlots = (day) => {
-    return Array.from({ length: 49 }, (_, index) => {
-      const hour = Math.floor(index / 2);
+    return Array.from({ length: 48 }, (_, index) => {
+      const hour = index / 2;
       const { active, activityName } = isActiveSlotAndGetActivityName(
         day,
         hour
       );
-
       return (
         <View
           key={`${day}-${index}`}
@@ -48,13 +47,20 @@ const ScheduleGrid = ({ schedule }) => {
   };
 
   // Render the time labels on the left side
+  const formatTime = (index) => {
+    let hours = Math.floor(index / 2);
+    const minutes = index % 2 === 0 ? "00" : "30";
+    const ampm = hours >= 12 ? "PM" : "AM";
+    hours = hours % 12;
+    hours = hours === 0 ? 12 : hours;
+    return `${hours}:${minutes} ${ampm}`;
+  };
+
   const renderTimeLabels = () => {
     return Array.from({ length: 49 }, (_, index) => {
-      const hour = Math.floor(index / 2);
-      const minutes = index % 2 === 0 ? "00" : "30";
       return (
         <View key={index} style={styles.timeLabelContainer}>
-          <Text style={styles.timeLabel}>{`${hour}:${minutes}`}</Text>
+          <Text style={styles.timeLabel}>{formatTime(index)}</Text>
         </View>
       );
     });
@@ -83,10 +89,10 @@ const ScheduleGrid = ({ schedule }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
+    marginRight: 10,
   },
   scrollView: {
     backgroundColor: "#fff",
-    width: screenWidth - 50, // Subtract the width of the time column
     flexDirection: "row",
   },
   timeColumn: {
@@ -121,7 +127,8 @@ const styles = StyleSheet.create({
     height: 20, // Match the height of the time slots
     justifyContent: "center",
     alignItems: "flex-end",
-    paddingRight: 10, // Right padding to align text with the slots
+    paddingRight: 5, // Right padding to align text with the slots
+    paddingLeft: 5,
   },
   timeLabel: {
     fontSize: 10, // Match the font size of the time slots for consistency
