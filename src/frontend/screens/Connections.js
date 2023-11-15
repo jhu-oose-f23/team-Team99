@@ -17,6 +17,7 @@ import {
   fetchUser,
   fetchAllUsers,
   deleteConnection,
+  removeExistingConnection,
 } from "../api";
 import { navigateToProfile } from "../Helpers";
 
@@ -43,6 +44,21 @@ const Connections = ({ route, navigation }) => {
     setConnections([...connections, ...acceptedConnection]);
     acceptConnection();
   };
+
+  const disconnect = (usr1, usr2) => {
+    const removeConn = () => {
+      const data = removeExistingConnection(usr1, usr2);
+      if (!data) {
+        console.log("Removing connection failed!", data);
+      }
+      else {
+        console.log("Connection removed successfully!", data);
+      }
+    };
+    const newConnection = connections.filter((item) => item.username !== usr1);
+    setConnections(newConnection);
+    removeConn();
+  }
 
   const rejectConn = (src, dst) => {
     const rejectConnection = () => {
@@ -171,7 +187,7 @@ const Connections = ({ route, navigation }) => {
                 style={[styles.button, isPressed ? styles.buttonPressed : null]}
                 onPress={() => disconnect(user.username, username)}
               >
-                Connected
+                Remove
               </Button>
             </View>
           </TouchableOpacity>
