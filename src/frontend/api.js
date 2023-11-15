@@ -177,3 +177,36 @@ export const PutConnectionRequest = async (source, dst) => {
     return 0;
   }
 };
+
+// Calendar API
+export const fetchCalendar = async (username) => {
+  const calendar = await fetchData(`calendar/${username}`);
+  return calendar;
+};
+
+// Calendar is an object like
+// {
+//   "schedule": [
+//       {"day": "Sunday",  "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//       {"day": "Monday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//       {"day": "Tuesday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//      {"day": "Wednesday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//     {"day": "Thursday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//     {"day": "Friday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//     {"day": "Saturday", "end_hour": 12, "name": "cardio", "start_hour": 10.5}
+// ]
+// “username”: “k1”
+// }
+export const updateCalendar = async (username, calendar) => {
+  console.log(`${BASE_URL}/calendar/${username}`);
+  const response = await fetch(`${BASE_URL}/calendar/${username}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(calendar),
+  });
+  console.log(JSON.stringify(calendar));
+  const res = await response.json();
+  console.log(res);
+};

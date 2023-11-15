@@ -10,7 +10,7 @@ import {
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
-import { createWorkout, fetchWorkouts } from "../api";
+import { createWorkout, fetchWorkouts, updateCalendar } from "../api";
 import { useFocusEffect } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -146,7 +146,6 @@ const CreateWorkout = ({ route }) => {
 
   useFocusEffect(
     React.useCallback(() => {
-      // Initialize with one empty exercise row when the component loads
       const getWorkouts = async () => {
         const workoutsResponse = await fetchWorkouts(username);
         setExistingWorkouts(workoutsResponse);
@@ -184,6 +183,16 @@ const CreateWorkout = ({ route }) => {
 
   const isEmptyExercise = (exercise) =>
     !exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim();
+
+  const constructWorkoutCalendar = () => ({
+    schedule: [
+      {
+        day: workoutDay,
+        start_hour: workoutStartTime,
+        end_hour: workoutEndTime,
+      },
+    ],
+  });
 
   const saveWorkout = async () => {
     // Input validation
@@ -245,10 +254,14 @@ const CreateWorkout = ({ route }) => {
       exercises: exerciseRows,
     };
     await createWorkout(workout);
+    await updateCalendar(username, constructWorkoutCalendar());
 
     // Reset all fields to blank
     setWorkoutName("");
     setExerciseRows([]);
+    setWorkoutDay("");
+    setWorkoutStartTime(-1);
+    setWorkoutEndTime(-1);
     navigation.navigate("Profile", {
       username: username,
       loggedinUser: username,
