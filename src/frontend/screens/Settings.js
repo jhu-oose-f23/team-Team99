@@ -16,9 +16,45 @@ import { createIssue } from "../api";
 import { Snackbar } from "react-native-paper";
 import { useContext } from "react";
 import UserContext from "../UserContext";
+import { useNavigation } from "@react-navigation/native";
 
-const Settings = ({ route }) => {
+ const Settings = ({ route }) => {
   const { username } = route.params;
+
+  const {navigate} = useNavigation();
+
+  const navigateToEditProfile = () => {
+    navigate("Edit Profile");
+  };
+
+  const navigateToSecurity = () => {
+    console.log("Security function");
+  };
+
+  const navigateToNotifications = () => {
+    navigate("Notifications")
+  };
+
+  const navigateToPrivacy = () => {
+    navigate("Privacy")
+  };
+
+  const navigateToSupport = () => {
+    console.log("Support function");
+  };
+
+  const navigateToTermsAndPolicies = () => {
+    navigate("Terms and Policies")
+  };
+
+  const navigateToReportProblem = () => {
+    console.log("Report a problem");
+  };
+
+  const addAccount = () => {
+    console.log("Aadd account ");
+  };
+
   const logout = () => {
     setUserLoggedIn(false);
   };

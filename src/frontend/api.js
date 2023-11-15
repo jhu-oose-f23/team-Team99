@@ -95,6 +95,7 @@ export const postConnectionRequest = async (source, dest) => {
   }
 };
 
+
 export const fetchLeaderboardList = async () => {
   try {
     const leaderboardList = await fetchData(`workouts/leaderboard`);
@@ -195,6 +196,26 @@ export const PutConnectionRequest = async (source, dst) => {
   }
 };
 
+
+export const PutUser = async (new_data) => {
+  const apiURL = "https://gymconnectbackend.onrender.com/user";
+
+  const response = await fetch(apiURL, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(new_data),
+  });
+
+  if (response.status == 200) {
+    return response.json();
+  } else {
+    console.error("Updating the user failed!!", response.status);
+    return 0;
+  }
+
+  
 export const createIssue = async (issue, username) => {
   const response = await fetch("https://gymconnectbackend.onrender.com/issue", {
     method: "POST",

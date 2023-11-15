@@ -10,6 +10,10 @@ import LeaderboardTabs from "./screens/Leaderboard";
 import Profile from "./screens/Profile";
 import Settings from "./screens/Settings";
 import Connections from "./screens/Connections";
+import Privacy from "./screens/settingsScreens/privacy";
+import Notifications from "./screens/settingsScreens/Notifications";
+import TermsAndPolicies from "./screens/settingsScreens/TermsAndPolicies";
+import EditProfile from "./screens/settingsScreens/editProfile";
 import Calendar from "./screens/Calendar";
 
 const Tab = createBottomTabNavigator();
@@ -31,6 +35,24 @@ const LeaderboardStack = ({ route }) => (
     />
   </Stack.Navigator>
 );
+
+const SettingsNavigation = ({route}) => {
+  return (
+    <Stack.Navigator>
+    <Stack.Screen name="Settings" 
+      component={Settings} 
+      initialParams={{username: route.params.username}}/>
+    <Stack.Screen name="Edit Profile" 
+      component={EditProfile}
+      initialParams={{username: route.params.username}}
+       />
+    <Stack.Screen name="Privacy" component={Privacy}/>
+    <Stack.Screen name="Notifications" component={Notifications}/>
+    <Stack.Screen name="Terms and Policies" component={TermsAndPolicies}/>
+  </Stack.Navigator>
+  )
+  
+}
 
 const BottomTabNavigator = ({ route }) => {
   const { username } = route.params;
@@ -98,12 +120,14 @@ const BottomTabNavigator = ({ route }) => {
       />
       <Tab.Screen
         name="Settings"
-        component={Settings}
+        component={SettingsNavigation}
         initialParams={{ username: username }}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-settings" color={color} size={size} />
           ),
+          
         }}
       />
     </Tab.Navigator>
