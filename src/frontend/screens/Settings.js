@@ -15,6 +15,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { createIssue } from "../api";
 import { Snackbar } from "react-native-paper";
 import { useContext } from "react";
+import UserContext from "../UserContext";
 
 const Settings = ({ route }) => {
   const { username } = route.params;
