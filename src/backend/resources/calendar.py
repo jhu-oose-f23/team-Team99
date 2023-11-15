@@ -10,7 +10,7 @@ blp = Blueprint("calendar", __name__, description="Operations on calendars")
 
 @blp.route("/calendar/<string:username>")
 class Calendar(MethodView):
-  @blp.response(200)
+  @blp.response(200, CalendarSchema)
   def get(self, username):
     result = get_calendar(username)
     if result == None:

@@ -11,8 +11,8 @@ supabase: Client = create_client(url, key)
 def get_calendar(username):
   if not get_user(username):
     return None
-  data = supabase.table("Calendars").select("*").eq("username", username).execute()
-  return data.data
+  data = supabase.table("Calendars").select("*").eq("username", username).execute().data
+  return data[0] if data else {"username": username, "schedule": []}
 
 def post_calendar(username, schedule):
   if not get_user(username):
