@@ -214,6 +214,7 @@ export const PutUser = async (new_data) => {
     console.error("Updating the user failed!!", response.status);
     return 0;
   }
+}
 
   
 export const createIssue = async (issue, username) => {
