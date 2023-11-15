@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
-  TextInput,
   Button,
   FlatList,
   TouchableOpacity,
   StyleSheet,
+  TextInput,
 } from "react-native";
+
 import { useNavigation } from "@react-navigation/native";
 import { createWorkout, fetchWorkouts } from "../api";
 import { useFocusEffect } from "@react-navigation/native";
@@ -47,11 +48,26 @@ const styles = StyleSheet.create({
 const CreateWorkout = ({ route }) => {
   const { username } = route.params;
   const [workoutName, setWorkoutName] = useState("");
+  const [workoutStartTime, setWorkoutStartTime] = useState(0);
+  const [workoutEndTime, setWorkoutEndTime] = useState(0);
   const [exerciseRows, setExerciseRows] = useState([]);
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
   const [existingWorkouts, setExistingWorkouts] = useState([]);
   const navigation = useNavigation();
+
+  // Days dropdown
+  const [workoutDay, setWorkoutDay] = useState("");
+  const [dayOpen, setDayOpen] = useState(false);
+  const [daysItems, setDaysItems] = useState([
+    { label: "Monday", value: "Monday" },
+    { label: "Tuesday", value: "Tuesday" },
+    { label: "Wednesday", value: "Wednesday" },
+    { label: "Thursday", value: "Thursday" },
+    { label: "Friday", value: "Friday" },
+    { label: "Saturday", value: "Saturday" },
+    { label: "Sunday", value: "Sunday" },
+  ]);
 
   const [open, setOpen] = useState([]);
   const [selectedExerciseValue, setSelectedExerciseValue] = useState(null);
@@ -167,19 +183,96 @@ const CreateWorkout = ({ route }) => {
 
   return (
     <View style={styles.container}>
-      <TextInput
+      <View
         style={{
-          margin: 0,
-          marginBottom: 5,
-          backgroundColor: "#fff",
-          height: 50,
-          padding: 10,
+          flexDirection: "row",
+          gap: 4,
         }}
-        mode="outlined"
-        placeholder="Workout name"
-        value={workoutName}
-        onChangeText={(text) => setWorkoutName(text)}
-      />
+      >
+        <TextInput
+          style={{
+            margin: 0,
+            marginBottom: 8, // increased for better spacing
+            backgroundColor: "#fff",
+            height: 50,
+            padding: 10,
+            borderRadius: 20,
+            borderWidth: 1, // specify border width for outlined mode
+            flex: 1,
+            borderColor: "white",
+          }}
+          mode="outlined"
+          placeholder="Workout Name"
+          value={workoutName}
+          onChangeText={(text) => setWorkoutName(text)}
+        />
+        <View style={{ flex: 1 }}>
+          <DropDownPicker
+            open={dayOpen}
+            listMode="SCROLLVIEW"
+            value={workoutDay}
+            items={daysItems}
+            setOpen={setDayOpen}
+            setValue={(v) => setWorkoutDay(v())}
+            placeholder="Day"
+            placeholderStyle={{
+              color: "#C7C7CD",
+              marginBottom: 8,
+            }}
+            style={{
+              borderWidth: 0,
+            }}
+            dropDownContainerStyle={{
+              borderWidth: 0,
+              maxHeight: 2000,
+            }}
+            containerStyle={{
+              maxHeight: 2000,
+            }}
+          />
+        </View>
+      </View>
+      <View
+        style={{
+          flexDirection: "row",
+          gap: 4,
+        }}
+      >
+        <TextInput
+          style={{
+            margin: 0,
+            marginBottom: 8, // increased for better spacing
+            backgroundColor: "#fff",
+            borderColor: "white",
+            height: 50,
+            padding: 10,
+            borderRadius: 20,
+            borderWidth: 1, // specify border width for outlined mode
+            flex: 1,
+          }}
+          mode="outlined"
+          placeholder="Start Time"
+          value={workoutName}
+          onChangeText={(text) => setWorkoutStartTime(text)}
+        />
+        <TextInput
+          style={{
+            margin: 0,
+            marginBottom: 8, // increased for better spacing
+            backgroundColor: "#fff",
+            borderColor: "white",
+            height: 50,
+            padding: 10,
+            borderRadius: 20,
+            borderWidth: 1, // specify border width for outlined mode
+            flex: 1,
+          }}
+          mode="outlined"
+          placeholder="End Time"
+          value={workoutName}
+          onChangeText={(text) => setWorkoutEndTime(text)}
+        />
+      </View>
       {workoutNameError && (
         <Text style={styles.errorText}>{workoutNameError}</Text>
       )}
@@ -208,7 +301,7 @@ const CreateWorkout = ({ route }) => {
               marginBottom: 15,
               backgroundColor: "#fff",
               padding: 10,
-              borderRadius: 5,
+              borderRadius: 30,
               alignItems: "center",
             }}
           >
@@ -221,6 +314,7 @@ const CreateWorkout = ({ route }) => {
             >
               <DropDownPicker
                 open={open[index]}
+                listMode="SCROLLVIEW"
                 value={item.name}
                 items={items}
                 setOpen={(o) => {
@@ -253,6 +347,10 @@ const CreateWorkout = ({ route }) => {
                 }}
                 dropDownContainerStyle={{
                   borderWidth: 0,
+                  maxHeight: 2000,
+                }}
+                containerStyle={{
+                  maxHeight: 2000,
                 }}
               />
             </View>
