@@ -15,7 +15,6 @@ def get_calendar(username):
   return data[0] if data else {"username": username, "schedule": []}
 
 def post_calendar(username, schedule):
-  print(schedule)
   if not get_user(username):
     return None
   
@@ -25,16 +24,32 @@ def post_calendar(username, schedule):
 
   # remove duplicates
   new_schedule = remove_duplicates(schedule)
+  
+  return create_or_update_db(new_schedule, username)
 
-  # check if the calendar already exists
-  data = supabase.table("Calendars").select("*").eq("username", username).execute().data
-  # if it doesn't, create it
-  if not data:
-    data = supabase.table("Calendars").insert({"username": username, "schedule": new_schedule}).execute().data
-  # if it does, update it
-  else:
-    data = supabase.table("Calendars").update({"schedule": new_schedule}).eq("username", username).execute().data
-  return data[0]
+def update_calendar(username, schedule):
+  if not get_user(username):
+    return None
+  
+  # verify that the schedule is valid
+  if not check_calendar(schedule):
+    return None
+  
+  # get the existing schedule
+  data = get_calendar(username)["schedule"]
+
+  # combine the new schedule with existing
+  data.extend(schedule)
+  
+  # remove duplicates
+  new_schedule = remove_duplicates(data)
+
+  return create_or_update_db(new_schedule, username)
+
+
+'''
+  Helper functions
+'''
 
 def check_calendar(schedule):
   days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
@@ -56,30 +71,14 @@ def remove_duplicates(schedule):
   ]
   return new_schedule
 
-def update_calendar(username, schedule):
-  if not get_user(username):
-    return None
-  
-  # verify that the schedule is valid
-  if not check_calendar(schedule):
-    return None
-  
-  # get the existing schedule
-  data = get_calendar(username)["schedule"]
-
-  # combine the new schedule with existing
-  data.extend(schedule)
-  
-  # remove duplicates
-  new_schedule = remove_duplicates(data)
-
+def create_or_update_db(new_sched, username):
   # check if the calendar already exists
   exist = supabase.table("Calendars").select("*").eq("username", username).execute().data
 
   # if calendar doesn't exist, create it
   if not exist:
-    data = supabase.table("Calendars").insert({"username": username, "schedule": new_schedule}).execute().data
+    data = supabase.table("Calendars").insert({"username": username, "schedule": new_sched}).execute().data
   # if it does, update it
   else:
-    data = supabase.table("Calendars").update({"schedule": new_schedule}).eq("username", username).execute().data
+    data = supabase.table("Calendars").update({"schedule": new_sched}).eq("username", username).execute().data
   return data[0]
