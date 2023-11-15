@@ -13,17 +13,23 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../constants/themes";
 import { MaterialIcons } from "@expo/vector-icons";
 import { createIssue } from "../api";
+import { Snackbar } from "react-native-paper";
 
 const Settings = ({ route }) => {
   const { username } = route.params;
   const logout = () => {
     console.log("Logout");
   };
+  // Snackbar
+  const [visibleSnackbar, setVisibleSnackbar] = useState(false);
+  const onDismissSnackBar = () => setVisibleSnackbar(false);
+
   const [modalVisible, setModalVisible] = useState(false);
   const [issue, setIssue] = useState("");
   const handleSubmit = async () => {
     setIssue("");
     setModalVisible(!modalVisible);
+    setVisibleSnackbar(true);
     const res = await createIssue(issue, username);
   };
   const renderReportModal = () => (
@@ -105,6 +111,14 @@ const Settings = ({ route }) => {
         </View>
         {renderReportModal()}
       </ScrollView>
+      <Snackbar
+        wrapperStyle={{ top: "100%" }}
+        visible={visibleSnackbar}
+        onDismiss={onDismissSnackBar}
+        duration={2000}
+      >
+        Issue submitted successfully
+      </Snackbar>
     </SafeAreaView>
   );
 };
