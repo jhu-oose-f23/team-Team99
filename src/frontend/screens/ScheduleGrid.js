@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     height: 20, // Align with the time slots
     justifyContent: "center",
     alignItems: "flex-end",
-    paddingRight: 5, // Padding to align text to the right
+    paddingRight: 10, // Padding to align text to the right
   },
 });
 
