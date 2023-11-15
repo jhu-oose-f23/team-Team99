@@ -14,11 +14,12 @@ import { COLORS, FONTS } from "../constants/themes";
 import { MaterialIcons } from "@expo/vector-icons";
 import { createIssue } from "../api";
 import { Snackbar } from "react-native-paper";
+import { useContext } from "react";
 
 const Settings = ({ route }) => {
   const { username } = route.params;
   const logout = () => {
-    console.log("Logout");
+    setUserLoggedIn(false);
   };
   // Snackbar
   const [visibleSnackbar, setVisibleSnackbar] = useState(false);
@@ -71,6 +72,7 @@ const Settings = ({ route }) => {
     },
     { icon: "logout", text: "Log out", action: logout },
   ];
+  const { setUserLoggedIn } = useContext(UserContext);
 
   const renderSettingsItem = ({ icon, text, action }) => (
     <TouchableOpacity
