@@ -3,10 +3,14 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../constants/themes";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
 
 const Settings = ({ navigation }) => {
+
+  const {navigate} = useNavigation();
+
   const navigateToEditProfile = () => {
-    // navigation.navigate("EditProfile");
+    navigate("Edit Profile");
   };
 
   const navigateToSecurity = () => {
@@ -14,11 +18,11 @@ const Settings = ({ navigation }) => {
   };
 
   const navigateToNotifications = () => {
-    console.log("Notifications function");
+    navigate("Notifications")
   };
 
   const navigateToPrivacy = () => {
-    console.log("Privacy function");
+    navigate("Privacy")
   };
 
   const navigateToSupport = () => {
@@ -26,7 +30,7 @@ const Settings = ({ navigation }) => {
   };
 
   const navigateToTermsAndPolicies = () => {
-    console.log("Terms and Policies function");
+    navigate("Terms and Policies")
   };
 
   const navigateToReportProblem = () => {
