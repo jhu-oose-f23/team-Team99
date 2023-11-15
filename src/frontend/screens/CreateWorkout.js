@@ -192,6 +192,7 @@ const CreateWorkout = ({ route }) => {
         end_hour: workoutEndTime,
       },
     ],
+    username,
   });
 
   const saveWorkout = async () => {
