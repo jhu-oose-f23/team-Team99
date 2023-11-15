@@ -127,7 +127,6 @@ export const fetchLeaderboard = async (exercise) => {
 
 export const fetchLeaderboardUser = async (exercise, user) => {
   try {
-    console.log(exercise);
     const leaderboard = await fetchData(
       `workouts/leaderboard/${exercise}/${user}`
     );
@@ -280,15 +279,17 @@ export const fetchCalendar = async (username) => {
 // “username”: “k1”
 // }
 export const updateCalendar = async (username, calendar) => {
-  console.log(`${BASE_URL}/calendar/${username}`);
-  const response = await fetch(`${BASE_URL}/calendar/${username}`, {
-    method: "POST",
+  const response = await fetch(`${BASE_URL}/calendar`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(calendar),
   });
   console.log(JSON.stringify(calendar));
-  const res = await response.json();
-  console.log(res);
+  try {
+    const res = await response.json();
+  } catch (e) {
+    console.log(e);
+  }
 };
