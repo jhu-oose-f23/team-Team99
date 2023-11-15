@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../constants/themes";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -75,6 +75,7 @@ const Settings = ({ navigation }) => {
     { icon: "people-outline", text: "Add Account", action: addAccount },
     { icon: "logout", text: "Log out", action: logout },
   ];
+  const { setUserLoggedIn } = useContext(UserContext);
 
   const renderSettingsItem = ({ icon, text, action }) => (
     <TouchableOpacity
