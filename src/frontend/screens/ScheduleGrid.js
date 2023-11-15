@@ -29,12 +29,11 @@ const ScheduleGrid = ({ schedule }) => {
 
   // Render the time slots for each day
   const renderTimeSlots = (day) => {
-    return Array.from({ length: 48 }, (_, index) => {
+    return Array.from({ length: 49 }, (_, index) => {
       const hour = Math.floor(index / 2);
-      const minutes = index % 2 === 0 ? "00" : "30";
       const { active, activityName } = isActiveSlotAndGetActivityName(
         day,
-        hour + minutes * 0.01 // Convert minutes into a decimal for comparison
+        hour
       );
 
       return (
@@ -50,12 +49,12 @@ const ScheduleGrid = ({ schedule }) => {
 
   // Render the time labels on the left side
   const renderTimeLabels = () => {
-    return Array.from({ length: 48 }, (_, index) => {
+    return Array.from({ length: 49 }, (_, index) => {
       const hour = Math.floor(index / 2);
       const minutes = index % 2 === 0 ? "00" : "30";
       return (
-        <View key={index} style={styles.timeLabel}>
-          <Text style={{ fontSize: 10 }}>{`${hour}:${minutes}`}</Text>
+        <View key={index} style={styles.timeLabelContainer}>
+          <Text style={styles.timeLabel}>{`${hour}:${minutes}`}</Text>
         </View>
       );
     });
@@ -72,12 +71,12 @@ const ScheduleGrid = ({ schedule }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.timeColumn}>{renderTimeLabels()}</View>
-      <ScrollView horizontal style={styles.scrollView}>
-        {renderDayColumns()}
-      </ScrollView>
-    </View>
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.timeColumn}>{renderTimeLabels()}</View>
+        <View style={styles.scrollView}>{renderDayColumns()}</View>
+      </View>
+    </ScrollView>
   );
 };
 
@@ -88,6 +87,7 @@ const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: "#fff",
     width: screenWidth - 50, // Subtract the width of the time column
+    flexDirection: "row",
   },
   timeColumn: {
     paddingTop: 18, // Align with the day headers
@@ -117,12 +117,17 @@ const styles = StyleSheet.create({
   activityName: {
     fontSize: 10,
   },
-  timeLabel: {
-    width: 50, // Width for the time column
-    height: 20, // Align with the time slots
+  timeLabelContainer: {
+    height: 20, // Match the height of the time slots
     justifyContent: "center",
     alignItems: "flex-end",
-    paddingRight: 10, // Padding to align text to the right
+    paddingRight: 10, // Right padding to align text with the slots
+  },
+  timeLabel: {
+    fontSize: 10, // Match the font size of the time slots for consistency
+  },
+  columnContainer: {
+    flexDirection: "row",
   },
 });
 
