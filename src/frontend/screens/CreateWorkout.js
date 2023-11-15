@@ -190,6 +190,7 @@ const CreateWorkout = ({ route }) => {
         day: workoutDay,
         start_hour: workoutStartTime,
         end_hour: workoutEndTime,
+        name: workoutName,
       },
     ],
     username,

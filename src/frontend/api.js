@@ -229,7 +229,6 @@ export const fetchCalendar = async (username) => {
 // “username”: “k1”
 // }
 export const updateCalendar = async (username, calendar) => {
-  console.log(`${BASE_URL}/calendar/${username}`);
   const response = await fetch(`${BASE_URL}/calendar`, {
     method: "PUT",
     headers: {
@@ -238,6 +237,9 @@ export const updateCalendar = async (username, calendar) => {
     body: JSON.stringify(calendar),
   });
   console.log(JSON.stringify(calendar));
-  const res = await response.json();
-  console.log(res);
+  try {
+    const res = await response.json();
+  } catch (e) {
+    console.log(e);
+  }
 };
