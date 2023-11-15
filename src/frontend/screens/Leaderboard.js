@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { Avatar } from "react-native-elements";
 import { fetchLeaderboard, fetchLeaderboardUser } from "../api";
 
@@ -18,15 +24,22 @@ const GlobalLeaderboard = ({ navigation, route }) => {
     React.useCallback(() => {
       const fetchData = async () => {
         const leaderboardResponse = await fetchLeaderboard(name);
-        console.log(leaderboardResponse);
         setLeaderboard(leaderboardResponse);
       };
       fetchData();
     }, [username])
   );
 
+  const navigateToProfile = (navigateToUsername) => {
+    navigation.navigate("Profile", {
+      username: navigateToUsername,
+      loggedinUser: username,
+    });
+  };
+
   const renderItem = ({ item, index }) => (
-    <View
+    <TouchableOpacity
+      onPress={() => navigateToProfile(item.username)}
       style={[
         styles.row,
         item.username === username ? styles.highlighted : null,
@@ -54,7 +67,7 @@ const GlobalLeaderboard = ({ navigation, route }) => {
           <FontAwesome5Icon name="crown" solid color="#cd7f32" size={16} />
         )}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -86,8 +99,16 @@ const WeightClassLeaderboard = ({ navigation, route }) => {
     }, [username])
   );
 
+  const navigateToProfile = (navigateToUsername) => {
+    navigation.navigate("Profile", {
+      username: navigateToUsername,
+      loggedinUser: username,
+    });
+  };
+
   const renderItem = ({ item, index }) => (
-    <View
+    <TouchableOpacity
+      onPress={() => navigateToProfile(item.username)}
       style={[
         styles.row,
         item.username === username ? styles.highlighted : null,
@@ -115,7 +136,7 @@ const WeightClassLeaderboard = ({ navigation, route }) => {
           <FontAwesome5Icon name="crown" solid color="#cd7f32" size={16} />
         )}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

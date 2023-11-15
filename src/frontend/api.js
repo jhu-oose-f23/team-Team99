@@ -113,7 +113,6 @@ export const fetchLeaderboardList = async () => {
 
 export const fetchLeaderboard = async (exercise) => {
   try {
-    console.log(exercise);
     const leaderboard = await fetchData(`workouts/leaderboard/${exercise}`);
     const transformedLeaderboard = leaderboard.map((item, index) => ({
       username: item[0],
@@ -215,4 +214,52 @@ export const PutUser = async (new_data) => {
     console.error("Updating the user failed!!", response.status);
     return 0;
   }
+
+  
+export const createIssue = async (issue, username) => {
+  const response = await fetch("https://gymconnectbackend.onrender.com/issue", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      username,
+      body: issue,
+    }),
+  });
+  const res = await response.json();
+  return res;
+};
+
+// Calendar API
+export const fetchCalendar = async (username) => {
+  const calendar = await fetchData(`calendar/${username}`);
+  return calendar;
+};
+
+// Calendar is an object like
+// {
+//   "schedule": [
+//       {"day": "Sunday",  "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//       {"day": "Monday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//       {"day": "Tuesday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//      {"day": "Wednesday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//     {"day": "Thursday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//     {"day": "Friday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+//     {"day": "Saturday", "end_hour": 12, "name": "cardio", "start_hour": 10.5}
+// ]
+// “username”: “k1”
+// }
+export const updateCalendar = async (username, calendar) => {
+  console.log(`${BASE_URL}/calendar/${username}`);
+  const response = await fetch(`${BASE_URL}/calendar/${username}`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(calendar),
+  });
+  console.log(JSON.stringify(calendar));
+  const res = await response.json();
+  console.log(res);
 };

@@ -14,7 +14,7 @@ import Privacy from "./screens/settingsScreens/privacy";
 import Notifications from "./screens/settingsScreens/Notifications";
 import TermsAndPolicies from "./screens/settingsScreens/TermsAndPolicies";
 import EditProfile from "./screens/settingsScreens/editProfile";
-
+import Calendar from "./screens/Calendar";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -75,6 +75,16 @@ const BottomTabNavigator = ({ route }) => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-add-circle" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Calendar"
+        component={Calendar}
+        initialParams={{ username: username }}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="md-calendar-sharp" color={color} size={size} />
           ),
         }}
       />
