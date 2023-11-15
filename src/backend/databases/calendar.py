@@ -19,19 +19,16 @@ def post_calendar(username, schedule):
     return None
   
   # verify that the schedule is valid
-  if len(schedule) != 7:
-    return None
-  days = set()
-  for day in schedule:
-    days.add(day["day"])
-    if type(day["start_hour"]) not in [float, int] or type(day["end_hour"]) not in [float, int]:
+  days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
+  for workout in schedule:
+    if type(workout["start_hour"]) not in [float, int] or type(workout["end_hour"]) not in [float, int]:
       return None
-    if day["start_hour"] < 0 or day["start_hour"] > 24 or day["end_hour"] < 0 or day["end_hour"] > 24:
+    if workout["start_hour"] < 0 or workout["start_hour"] > 24 or workout["end_hour"] < 0 or workout["end_hour"] > 24:
       return None
-    if day["start_hour"] >= day["end_hour"]:
+    if workout["start_hour"] >= workout["end_hour"]:
       return None  
-  if days != {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}:
-    return None
+    if workout["day"] not in days:
+      return None
   # check if the calendar already exists
   data = supabase.table("Calendars").select("*").eq("username", username).execute().data
   # if it doesn't, create it
