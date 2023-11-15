@@ -10,6 +10,7 @@ import LeaderboardTabs from "./screens/Leaderboard";
 import Profile from "./screens/Profile";
 import Settings from "./screens/Settings";
 import Connections from "./screens/Connections";
+import Calendar from "./screens/Calendar";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -52,6 +53,16 @@ const BottomTabNavigator = ({ route }) => {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-add-circle" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Calendar"
+        component={Calendar}
+        initialParams={{ username: username }}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Ionicons name="md-calendar-sharp" color={color} size={size} />
           ),
         }}
       />
