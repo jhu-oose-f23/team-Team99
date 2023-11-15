@@ -5,12 +5,12 @@ const session = require("express-session");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 
-const PbK = fs.readFileSync(__dirname + "/certs/cert.pem", "utf8");
-const PvK = fs.readFileSync(__dirname + "/certs/key.pem", "utf8");
+const PbK = fs.readFileSync(__dirname + "/cert.pem", "utf8");
+const PvK = fs.readFileSync(__dirname + "/key.pem", "utf8");
 
 const JHU_SSO_URL = "https://idp.jh.edu/idp/profile/SAML2/Redirect/SSO";
 const SP_NAME = "gym-connect";
-const BASE_URL = "https://glacial-plateau-47269.herokuapp.com";
+const BASE_URL = "https://jhu-sso-api.onrender.com";
 
 // Setup SAML strategy
 const samlStrategy = new saml.Strategy(
@@ -88,6 +88,4 @@ app.get("/jhu/metadata", (req, res) => {
 });
 
 // Start the server.
-app.listen(port, () => {
-  console.log(`Listening on http://localhost:${port}/`);
-});
+app.listen(port);
