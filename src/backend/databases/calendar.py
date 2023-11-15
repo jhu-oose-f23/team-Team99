@@ -50,7 +50,6 @@ def update_calendar(username, schedule):
 '''
   Helper functions
 '''
-
 def check_calendar(schedule):
   days = {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"}
   for workout in schedule:
