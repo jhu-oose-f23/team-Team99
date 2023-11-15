@@ -66,7 +66,7 @@ const Settings = ({ route }) => {
   const actionsItems = [
     {
       icon: "outlined-flag",
-      text: "Report a problem",
+      text: "Report an Issue",
       action: () => setModalVisible(true),
     },
     { icon: "logout", text: "Log out", action: logout },
