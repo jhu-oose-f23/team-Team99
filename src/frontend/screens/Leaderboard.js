@@ -15,7 +15,6 @@ const Leaderboard = ({ navigation, route }) => {
     React.useCallback(() => {
       const fetchData = async () => {
         const leaderboardResponse = await fetchLeaderboard(name);
-        console.log(leaderboardResponse);
         setLeaderboard(leaderboardResponse);
       };
       fetchData();
