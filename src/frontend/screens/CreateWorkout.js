@@ -187,6 +187,7 @@ const CreateWorkout = ({ route }) => {
         style={{
           flexDirection: "row",
           gap: 4,
+          zIndex: 100,
         }}
       >
         <TextInput
@@ -196,7 +197,7 @@ const CreateWorkout = ({ route }) => {
             backgroundColor: "#fff",
             height: 50,
             padding: 10,
-            borderRadius: 20,
+            borderRadius: 10,
             borderWidth: 1, // specify border width for outlined mode
             flex: 1,
             borderColor: "white",
@@ -246,7 +247,7 @@ const CreateWorkout = ({ route }) => {
             borderColor: "white",
             height: 50,
             padding: 10,
-            borderRadius: 20,
+            borderRadius: 10,
             borderWidth: 1, // specify border width for outlined mode
             flex: 1,
           }}
@@ -255,23 +256,25 @@ const CreateWorkout = ({ route }) => {
           value={workoutName}
           onChangeText={(text) => setWorkoutStartTime(text)}
         />
-        <TextInput
-          style={{
-            margin: 0,
-            marginBottom: 8, // increased for better spacing
-            backgroundColor: "#fff",
-            borderColor: "white",
-            height: 50,
-            padding: 10,
-            borderRadius: 20,
-            borderWidth: 1, // specify border width for outlined mode
-            flex: 1,
-          }}
-          mode="outlined"
-          placeholder="End Time"
-          value={workoutName}
-          onChangeText={(text) => setWorkoutEndTime(text)}
-        />
+        <View style={{ flex: 1 }}>
+          <TextInput
+            style={{
+              margin: 0,
+              marginBottom: 8, // increased for better spacing
+              backgroundColor: "#fff",
+              borderColor: "white",
+              height: 50,
+              padding: 10,
+              borderRadius: 10,
+              borderWidth: 1, // specify border width for outlined mode
+              flex: 1,
+            }}
+            mode="outlined"
+            placeholder="End Time"
+            value={workoutName}
+            onChangeText={(text) => setWorkoutEndTime(text)}
+          />
+        </View>
       </View>
       {workoutNameError && (
         <Text style={styles.errorText}>{workoutNameError}</Text>
