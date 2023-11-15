@@ -1,8 +1,10 @@
 import { View, Text, TouchableOpacity, ScrollView } from "react-native";
-import React from "react";
+import React, { useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../constants/themes";
 import { MaterialIcons } from "@expo/vector-icons";
+import UserContext from "../UserContext";
+
 
 const Settings = ({ navigation }) => {
   const navigateToEditProfile = () => {
@@ -37,8 +39,10 @@ const Settings = ({ navigation }) => {
     console.log("Aadd account ");
   };
 
+  const { setUserLoggedIn } = useContext(UserContext);
+
   const logout = () => {
-    console.log("Logout");
+    setUserLoggedIn(false);
   };
 
   const accountItems = [
