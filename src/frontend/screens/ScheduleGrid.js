@@ -94,6 +94,7 @@ const styles = StyleSheet.create({
   scrollView: {
     backgroundColor: "#fff",
     flexDirection: "row",
+    flex: 1,
   },
   timeColumn: {
     paddingTop: 18, // Align with the day headers
