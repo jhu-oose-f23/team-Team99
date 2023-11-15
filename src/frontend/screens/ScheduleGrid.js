@@ -89,7 +89,7 @@ const ScheduleGrid = ({ schedule }) => {
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginRight: 10,
+    marginRight: 3,
   },
   scrollView: {
     backgroundColor: "#fff",
