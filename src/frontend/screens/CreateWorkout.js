@@ -10,7 +10,12 @@ import {
 } from "react-native";
 
 import { useNavigation } from "@react-navigation/native";
-import { createWorkout, fetchWorkouts, updateCalendar } from "../api";
+import {
+  createWorkout,
+  fetchCalendar,
+  fetchWorkouts,
+  updateCalendar,
+} from "../api";
 import { useFocusEffect } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -245,6 +250,11 @@ const CreateWorkout = ({ route }) => {
         }
       }
     }
+    const status = await updateCalendar(username, constructWorkoutCalendar());
+    if (status === 404) {
+      setWorkoutNameError("A workout already exists for this day and time");
+      isValid = false;
+    }
 
     // If any validation failed, don't proceed with the save
     if (!isValid) {
@@ -256,7 +266,6 @@ const CreateWorkout = ({ route }) => {
       exercises: exerciseRows,
     };
     await createWorkout(workout);
-    await updateCalendar(username, constructWorkoutCalendar());
 
     // Reset all fields to blank
     setWorkoutName("");
