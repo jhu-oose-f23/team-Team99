@@ -26,6 +26,16 @@ def login_user(username, password):
   data = supabase.table("Users").select("first_name, last_name, username").eq("username", username).eq("password", password).execute().data
   return data[0] if data else None
 
+def update_user(username, data):
+  try:
+    data = supabase.table("Users").update(data).eq("username", username).execute()
+    return data.data[0]
+  except:
+    return None
+
+'''
+  Helper functions
+'''
 def get_recommendations(username):
   if not get_user(username):
     return []
