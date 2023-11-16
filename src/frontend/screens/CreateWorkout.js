@@ -349,7 +349,6 @@ const CreateWorkout = ({ route }) => {
             }}
             dropDownContainerStyle={{
               borderWidth: 0,
-              maxHeight: 2000,
             }}
             containerStyle={{
               maxHeight: 2000,
@@ -374,7 +373,6 @@ const CreateWorkout = ({ route }) => {
             }}
             dropDownContainerStyle={{
               borderWidth: 0,
-              maxHeight: 2000,
             }}
             containerStyle={{
               maxHeight: 2000,
