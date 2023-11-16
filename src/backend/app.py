@@ -5,6 +5,9 @@ from resources.workouts import blp as WorkoutsBlueprint
 from resources.user import blp as UserBlueprint
 from resources.connection import blp as ConnectionBlueprint
 from resources.conn_request import blp as ConnectionRequestBlueprint
+from resources.issues import blp as IssueBlueprint
+from resources.posts import blp as PostBlueprint
+from resources.calendar import blp as CalendarBlueprint
 
 app = Flask(__name__)
 
@@ -23,3 +26,6 @@ api.register_blueprint(WorkoutsBlueprint)
 api.register_blueprint(UserBlueprint)
 api.register_blueprint(ConnectionBlueprint)
 api.register_blueprint(ConnectionRequestBlueprint)
+api.register_blueprint(IssueBlueprint)
+api.register_blueprint(PostBlueprint)
+api.register_blueprint(CalendarBlueprint)
