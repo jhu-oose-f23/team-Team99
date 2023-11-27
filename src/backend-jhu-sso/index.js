@@ -9,7 +9,7 @@ const PbK = fs.readFileSync(__dirname + "/cert.pem", "utf8");
 const PvK = fs.readFileSync(__dirname + "/key.pem", "utf8");
 
 const JHU_SSO_URL = "https://idp.jh.edu/idp/profile/SAML2/Redirect/SSO";
-const SP_NAME = "jhu-sso-api";
+const SP_NAME = "https://jhu-sso-api.onrender.com";
 const BASE_URL = "https://jhu-sso-api.onrender.com";
 
 // Setup SAML strategy
