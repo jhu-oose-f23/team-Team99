@@ -1,6 +1,7 @@
 import os
 from supabase import create_client, Client
 from datetime import date
+from heapq import *
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
@@ -33,25 +34,31 @@ def update_user(username, data):
   except:
     return None
 
-'''
-  Helper functions
-'''
 def get_recommendations(username):
+  heap = []
+  heapify(heap)
   if not get_user(username):
     return []
   users = [u["username"] for u in supabase.table("Users").select("username").neq("username", username).execute().data]
-  result = []
   for u in users:
     if check_connection(username, u):
       continue
     sim_score = calculate_similarity(username, u)
-    result.append({"username": u, "percent": sim_score/6.5 * 100 })
+    heappush(heap, (sim_score/6.5 * 100, u))
+    if len(heap) > 5:
+      heappop(heap)
   second = get_second_connections(username)
-  res = sorted(result, reverse=True, key=lambda x: (x["percent"], x["username"]))[:5]
   for each in second:
-    res.append({"username": each, "percent": 50})
-  return res
+    heap.append((50, each))
+  res = {}
+  for score,u in heap:
+    res[u] = max(res.get(u,0), score)
+  result = sorted([{"username": u, "percent": res[u]} for u in res], key=lambda x: (x["percent"], x["username"]), reverse=True)
+  return result
 
+'''
+  Helper functions
+'''
 def jaccard_similarity(x, y):
     intersection = len(set(x).intersection(y))
     union = len(set(x).union(y))
