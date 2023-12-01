@@ -22,6 +22,8 @@ def submit_post(username, body):
   return data.data[0]
 
 def get_posts(username):
+  # res = supabase.storage.from_('testing').create_signed_url('k1.jpg', 600)
+  # print(res)
   if not get_user(username):
     return None
   data = supabase.table("Posts").select("*").eq("username", username).execute().data
