@@ -76,8 +76,11 @@ app.post(
   },
   passport.authenticate("samlStrategy"),
   (req, res) => {
+    console.log(user);
     // the user data is in req.user
-    res.send(`welcome ${req.user.first_name}`);
+    res.redirect(
+      `yourapp://loginSuccess?username=${encodeURIComponent(req.user.uid)}`
+    );
   }
 );
 
