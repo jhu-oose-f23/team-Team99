@@ -9,7 +9,7 @@ import {
   StyleSheet,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { fetchRecommendations, postConnectionRequest, fetchConnectionRequestSource } from "../api";
+import { fetchRecommendations, postConnectionRequest, fetchConnectionRequestSource, deleteConnection } from "../api";
 
 const FeedScreen = ({ navigation, route }) => {
   const [connectionRequests, setConnectionRequests] = useState([]);
@@ -35,6 +35,24 @@ const FeedScreen = ({ navigation, route }) => {
       loggedinUser: username,
     });
   };
+
+  // send a connection request if none exists. Else delete the active connection request
+
+  const changeRequestStatus = (profileId) => {
+    if (connectionRequests.includes(profileId)) {
+      const statusData = deleteConnection(username, profileId)
+
+      if (statusData) {
+        const newConnectionRequests = connectionRequests.filter(val => val != profileId)
+        setConnectionRequests([...newConnectionRequests])
+        console.log("Retracting connection succeeded")
+      }      
+    }
+
+    else {
+      sendConnectionRequest(profileId);
+    }
+  }
 
   const sendConnectionRequest = async (profileId) => {
     await postConnectionRequest(
@@ -229,8 +247,8 @@ const FeedScreen = ({ navigation, route }) => {
                     borderRadius: 5,
                     marginTop: 10,
                   }}
-                  onPress={() => sendConnectionRequest(profile.username)}
-                  disabled={connectionRequests.includes(profile.username)}
+                  onPress={() => changeRequestStatus(profile.username)}
+                  // disabled={connectionRequests.includes(profile.username)}
                 >
                   <Text style={{ color: "#fff" }}>
                     {connectionRequests.includes(profile.username)

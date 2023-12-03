@@ -11,6 +11,7 @@ import {
   deleteWorkout,
   postConnectionRequest,
   fetchConnectionRequestSource,
+  deleteConnection
 } from "../api";
 
 const styles = StyleSheet.create({
@@ -152,6 +153,22 @@ const Profile = ({ navigation, route }) => {
   // If username != loggedinUser, this profile is for a different user than the logged in user
   const { username, loggedinUser } = route.params;
 
+
+  const changeRequestStatus = (profileId) => {
+    if (connectionRequests.includes(profileId)) {
+      const statusData = deleteConnection(loggedinUser, profileId)
+
+      if (statusData) {
+        const newConnectionRequests = connectionRequests.filter(val => val != profileId)
+        setConnectionRequests([...newConnectionRequests])
+      }      
+    }
+
+    else {
+      sendConnectionRequest(profileId);
+    }
+  }
+
   const sendConnectionRequest = async (profileId) => {
     await postConnectionRequest(loggedinUser, profileId);
     const fetchedConnectionRequests = await fetchConnectionRequestSource(
@@ -261,8 +278,8 @@ const Profile = ({ navigation, route }) => {
                       borderRadius: 5,
                       marginTop: 10,
                     }}
-                    onPress={() => sendConnectionRequest(username)}
-                    disabled={connectionRequests.includes(username)}
+                    onPress={() => changeRequestStatus(username)}
+                    // disabled={connectionRequests.includes(username)}
                   >
                     <Text style={{ color: "#fff" }}>{getButtonLabel()}</Text>
                   </TouchableOpacity>
