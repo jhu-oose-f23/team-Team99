@@ -52,8 +52,7 @@ Helper functions
 '''
 def get_image(post_id):
   try:
-    # res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
-    res = supabase.storage.from_('testing').create_signed_url("k1.jpg", 1200)
+    res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
   except:
     return None
   return res
@@ -63,14 +62,11 @@ def get_user_posts(username):
     return None
   data = supabase.table("Posts").select("*").eq("username", username).execute().data
   for each in data:
-    # each["image_url"] = f"https://btnctdrhtfujuxuuqkke.supabase.co/storage/v1/object/public/post_images/{each['post_id']}.jpg"
-    # each["image_url"] = get_image(each["post_id"])["signedURL"]
-    each["image_url"] = get_image("HEHE")["signedURL"]
-    # print(each)
-    # try:
+    try:
+      each["image_url"] = f"https://btnctdrhtfujuxuuqkke.supabase.co/storage/v1/object/public/post_images/{each['post_id']}.jpg"
     #   each["image_url"] = get_image(each["post_id"])["signedURL"]
-    # except:
-    #   each["image_url"] = None
+    except:
+      each["image_url"] = None
 
 
   return data
