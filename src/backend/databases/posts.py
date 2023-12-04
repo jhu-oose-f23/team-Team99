@@ -63,7 +63,9 @@ def get_user_posts(username):
   data = supabase.table("Posts").select("*").eq("username", username).execute().data
   print(data)
   for each in data:
-    each["image_url"] = get_image(each["post_id"])["signedURL"]
+    each["image_url"] = f"https://btnctdrhtfujuxuuqkke.supabase.co/storage/v1/object/public/post_images/{each['post_id']}.jpg"
+    print(each['post_id'])
+    # each["image_url"] = get_image(each["post_id"])["signedURL"]
     # print(each)
     # try:
     #   each["image_url"] = get_image(each["post_id"])["signedURL"]
