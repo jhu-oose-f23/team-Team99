@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#1a1a1a",
   },
   errorText: {
     color: "red",
@@ -281,15 +281,17 @@ const CreateWorkout = ({ route }) => {
           <TextInput
             style={{
               margin: 0,
-              backgroundColor: "#fff",
+              backgroundColor: "#808080",
               padding: 10,
               borderRadius: 10,
-              borderWidth: 1, // specify border width for outlined mode
+              borderWidth: 1, 
               flex: 1,
-              borderColor: "white",
+              borderColor: "#ffd700",
+              color:"white",
             }}
             mode="outlined"
             placeholder="Workout Name"
+            placeholderTextColor="#C7C7CD"
             value={workoutName}
             onChangeText={(text) => setWorkoutName(text)}
           />
@@ -305,19 +307,24 @@ const CreateWorkout = ({ route }) => {
             setValue={(v) => setWorkoutDay(v())}
             placeholder="Day"
             placeholderStyle={{
-              color: "#C7C7CD",
+              color: "#C7C7CD", // Gray placeholder text color
               marginBottom: 8,
             }}
             style={{
-              borderWidth: 0,
+              borderRadius: 10,
+              borderWidth: 1, 
+              backgroundColor: "#808080",
+              borderColor: "#ffd700",
             }}
             dropDownContainerStyle={{
               borderWidth: 0,
               maxHeight: 2000,
+              backgroundColor: "#808080",
             }}
             containerStyle={{
               maxHeight: 2000,
             }}
+            textStyle={{ color: "white" }} 
           />
         </View>
       </View>
@@ -343,15 +350,20 @@ const CreateWorkout = ({ route }) => {
               marginBottom: 8,
             }}
             style={{
-              borderWidth: 0,
+              borderRadius: 10,
+              borderWidth: 1, 
+              backgroundColor: "#808080",
+              borderColor: "#ffd700",
             }}
             dropDownContainerStyle={{
               borderWidth: 0,
               maxHeight: 2000,
+              backgroundColor: "#808080",
             }}
             containerStyle={{
               maxHeight: 2000,
             }}
+            textStyle={{ color: "white" }} 
           />
         </View>
         <View style={{ flex: 1 }}>
@@ -368,15 +380,23 @@ const CreateWorkout = ({ route }) => {
               marginBottom: 8,
             }}
             style={{
-              borderWidth: 0,
+              borderRadius: 10,
+              borderWidth: 1, 
+              backgroundColor: "#808080",
+              borderColor: "#ffd700",
             }}
             dropDownContainerStyle={{
-              borderWidth: 0,
+              
               maxHeight: 2000,
+              borderRadius: 10,
+              borderWidth: 1, 
+              backgroundColor: "#808080",
+              borderColor: "#ffd700",
             }}
             containerStyle={{
               maxHeight: 2000,
             }}
+            textStyle={{ color: "white" }} 
           />
         </View>
       </View>
@@ -385,7 +405,7 @@ const CreateWorkout = ({ route }) => {
       )}
       {exerciseError && <Text style={styles.errorText}>{exerciseError}</Text>}
 
-      <Button title="Add Exercise" onPress={addExerciseRow} />
+      <Button title="Add Exercise" onPress={addExerciseRow} color="#ffd700" />
 
       <FlatList
         data={exerciseRows}
@@ -492,7 +512,7 @@ const CreateWorkout = ({ route }) => {
         )}
       />
 
-      <Button title="Save Workout" onPress={saveWorkout} />
+      <Button title="Save Workout" onPress={saveWorkout} color="#ffd700" />
     </View>
   );
 };
