@@ -32,8 +32,10 @@ def submit_post(username, body):
   return data.data[0]
 
 def get_posts(username):
-  data = supabase.storage.from_('testing').list()
+  # data = supabase.storage.from_('testing').list()
   # data = get_user_posts(username)
+  data = supabase.storage.list_buckets()
+  # data = get_image("250c79eb-122a-4a47-a09c-3a013893849b")
   # data.sort(key=lambda x:x["date_time"], reverse=True)
   return data
 
