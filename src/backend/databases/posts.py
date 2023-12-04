@@ -32,12 +32,9 @@ def submit_post(username, body):
   return data.data[0]
 
 def get_posts(username):
-  # data = supabase.storage.from_('testing').list()
-  # data = get_user_posts(username)
-  data = supabase.storage.list_buckets()
-  # data = get_image("250c79eb-122a-4a47-a09c-3a013893849b")
-  # data.sort(key=lambda x:x["date_time"], reverse=True)
-  return str(data)
+  data = get_user_posts(username)
+  data.sort(key=lambda x:x["date_time"], reverse=True)
+  return data
 
 def get_feed(username):
   if not get_user(username):
@@ -65,8 +62,8 @@ def get_user_posts(username):
   data = supabase.table("Posts").select("*").eq("username", username).execute().data
   for each in data:
     try:
-      each["image_url"] = f"https://btnctdrhtfujuxuuqkke.supabase.co/storage/v1/object/public/post_images/{each['post_id']}.jpg"
-    #   each["image_url"] = get_image(each["post_id"])["signedURL"]
+      # each["image_url"] = f"https://btnctdrhtfujuxuuqkke.supabase.co/storage/v1/object/public/post_images/{each['post_id']}.jpg"
+      each["image_url"] = get_image(each["post_id"])["signedURL"]
     except:
       each["image_url"] = None
 
