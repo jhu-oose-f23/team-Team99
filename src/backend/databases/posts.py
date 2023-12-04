@@ -17,13 +17,13 @@ def submit_post(username, body):
     return None
   unique_id = str(uuid.uuid4())
 
-  new_issue = {
+  new_post = {
     "username": username,
     "body": body,
     "post_id": unique_id
   }
   try:
-    data = supabase.table("Posts").insert(new_issue).execute()
+    data = supabase.table("Posts").insert(new_post).execute()
   except:
     return None
   
@@ -69,6 +69,4 @@ def get_user_posts(username):
     each["image_url"] = get_image(each["post_id"])
     # except:
     # each["image_url"] = "NOT FOUND"
-
-
   return data
