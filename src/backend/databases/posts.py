@@ -51,7 +51,13 @@ Helper functions
 '''
 def get_image(post_id):
   res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
-  return res["signedURL"] if res else "NOT FOUND"
+  if not res:
+    return "NOT FOUND"
+  if type(res) != dict:
+    return "NOT DICT"
+  if "signedURL" not in res:
+    return "NO SIGNED URL"
+  return res["signedURL"]
 
 def get_user_posts(username):
   if not get_user(username):
