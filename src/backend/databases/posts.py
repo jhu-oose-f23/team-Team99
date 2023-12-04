@@ -52,8 +52,10 @@ Helper functions
 def get_image(post_id):
   try:
     res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
+    print("55 " + str(res))
   except:
     return None
+  
   return res
 
 def get_user_posts(username):
