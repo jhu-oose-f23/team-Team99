@@ -3,7 +3,7 @@ from flask_smorest import Blueprint, abort
 from flask import make_response
 from schemas import PostSchema
 
-from databases.posts import submit_post, get_posts, get_feed
+from databases.posts import submit_post, get_posts, get_feed, get_image
 
 blp = Blueprint("posts", __name__, description="Operations on posts")
 
@@ -25,9 +25,10 @@ class Post(MethodView):
 class Post(MethodView):
     @blp.response(200, PostSchema(many=True))
     def get(self, username):
-      data = get_posts(username)
-      if data == None:
-        abort(400, message="Could not get posts. User may not exist.")
+      data = get_image("75d1eebd-72ef-4bbc-89dc-6d8fe01c08cf")
+      # data = get_posts(username)
+      # if data == None:
+      #   abort(400, message="Could not get posts. User may not exist.")
       response = make_response(data)
       response.headers['Access-Control-Allow-Origin'] = '*'
       return response

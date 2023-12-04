@@ -55,7 +55,6 @@ def get_image(post_id):
     res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
   except:
     return None
-  
   return res
 
 def get_user_posts(username):
@@ -64,9 +63,10 @@ def get_user_posts(username):
   data = supabase.table("Posts").select("*").eq("username", username).execute().data
   print(data)
   for each in data:
-    print(each)
-    try:
-      each["image_url"] = get_image(each["post_id"])["signedURL"]
-    except:
-      each["image_url"] = None
+    each["image_url"] = get_image(each["post_id"])["signedURL"]
+    # print(each)
+    # try:
+    #   each["image_url"] = get_image(each["post_id"])["signedURL"]
+    # except:
+    #   each["image_url"] = None
   return data
