@@ -51,7 +51,7 @@ Helper functions
 '''
 def get_image(post_id):
   res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
-  if not res:
+  if res == None:
     return "NOT FOUND"
   if type(res) != dict:
     return "NOT DICT"
