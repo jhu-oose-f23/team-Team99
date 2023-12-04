@@ -25,7 +25,6 @@ function App() {
             <Stack.Screen
               name="Login"
               component={Login}
-              initialParams={{ setUserLoggedIn }}
               options={{ headerShown: false }}
             />
           )}

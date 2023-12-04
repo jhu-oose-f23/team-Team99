@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { WebView } from "react-native-webview";
+import UserContext from "../UserContext";
 
 const Login = ({ navigation, route }) => {
-  const { setUserLoggedIn } = route.params;
+  const { setUserLoggedIn } = useContext(UserContext);
 
   const handleWebViewMessage = (event) => {
     // Extracting the message (user uid) sent from the backend
