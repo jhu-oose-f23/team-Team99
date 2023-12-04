@@ -32,9 +32,9 @@ def submit_post(username, body):
   return data.data[0]
 
 def get_posts(username):
-  data = get_user_posts(username)
-  data.sort(key=lambda x:x["date_time"], reverse=True)
-  print(data)
+  data = supabase.storage.from_('testing').list()
+  # data = get_user_posts(username)
+  # data.sort(key=lambda x:x["date_time"], reverse=True)
   return data
 
 def get_feed(username):
