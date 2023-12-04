@@ -77,10 +77,16 @@ app.post(
   passport.authenticate("samlStrategy"),
   (req, res) => {
     console.log(req.user);
-    // the user data is in req.user
-    res.redirect(
-      `yourapp://loginSuccess?username=${encodeURIComponent(req.user.uid)}`
-    );
+    res.send(`
+      <html>
+        <body>
+          <script type="text/javascript">
+            // Post message with user uid
+            window.ReactNativeWebView.postMessage('${req.user.uid}');
+          </script>
+        </body>
+      </html>
+    `);
   }
 );
 
