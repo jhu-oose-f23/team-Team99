@@ -410,6 +410,7 @@ const CreateWorkout = ({ route }) => {
       <FlatList
         data={exerciseRows}
         keyExtractor={(item, index) => index.toString()}
+        style={{backgroundcolor: "#808080"}}
         CellRendererComponent={({ children, index, style, ...props }) => {
           return (
             <View
@@ -426,7 +427,7 @@ const CreateWorkout = ({ route }) => {
             style={{
               flexDirection: "row",
               marginBottom: 15,
-              backgroundColor: "#fff",
+              backgroundColor: "#808080", // Dark gray background
               padding: 10,
               borderRadius: 30,
               alignItems: "center",
@@ -435,8 +436,7 @@ const CreateWorkout = ({ route }) => {
             <View
               style={[
                 styles.input,
-                // { flex: 2, minHeight: open[index] ? 250 : 0 },
-                { flex: 2 },
+                { flex: 2 ,backgroundColor: "#808080"},
               ]}
             >
               <DropDownPicker
@@ -446,7 +446,6 @@ const CreateWorkout = ({ route }) => {
                 items={items}
                 setOpen={(o) => {
                   const updatedOpen = [...open];
-                  // Check if open[index] is defined
                   if (open.length > index) {
                     updatedOpen[index] = o;
                   } else {
@@ -455,7 +454,6 @@ const CreateWorkout = ({ route }) => {
                   setOpen(updatedOpen);
                 }}
                 onOpen={() => {
-                  // Close all other dropdowns
                   const updatedOpen = [...open];
                   updatedOpen.forEach((o, i) => {
                     updatedOpen[i] = false;
@@ -466,41 +464,47 @@ const CreateWorkout = ({ route }) => {
                 setValue={(v) => updateExercise(index, "name", v())}
                 placeholder="Exercise"
                 placeholderStyle={{
-                  color: "#C7C7CD",
+                  color: "#C7C7CD", // Gray placeholder text
                   marginBottom: 8,
                 }}
                 style={{
                   borderWidth: 0,
+                  backgroundColor: "#808080", // Dark gray background
                 }}
                 dropDownContainerStyle={{
                   borderWidth: 0,
                   maxHeight: 2000,
+                  backgroundColor: "#808080", // Dark gray background
                 }}
                 containerStyle={{
                   maxHeight: 2000,
                 }}
+                textStyle={{ color: "white" }} 
               />
             </View>
             <TextInput
-              style={[styles.input, { flex: 1, marginRight: 10 }]}
+              style={[styles.input, { flex: 1, marginRight: 10, backgroundColor: "#808080", color: "white"}]}
               mode="outlined"
               placeholder="Weight"
+              placeholderTextColor="#C7C7CD"
               value={item.weight}
               onChangeText={(text) => updateExercise(index, "weight", text)}
               keyboardType="numeric"
             />
             <TextInput
-              style={[styles.input, { flex: 1, marginRight: 10 }]}
+              style={[styles.input, { flex: 1, marginRight: 10, backgroundColor: "#808080" }]}
               mode="outlined"
               placeholder="Sets"
+              placeholderTextColor="#C7C7CD"
               value={item.sets}
               onChangeText={(text) => updateExercise(index, "sets", text)}
               keyboardType="numeric"
             />
             <TextInput
-              style={[styles.input, { flex: 1 }]}
+              style={[styles.input, { flex: 1, backgroundColor: "#808080" }]}
               mode="outlined"
               placeholder="Reps"
+              placeholderTextColor="#C7C7CD"
               value={item.reps}
               onChangeText={(text) => updateExercise(index, "reps", text)}
               keyboardType="numeric"
@@ -510,7 +514,8 @@ const CreateWorkout = ({ route }) => {
             </TouchableOpacity>
           </View>
         )}
-      />
+        />
+        
 
       <Button title="Save Workout" onPress={saveWorkout} color="#ffd700" />
     </View>
