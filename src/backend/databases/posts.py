@@ -34,6 +34,7 @@ def submit_post(username, body):
 def get_posts(username):
   data = get_user_posts(username)
   data.sort(key=lambda x:x["date_time"], reverse=True)
+  print(data)
   return data
 
 def get_feed(username):
@@ -52,7 +53,6 @@ Helper functions
 def get_image(post_id):
   try:
     res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
-    print("55 " + str(res))
   except:
     return None
   
@@ -62,7 +62,9 @@ def get_user_posts(username):
   if not get_user(username):
     return None
   data = supabase.table("Posts").select("*").eq("username", username).execute().data
+  print(data)
   for each in data:
+    print(each)
     try:
       each["image_url"] = get_image(each["post_id"])["signedURL"]
     except:
