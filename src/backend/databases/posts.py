@@ -53,7 +53,7 @@ Helper functions
 def get_image(post_id):
   try:
     # res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
-    res = supabase.storage.from_('testing').create_signed_url("75d1eebd-72ef-4bbc-89dc-6d8fe01c08cf.jpg", 1200)
+    res = supabase.storage.from_('testing').create_signed_url("k1.jpg", 1200)
   except:
     return None
   return res
