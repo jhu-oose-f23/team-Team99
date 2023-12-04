@@ -50,22 +50,19 @@ def get_feed(username):
 Helper functions
 '''
 def get_image(post_id):
-  try:
-    res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
-  except:
-    return None
-  return res
+  res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
+  return res["signedURL"] if res else "NOT FOUND"
 
 def get_user_posts(username):
   if not get_user(username):
     return None
   data = supabase.table("Posts").select("*").eq("username", username).execute().data
   for each in data:
-    try:
-      # each["image_url"] = f"https://btnctdrhtfujuxuuqkke.supabase.co/storage/v1/object/public/post_images/{each['post_id']}.jpg"
-      each["image_url"] = get_image(each["post_id"])["signedURL"]
-    except:
-      each["image_url"] = None
+    # try:
+    #   # each["image_url"] = f"https://btnctdrhtfujuxuuqkke.supabase.co/storage/v1/object/public/post_images/{each['post_id']}.jpg"
+    each["image_url"] = get_image(each["post_id"])
+    # except:
+    # each["image_url"] = "NOT FOUND"
 
 
   return data
