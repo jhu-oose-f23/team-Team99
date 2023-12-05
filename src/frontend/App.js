@@ -43,6 +43,7 @@ function App() {
               name="Login"
               component={Login}
               options={{ headerShown: false }}
+              initialParams={{ username: userLoggedIn }}
             />
           )}
         </Stack.Navigator>

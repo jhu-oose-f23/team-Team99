@@ -68,6 +68,12 @@ app.get(
   passport.authenticate("samlStrategy")
 );
 
+// Logout route
+app.get("/logout", (req, res) => {
+  req.logout(); // Passport's method to log out the user
+  res.redirect("/jhu/login"); // Redirect to the home page after logout
+});
+
 // callback route
 app.post(
   "/jhu/login/callback",

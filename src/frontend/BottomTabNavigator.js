@@ -36,23 +36,22 @@ const LeaderboardStack = ({ route }) => (
   </Stack.Navigator>
 );
 
-const SettingsNavigation = ({route}) => {
+const SettingsNavigation = ({ route }) => {
   return (
     <Stack.Navigator>
-    <Stack.Screen name="Settings" 
-      component={Settings} 
-      initialParams={{username: route.params.username}}/>
-    <Stack.Screen name="Edit Profile" 
-      component={EditProfile}
-      initialParams={{username: route.params.username}}
-       />
-    <Stack.Screen name="Privacy" component={Privacy}/>
-    <Stack.Screen name="Notifications" component={Notifications}/>
-    <Stack.Screen name="Terms and Policies" component={TermsAndPolicies}/>
-  </Stack.Navigator>
-  )
-  
-}
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        initialParams={{ username: route.params.username }}
+      />
+      <Stack.Screen
+        name="Edit Profile"
+        component={EditProfile}
+        initialParams={{ username: route.params.username }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const BottomTabNavigator = ({ route }) => {
   const { username } = route.params;
@@ -127,7 +126,6 @@ const BottomTabNavigator = ({ route }) => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-settings" color={color} size={size} />
           ),
-          
         }}
       />
     </Tab.Navigator>

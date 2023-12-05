@@ -20,6 +20,7 @@ import { useNavigation } from "@react-navigation/native";
 
 const Settings = ({ route }) => {
   const { username } = route.params;
+  const { setUserLoggedIn, setUserHasSignedUp } = useContext(UserContext);
 
   const { navigate } = useNavigation();
 
@@ -27,12 +28,9 @@ const Settings = ({ route }) => {
     navigate("Edit Profile");
   };
 
-  const navigateToNotifications = () => {
-    navigate("Notifications");
-  };
-
   const logout = () => {
-    setUserLoggedIn(false);
+    setUserLoggedIn("");
+    setUserHasSignedUp(false);
   };
   // Snackbar
   const [visibleSnackbar, setVisibleSnackbar] = useState(false);
@@ -83,11 +81,6 @@ const Settings = ({ route }) => {
       text: "Edit Profile",
       action: navigateToEditProfile,
     },
-    {
-      icon: "notifications-none",
-      text: "Notifications",
-      action: navigateToNotifications,
-    },
   ];
 
   const actionsItems = [
@@ -98,7 +91,6 @@ const Settings = ({ route }) => {
     },
     { icon: "logout", text: "Log out", action: logout },
   ];
-  const { setUserLoggedIn } = useContext(UserContext);
 
   const renderSettingsItem = ({ icon, text, action }) => (
     <TouchableOpacity
