@@ -18,41 +18,17 @@ import { useContext } from "react";
 import UserContext from "../UserContext";
 import { useNavigation } from "@react-navigation/native";
 
- const Settings = ({ route }) => {
+const Settings = ({ route }) => {
   const { username } = route.params;
 
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
 
   const navigateToEditProfile = () => {
     navigate("Edit Profile");
   };
 
-  const navigateToSecurity = () => {
-    console.log("Security function");
-  };
-
   const navigateToNotifications = () => {
-    navigate("Notifications")
-  };
-
-  const navigateToPrivacy = () => {
-    navigate("Privacy")
-  };
-
-  const navigateToSupport = () => {
-    console.log("Support function");
-  };
-
-  const navigateToTermsAndPolicies = () => {
-    navigate("Terms and Policies")
-  };
-
-  const navigateToReportProblem = () => {
-    console.log("Report a problem");
-  };
-
-  const addAccount = () => {
-    console.log("Aadd account ");
+    navigate("Notifications");
   };
 
   const logout = () => {
@@ -107,21 +83,10 @@ import { useNavigation } from "@react-navigation/native";
       text: "Edit Profile",
       action: navigateToEditProfile,
     },
-    { icon: "security", text: "Security", action: navigateToSecurity },
     {
       icon: "notifications-none",
       text: "Notifications",
       action: navigateToNotifications,
-    },
-    { icon: "lock-outline", text: "Privacy", action: navigateToPrivacy },
-  ];
-
-  const supportItems = [
-    { icon: "help-outline", text: "Help & Support", action: navigateToSupport },
-    {
-      icon: "info-outline",
-      text: "Terms and Policies",
-      action: navigateToTermsAndPolicies,
     },
   ];
 
@@ -143,10 +108,9 @@ import { useNavigation } from "@react-navigation/native";
         alignItems: "center",
         paddingVertical: 8,
         paddingLeft: 12,
-        backgroundColor: COLORS.gray,
       }}
     >
-      <MaterialIcons name={icon} size={24} color="black" />
+      <MaterialIcons name={icon} size={24} />
       <Text
         style={{
           marginLeft: 36,
@@ -163,14 +127,11 @@ import { useNavigation } from "@react-navigation/native";
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <ScrollView style={{ marginHorizontal: 12 }}>
-
         {/* Account Settings */}
-        <View style={{ marginBottom: 12 }}>
-          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Account</Text>
+        <View>
           <View
             style={{
               borderRadius: 12,
-              backgroundColor: COLORS.gray,
             }}
           >
             {accountItems.map((item, index) => (
@@ -181,30 +142,10 @@ import { useNavigation } from "@react-navigation/native";
           </View>
         </View>
 
-        {/* Support and About settings */}
-
-        <View style={{ marginBottom: 12 }}>
-          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>
-            Support & About{" "}
-          </Text>
-          <View
-            style={{
-              borderRadius: 12,
-              backgroundColor: COLORS.gray,
-            }}
-          >
-            {supportItems.map((item, index) => (
-              <React.Fragment key={index}>
-                {renderSettingsItem(item)}
-              </React.Fragment>
-            ))}
-          </View>
-        </View>
-
         {/* Actions Settings */}
 
         <View style={{ marginBottom: 12 }}>
-          <View style={{ borderRadius: 12, backgroundColor: COLORS.gray }}>
+          <View style={{ borderRadius: 12 }}>
             {actionsItems.map((item, index) => (
               <React.Fragment key={index}>
                 {renderSettingsItem(item)}
