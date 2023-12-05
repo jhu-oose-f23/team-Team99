@@ -96,7 +96,7 @@ const Settings = ({ route }) => {
       text: "Report an Issue",
       action: () => setModalVisible(true),
     },
-    { icon: "logout", text: "Log out", action: logout },
+    // { icon: "logout", text: "Log out", action: logout },
   ];
 
   const renderSettingsItem = ({ icon, text, action }) => (

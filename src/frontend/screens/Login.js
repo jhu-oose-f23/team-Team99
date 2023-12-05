@@ -2,36 +2,47 @@ import React, { useContext, useEffect } from "react";
 import { WebView } from "react-native-webview";
 import UserContext from "../UserContext";
 import { fetchUser } from "../api";
+import * as SecureStore from "expo-secure-store";
 
 const Login = ({ navigation, route }) => {
   const { userLoggedIn } = route.params;
   const { setUserLoggedIn, setUserHasSignedUp } = useContext(UserContext);
 
   useEffect(() => {
-    // This code runs when `userLoggedIn` changes.
-    // You can add any operations here that should happen when `userLoggedIn` changes.
-    // For example, fetching user data or updating the state.
-  }, [userLoggedIn]);
+    // Check if user UID is stored in secure storage
+    const checkLoginStatus = async () => {
+      const storedUserUid = await SecureStore.getItemAsync("userUid");
+      if (storedUserUid) {
+        setUserLoggedIn(storedUserUid);
+        if (fetchUser(storedUserUid)) {
+          setUserHasSignedUp(true);
+        }
+      }
+    };
+    checkLoginStatus();
+  }, []);
 
-  const handleWebViewMessage = (event) => {
-    // Extracting the message (user uid) sent from the backend
+  const handleWebViewMessage = async (event) => {
     const userUid = event.nativeEvent.data;
     console.log(userUid);
-    setUserLoggedIn(userUid);
 
-    // Check if the user has signed up
+    // Save user UID to secure storage
+    await SecureStore.setItemAsync("userUid", userUid);
+
+    setUserLoggedIn(userUid);
     if (fetchUser(userUid)) {
       setUserHasSignedUp(true);
     }
   };
+
   console.log("rendering");
 
   return (
     <WebView
-      key={userLoggedIn} // This is to force the WebView to rerender when `userLoggedIn` changes
+      key={userLoggedIn}
       source={{ uri: "https://jhu-sso-api.onrender.com/jhu/login/" }}
       style={{ marginTop: 20 }}
-      onMessage={handleWebViewMessage} // Listening for messages posted from the WebView
+      onMessage={handleWebViewMessage}
     />
   );
 };
