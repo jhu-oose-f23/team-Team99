@@ -69,9 +69,10 @@ app.get(
 );
 
 // Logout route
-app.get("/logout", (req, res) => {
-  req.logout(); // Passport's method to log out the user
-  res.redirect("/"); // Redirect to the home page after logout
+app.get("/jhu/logout", (req, res) => {
+  req.session.destroy(function (err) {
+    res.redirect("/"); //Inside a callback… bulletproof!
+  });
 });
 
 // callback route
