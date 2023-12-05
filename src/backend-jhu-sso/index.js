@@ -70,11 +70,12 @@ app.get(
 
 // Logout route
 app.post("/jhu/logout", function (req, res, next) {
+  res.clearCookie("connect.sid");
   req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/jhu/login");
+    req.session.destroy(function (err) {
+      // destroys the session
+      res.send();
+    });
   });
 });
 

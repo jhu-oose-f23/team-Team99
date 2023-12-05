@@ -32,10 +32,12 @@ const Settings = ({ route }) => {
     setUserLoggedIn("");
     setUserHasSignedUp(false);
     async function logout() {
+      console.log("logging out");
       const res = await fetch("https://jhu-sso-api.onrender.com/jhu/logout/", {
         method: "POST",
         credentials: "include",
       });
+
       const data = await res.json();
       console.log(data);
     }
