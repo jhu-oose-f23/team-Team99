@@ -30,8 +30,10 @@ const Settings = ({ route }) => {
 
   const logout = async () => {
     console.log("logging out");
-    const res = await fetch("https://jhu-sso-api.onrender.com/jhu/logout/");
-    const data = await res.json();
+    const res = await fetch("https://jhu-sso-api.onrender.com/jhu/logout", {
+      credentials: "include", // to ensure cookies are sent
+    });
+    console.log(res.status);
     console.log("logged out");
     // console.log(data);
     setUserLoggedIn("");

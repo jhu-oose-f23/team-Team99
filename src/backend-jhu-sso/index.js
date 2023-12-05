@@ -71,10 +71,8 @@ app.get(
 // Logout route
 app.get("/jhu/logout", function (req, res, next) {
   console.log(req.user);
-  req.session.destroy(function (err) {
-    console.log(req.user);
-    res.redirect("/"); //Inside a callback… bulletproof!
-  });
+  req.logOut();
+  res.redirect("/");
 });
 
 // callback route
