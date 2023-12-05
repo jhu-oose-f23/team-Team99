@@ -43,10 +43,13 @@ def get_recommendations(username):
   for u in users:
     if check_connection(username, u):
       continue
-    sim_score = calculate_similarity(username, u)
-    heappush(heap, (sim_score/6.5 * 100, u))
-    if len(heap) > 5:
-      heappop(heap)
+    try:
+      sim_score = calculate_similarity(username, u)
+      heappush(heap, (sim_score/6.5 * 100, u))
+      if len(heap) > 5:
+        heappop(heap)
+    except:
+      pass
   second = get_second_connections(username)
   for each in second:
     heap.append((50, each))
