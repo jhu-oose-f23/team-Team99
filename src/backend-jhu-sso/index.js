@@ -70,12 +70,8 @@ app.get(
 
 // Logout route
 app.get("/jhu/logout", function (req, res, next) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
-    res.redirect("/");
-  });
+  req.user = null;
+  res.send("Logged out");
 });
 
 // callback route
