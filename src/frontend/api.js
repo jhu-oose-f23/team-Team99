@@ -1,11 +1,10 @@
 // TODO: make this a .env variable
 const BASE_URL = "https://gymconnectbackend.onrender.com";
 
-
 export const fetchConnectionRequestSource = async (src) => {
   const connectionRequests = await fetchData(`connection/request/out/${src}`);
-  return connectionRequests
-}
+  return connectionRequests;
+};
 
 const fetchData = async (endpoint) => {
   try {
@@ -127,10 +126,10 @@ export const fetchLeaderboard = async (exercise) => {
 };
 
 export const fetchConnectionRequest = (dst) => {
-  return fetchData(`connection/request/${dst}`)
-}
+  return fetchData(`connection/request/${dst}`);
+};
 
-export const fetchAllUsers = () => fetchData('user');
+export const fetchAllUsers = () => fetchData("user");
 
 export const deleteConnection = async (source, dst) => {
   const apiURL = `https://gymconnectbackend.onrender.com/connection/request`;
@@ -140,25 +139,21 @@ export const deleteConnection = async (source, dst) => {
     dest: dst,
   };
 
-    const response = await fetch(apiURL, 
-      {
-        method: 'DELETE',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+  const response = await fetch(apiURL, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  });
 
-      if (response.status == 200) {
-        return response.json();
-      }
-
-      else {
-        console.error("Rejecting connection failed!!", response.status)
-        return 0;
-      }
-
-}
+  if (response.status == 200) {
+    return response.json();
+  } else {
+    console.error("Rejecting connection failed!!", response.status);
+    return 0;
+  }
+};
 
 export const PutConnectionRequest = async (source, dst) => {
   const apiURL = `https://gymconnectbackend.onrender.com/connection/request`;
@@ -168,21 +163,36 @@ export const PutConnectionRequest = async (source, dst) => {
     dest: dst,
   };
 
-    const response = await fetch(apiURL, 
-      {
-        method: 'PUT',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+  const response = await fetch(apiURL, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  });
 
-      if (response.status == 200) {
-        return response.json();
-      }
+  if (response.status == 200) {
+    return response.json();
+  } else {
+    console.error("Accepting connection failed!!", response.status);
+    return 0;
+  }
+};
 
-      else {
-        console.error("Accepting connection failed!!", response.status)
-        return 0;
-      }
-}
+export const postUser = async (userData) => {
+  console.log(JSON.stringify(userData));
+  const response = await fetch(`${BASE_URL}/user`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  if (response.status == 200) {
+    return response.json();
+  } else {
+    console.error("Accepting connection failed!!", response.status);
+    console.log(response.statusText);
+    return 0;
+  }
+};

@@ -9,7 +9,11 @@ import {
   StyleSheet,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { fetchRecommendations, postConnectionRequest, fetchConnectionRequestSource } from "../api";
+import {
+  fetchRecommendations,
+  postConnectionRequest,
+  fetchConnectionRequestSource,
+} from "../api";
 
 const FeedScreen = ({ navigation, route }) => {
   const [connectionRequests, setConnectionRequests] = useState([]);
@@ -21,7 +25,6 @@ const FeedScreen = ({ navigation, route }) => {
     recommendations: [],
   });
 
-  
   const username = route.params.username;
   const resetToFeed = () => {
     setIsSearchActive(false);
@@ -36,10 +39,7 @@ const FeedScreen = ({ navigation, route }) => {
   };
 
   const sendConnectionRequest = async (profileId) => {
-    await postConnectionRequest(
-      username,
-      profileId
-    );
+    await postConnectionRequest(username, profileId);
     setConnectionRequests([...connectionRequests, profileId]);
   };
 
@@ -71,11 +71,14 @@ const FeedScreen = ({ navigation, route }) => {
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
-        const fetchedConnectionRequests = await fetchConnectionRequestSource(username);
-        if (fetchedConnectionRequests != null) { 
+        const fetchedConnectionRequests = await fetchConnectionRequestSource(
+          username
+        );
+        if (fetchedConnectionRequests != null) {
           setConnectionRequests(fetchedConnectionRequests);
         }
         const recommendationsResponse = await fetchRecommendations(username);
+        console.log(recommendationsResponse);
         setUserData({
           recommendations: recommendationsResponse,
         });
@@ -185,53 +188,56 @@ const FeedScreen = ({ navigation, route }) => {
             Recommendations
           </Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {userData.recommendations.map((profile, index) => (
-              <View
-                key={index}
-                style={{
-                  backgroundColor: "#ffffff",
-                  padding: 10,
-                  marginRight: 10,
-                  alignItems: "center",
-                  height: 180,
-                  width: 180,
-                }}
-              >
-                <Image
-                  source={require("../assets/icon.png")}
+            {userData?.recommendations &&
+              userData.recommendations.map((profile, index) => (
+                <View
+                  key={index}
                   style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 30,
-                    marginBottom: 10,
+                    backgroundColor: "#ffffff",
+                    padding: 10,
+                    marginRight: 10,
+                    alignItems: "center",
+                    height: 180,
+                    width: 180,
                   }}
-                />
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                  @{profile.username}
-                </Text>
-                <Text style={{ fontSize: 14, color: "#555" }}>
-                  {profile.percent.toFixed(2)}% Match
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: connectionRequests.includes(profile.username)
-                      ? "green"
-                      : "#007bff",
-                    padding: 5,
-                    borderRadius: 5,
-                    marginTop: 10,
-                  }}
-                  onPress={() => sendConnectionRequest(profile.username)}
-                  disabled={connectionRequests.includes(profile.username)}
                 >
-                  <Text style={{ color: "#fff" }}>
-                    {connectionRequests.includes(profile.username)
-                      ? "Request Sent"
-                      : "Connect"}
+                  <Image
+                    source={require("../assets/icon.png")}
+                    style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 30,
+                      marginBottom: 10,
+                    }}
+                  />
+                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                    @{profile.username}
                   </Text>
-                </TouchableOpacity>
-              </View>
-            ))}
+                  <Text style={{ fontSize: 14, color: "#555" }}>
+                    {profile.percent.toFixed(2)}% Match
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: connectionRequests.includes(
+                        profile.username
+                      )
+                        ? "green"
+                        : "#007bff",
+                      padding: 5,
+                      borderRadius: 5,
+                      marginTop: 10,
+                    }}
+                    onPress={() => sendConnectionRequest(profile.username)}
+                    disabled={connectionRequests.includes(profile.username)}
+                  >
+                    <Text style={{ color: "#fff" }}>
+                      {connectionRequests.includes(profile.username)
+                        ? "Request Sent"
+                        : "Connect"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ))}
           </ScrollView>
         </>
       )}

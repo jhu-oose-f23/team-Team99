@@ -10,10 +10,27 @@ const Stack = createNativeStackNavigator();
 
 function App() {
   const [userLoggedIn, setUserLoggedIn] = useState("");
+
+  useState(() => {
+    // Check if the user has signed up
+    fetch(`https://gymconnectbackend.onrender.com/user/${userLoggedIn}`)
+      .then((response) => response.json())
+      .then((responseData) => {
+        if (responseData.length > 0) {
+          setUserHasSignedUp(true);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+      });
+  }, [userLoggedIn]);
+
   const [userHasSignedUp, setUserHasSignedUp] = useState(false);
 
   return (
-    <UserContext.Provider value={{ userLoggedIn, setUserLoggedIn }}>
+    <UserContext.Provider
+      value={{ userLoggedIn, setUserLoggedIn, setUserHasSignedUp }}
+    >
       <NavigationContainer>
         <Stack.Navigator>
           {userLoggedIn ? (
