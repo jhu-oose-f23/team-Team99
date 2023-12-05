@@ -48,9 +48,9 @@ const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(
-  session({ secret: "use-any-secret", resave: false, saveUninitialized: true })
-);
+// app.use(
+//   session({ secret: "use-any-secret", resave: false, saveUninitialized: true })
+// );
 app.use(passport.initialize({}));
 // app.use(passport.session({}));
 
