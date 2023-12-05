@@ -52,7 +52,7 @@ app.use(
   session({ secret: "use-any-secret", resave: false, saveUninitialized: true })
 );
 app.use(passport.initialize({}));
-app.use(passport.session({}));
+// app.use(passport.session({}));
 
 // Set up homepage route
 app.get("/", (req, res) => {
