@@ -43,7 +43,6 @@ def get_recommendations(username):
     return generate_recommendations(username)
   return data["recs"]
 
-
 '''
   Helper functions
 '''
