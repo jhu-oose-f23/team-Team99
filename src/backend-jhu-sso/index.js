@@ -69,9 +69,12 @@ app.get(
 );
 
 // Logout route
-app.get("/jhu/logout", (req, res) => {
-  req.session.destroy(function (err) {
-    res.redirect("/"); //Inside a callback… bulletproof!
+app.post("/logout", function (req, res, next) {
+  req.logout(function (err) {
+    if (err) {
+      return next(err);
+    }
+    res.redirect("/");
   });
 });
 
