@@ -42,13 +42,19 @@ def get_leaderboard(exercise):
   for d in data:
     for e in d["exercises"]:
       if e["name"].lower() == exercise.lower():
-        pairs[d["user"]].append(e["weight"])
+        try:
+          pairs[d["user"]].append(int(e["weight"]))
+        except:
+          pass
   leaders = [(username, max(weights)) for username, weights in pairs.items()]
   return sorted(leaders, key=lambda x: x[1], reverse=True)
 
 def get_weight_class_leaderboard(exercise, username):
   full_leaders = get_leaderboard(exercise)
-  user_weight = get_user(username)["weight"]
+  try:
+    user_weight = float(get_user(username)["weight"])
+  except:
+    return []
   l,h = user_weight * 0.75, user_weight * 1.25
   weight_class = set()
   for leader in full_leaders:
