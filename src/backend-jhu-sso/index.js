@@ -69,7 +69,7 @@ app.get(
 );
 
 // Logout route
-app.post("/jhu/logout", function (req, res, next) {
+app.get("/jhu/logout", function (req, res, next) {
   res.clearCookie("connect.sid");
   req.logout(function (err) {
     req.session.destroy(function (err) {

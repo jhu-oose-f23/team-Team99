@@ -28,20 +28,15 @@ const Settings = ({ route }) => {
     navigate("Edit Profile");
   };
 
-  const logout = () => {
+  const logout = async () => {
+    console.log("logging out");
+    const res = await fetch("https://jhu-sso-api.onrender.com/jhu/logout/");
+    const data = await res.json();
+    console.log("logged out");
+    console.log(data);
+    await logout();
     setUserLoggedIn("");
     setUserHasSignedUp(false);
-    async function logout() {
-      console.log("logging out");
-      const res = await fetch("https://jhu-sso-api.onrender.com/jhu/logout/", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      const data = await res.json();
-      console.log(data);
-    }
-    logout();
   };
   // Snackbar
   const [visibleSnackbar, setVisibleSnackbar] = useState(false);
