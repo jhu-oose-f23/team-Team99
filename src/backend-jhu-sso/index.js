@@ -69,12 +69,12 @@ app.get(
 );
 
 // Logout route
-app.post("/logout", function (req, res, next) {
+app.post("/jhu/logout", function (req, res, next) {
   req.logout(function (err) {
     if (err) {
       return next(err);
     }
-    res.redirect("/");
+    res.redirect("/jhu/login");
   });
 });
 

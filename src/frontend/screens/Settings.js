@@ -31,6 +31,15 @@ const Settings = ({ route }) => {
   const logout = () => {
     setUserLoggedIn("");
     setUserHasSignedUp(false);
+    async function logout() {
+      const res = await fetch("https://jhu-sso-api.onrender.com/jhu/logout/", {
+        method: "POST",
+        credentials: "include",
+      });
+      const data = await res.json();
+      console.log(data);
+    }
+    logout();
   };
   // Snackbar
   const [visibleSnackbar, setVisibleSnackbar] = useState(false);
