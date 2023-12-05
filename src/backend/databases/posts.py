@@ -27,8 +27,6 @@ def submit_post(username, body):
   except:
     return None
   
-  # use unique_id to add image to the storage bucket
-
   return data.data[0]
 
 def get_posts(username):
@@ -49,24 +47,18 @@ def get_feed(username):
 '''
 Helper functions
 '''
-def get_image(post_id):
-  res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
-  if res == None:
-    return "NOT FOUND"
-  if type(res) != dict:
-    return "NOT DICT"
-  if "signedURL" not in res:
-    return "NO SIGNED URL"
-  return res["signedURL"]
+# def get_image(post_id):
+#   res = supabase.storage.from_('post_images').create_signed_url(f"{post_id}.jpg", 1200)
+#   if res == None:
+#     return "NOT FOUND"
+#   if type(res) != dict:
+#     return "NOT DICT"
+#   if "signedURL" not in res:
+#     return "NO SIGNED URL"
+#   return res["signedURL"]
 
 def get_user_posts(username):
   if not get_user(username):
     return None
   data = supabase.table("Posts").select("*").eq("username", username).execute().data
-  for each in data:
-    # try:
-    #   # each["image_url"] = f"https://btnctdrhtfujuxuuqkke.supabase.co/storage/v1/object/public/post_images/{each['post_id']}.jpg"
-    each["image_url"] = get_image(each["post_id"])
-    # except:
-    # each["image_url"] = "NOT FOUND"
   return data
