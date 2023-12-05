@@ -3,7 +3,7 @@ from flask_smorest import Blueprint, abort
 from flask import make_response
 from schemas import PostSchema
 
-from databases.posts import submit_post, get_posts, get_feed, get_image
+from databases.posts import submit_post, get_posts, get_feed
 
 blp = Blueprint("posts", __name__, description="Operations on posts")
 
