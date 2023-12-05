@@ -31,6 +31,7 @@ const FeedScreen = ({ navigation, route }) => {
     setSearchQuery("");
   };
 
+  
   const navigateToProfile = (navigateToUsername) => {
     navigation.navigate("Profile", {
       username: navigateToUsername,
@@ -188,10 +189,27 @@ const FeedScreen = ({ navigation, route }) => {
             Recommendations
           </Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {userData?.recommendations &&
-              userData.recommendations.map((profile, index) => (
+              {userData.recommendations.map((profile, index) => (
+                <TouchableOpacity
+          key={index}
+          onPress={() => {
+            // Navigate to the profile screen with profile data
+            navigateToProfile(profile.username);
+          }}
+                >
                 <View
-                  key={index}
+                key={index}
+                style={{
+                  backgroundColor: "#ffffff",
+                  padding: 10,
+                  marginRight: 10,
+                  alignItems: "center",
+                  height: 180,
+                  width: 180,
+                }}
+              >
+                <Image
+                  source={require("../assets/icon.png")}
                   style={{
                     backgroundColor: "#ffffff",
                     padding: 10,
@@ -213,31 +231,10 @@ const FeedScreen = ({ navigation, route }) => {
                   <Text style={{ fontSize: 16, fontWeight: "bold" }}>
                     @{profile.username}
                   </Text>
-                  <Text style={{ fontSize: 14, color: "#555" }}>
-                    {profile.percent.toFixed(2)}% Match
-                  </Text>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: connectionRequests.includes(
-                        profile.username
-                      )
-                        ? "green"
-                        : "#007bff",
-                      padding: 5,
-                      borderRadius: 5,
-                      marginTop: 10,
-                    }}
-                    onPress={() => sendConnectionRequest(profile.username)}
-                    disabled={connectionRequests.includes(profile.username)}
-                  >
-                    <Text style={{ color: "#fff" }}>
-                      {connectionRequests.includes(profile.username)
-                        ? "Request Sent"
-                        : "Connect"}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
+                </TouchableOpacity>
+              </View>
+              </TouchableOpacity>
+            ))}
           </ScrollView>
         </>
       )}

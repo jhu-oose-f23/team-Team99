@@ -1,11 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useFocusEffect } from "@react-navigation/native";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
-import { View, Text, StyleSheet, FlatList } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  TouchableOpacity,
+} from "react-native";
 import { Avatar } from "react-native-elements";
-import { fetchLeaderboard } from "../api";
+import { fetchLeaderboard, fetchLeaderboardUser } from "../api";
 
-const Leaderboard = ({ navigation, route }) => {
+const Tab = createMaterialTopTabNavigator();
+
+const GlobalLeaderboard = ({ navigation, route }) => {
   const username = route.params.username;
   const name = route.params.name;
   const [leaderboard, setLeaderboard] = useState([]);
@@ -15,15 +24,22 @@ const Leaderboard = ({ navigation, route }) => {
     React.useCallback(() => {
       const fetchData = async () => {
         const leaderboardResponse = await fetchLeaderboard(name);
-        console.log(leaderboardResponse);
         setLeaderboard(leaderboardResponse);
       };
       fetchData();
     }, [username])
   );
 
+  const navigateToProfile = (navigateToUsername) => {
+    navigation.navigate("Profile", {
+      username: navigateToUsername,
+      loggedinUser: username,
+    });
+  };
+
   const renderItem = ({ item, index }) => (
-    <View
+    <TouchableOpacity
+      onPress={() => navigateToProfile(item.username)}
       style={[
         styles.row,
         item.username === username ? styles.highlighted : null,
@@ -51,7 +67,7 @@ const Leaderboard = ({ navigation, route }) => {
           <FontAwesome5Icon name="crown" solid color="#cd7f32" size={16} />
         )}
       </Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (
@@ -63,6 +79,92 @@ const Leaderboard = ({ navigation, route }) => {
         keyExtractor={(item) => item.username}
       />
     </View>
+  );
+};
+
+const WeightClassLeaderboard = ({ navigation, route }) => {
+  const username = route.params.username;
+  const name = route.params.name;
+  const [leaderboard, setLeaderboard] = useState([]);
+
+  // Get Leaderboard
+  useFocusEffect(
+    React.useCallback(() => {
+      const fetchData = async () => {
+        const leaderboardResponse = await fetchLeaderboardUser(name, username);
+        console.log(leaderboardResponse);
+        setLeaderboard(leaderboardResponse);
+      };
+      fetchData();
+    }, [username])
+  );
+
+  const navigateToProfile = (navigateToUsername) => {
+    navigation.navigate("Profile", {
+      username: navigateToUsername,
+      loggedinUser: username,
+    });
+  };
+
+  const renderItem = ({ item, index }) => (
+    <TouchableOpacity
+      onPress={() => navigateToProfile(item.username)}
+      style={[
+        styles.row,
+        item.username === username ? styles.highlighted : null,
+      ]}
+    >
+      <Text style={styles.rank}>{index + 1}</Text>
+      <Avatar
+        rounded
+        title={item.username[0].toUpperCase()}
+        size="medium"
+        containerStyle={styles.avatar}
+      />
+      <View style={styles.userInfo}>
+        <Text style={styles.username}>{item.username}</Text>
+        <Text style={styles.score}>Weight: {item.score}</Text>
+      </View>
+      <Text style={styles.rank}>
+        {index === 0 && (
+          <FontAwesome5Icon name="crown" solid color="gold" size={16} />
+        )}
+        {index === 1 && (
+          <FontAwesome5Icon name="crown" solid color="silver" size={16} />
+        )}
+        {index === 2 && (
+          <FontAwesome5Icon name="crown" solid color="#cd7f32" size={16} />
+        )}
+      </Text>
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.header}>{name} Leaderboard</Text>
+      <FlatList
+        data={leaderboard}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.username}
+      />
+    </View>
+  );
+};
+
+const LeaderboardTabs = ({ route }) => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Global"
+        component={GlobalLeaderboard}
+        initialParams={route.params}
+      />
+      <Tab.Screen
+        name="My Weight Class"
+        component={WeightClassLeaderboard}
+        initialParams={route.params}
+      />
+    </Tab.Navigator>
   );
 };
 
@@ -108,4 +210,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Leaderboard;
+export default LeaderboardTabs;
