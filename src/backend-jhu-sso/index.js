@@ -70,8 +70,11 @@ app.get(
 
 // Logout route
 app.get("/jhu/logout", function (req, res, next) {
-  req.user = null;
-  res.send("Logged out");
+  console.log(req.user);
+  req.session.destroy(function (err) {
+    console.log(req.user);
+    res.redirect("/"); //Inside a callback… bulletproof!
+  });
 });
 
 // callback route
@@ -82,7 +85,6 @@ app.post(
   },
   passport.authenticate("samlStrategy"),
   (req, res) => {
-    console.log(req.user);
     res.send(`
       <html>
         <body>
