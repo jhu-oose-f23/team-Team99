@@ -18,18 +18,18 @@ def submit_post(data):
   if not get_user(data["username"]):
     return None
   
+  # need to make sure that if a workout id was provided, it actually exists and belongs to this user
   user_workouts = get_user_workouts(data["username"])
   found = False
-
   workout_id = data["workout_id"] if "workout_id" in data else None
   for workout in user_workouts:
     if workout["id"] == workout_id:
       found = True
       break
-  
   if not found and workout_id:
     return "Workout not found for this user"
 
+  # update db
   try:
     data = supabase.table("Posts").insert(data).execute()
   except:
