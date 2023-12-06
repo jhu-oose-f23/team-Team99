@@ -109,7 +109,7 @@ GET /workouts/leaderboard: get all the exercises that appear in any workout. Sam
         skullcrushers"
     ]
 
-GET /workouts/leaderboard/username (example /workouts/leaderboard/skullcrushers). Sample response:
+GET /workouts/leaderboard/exercise (example /workouts/leaderboard/skullcrushers). Sample response:
 
     [
         [
@@ -134,6 +134,24 @@ GET /workouts/leaderboard/username (example /workouts/leaderboard/skullcrushers)
         ]
     ]
 
+GET /workouts/leaderboard/exercise/username (example /workouts/leaderboard/skullcrushers/k1) 
+Provides a leaderboard for this user and exercise, with only users in same weight class. Sample response:
+
+    [
+        [
+            "k1",
+            300
+        ],
+        [
+            "travis",
+            300
+        ],
+        [
+            "dhop",
+            70
+        ]
+    ]
+
 POST /user: add new user to the database. Sample request body is below:
 
     {
@@ -150,6 +168,8 @@ POST /user: add new user to the database. Sample request body is below:
         "preferred_time": "Morning",
         "level": "Beginner"
     }
+
+PUT /user: Update a user's profile. Same Schema as POST /user
 
 GET /user: get all users. Sample response below:
 
@@ -314,6 +334,96 @@ GET /connection/username: provide all the connections of a given user. Example (
         }
     ]
 
+POST /issue: submit an issue/feedback. Request body:
+
+    {
+        "username": "k1", 
+        “body”: “This app sucks!”
+    }
+
+POST /calendar. Creates/updates the user's entire workout schedule. Sample request body:
+
+    {
+       "schedule": [
+           {"day": "Sunday",  "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+           {"day": "Monday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+           {"day": "Tuesday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+          {"day": "Wednesday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+         {"day": "Thursday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+         {"day": "Friday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
+        ]
+        “username”: “k1”
+    }
+
+GET /calendar/username (example: /calendar/k1). Get's user weekly workout schedule. Sample response body:
+
+    {
+        "schedule": [
+            {
+                "day": "Sunday",
+                "end_hour": 14,
+                "name": "cardio",
+                "start_hour": 10.5
+            },
+            {
+                "day": "Monday",
+                "end_hour": 12,
+                "name": "cardio",
+                "start_hour": 10.5
+            }
+        ],
+        "username": "k1"
+    }
+
+PUT /calendar: add any number of new workouts into the weekly schedule. Duplicates are prevented. Sample request body:
+
+    {
+        "schedule": [
+            {"day": "Tuesday", "start_hour": 12, "end_hour": 13, "name": "cardio"}
+        ], 
+        "username": "k1"
+    }
+
+POST /post: make a post. Sample request body:
+    
+    {
+        "username": "k1", 
+        “body”: “This app sucks!”
+    }
+
+GET /post/username (example /post/travis). Get all of the posts of a particualr user, sorted most to least recent. Sample response:
+
+    [
+       {
+           "body": "Got an insane bicep pump today.",
+           "date_time": "2023-11-14T23:59:12.679007+00:00",
+           "id": 5,
+           "username": "travis"
+       },
+       {
+           "body": "Got an insane bicep pump today.",
+           "date_time": "2023-11-12T23:45:28+00:00",
+           "id": 4,
+           "username": "travis"
+       }
+    ]
+
+GET /post/feed/username (example /post/feed/k1). Get all of the posts by all connections of a particular user, sorted most to least recent. Sample response body:
+
+    [
+       {
+           "body": "Got an insane quad pump today.",
+           "date_time": "2023-11-15T00:08:59.441596+00:00",
+           "id": 10,
+           "username": "t_woods"
+       },
+       {
+           "body": "Got an insane bicep pump today.",
+           "date_time": "2023-11-15T00:08:26.279572+00:00",
+           "id": 9,
+           "username": "chicken"
+       }
+    ]
 
 **NOTES**
 

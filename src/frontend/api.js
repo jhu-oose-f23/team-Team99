@@ -95,6 +95,7 @@ export const postConnectionRequest = async (source, dest) => {
   }
 };
 
+
 export const fetchLeaderboardList = async () => {
   try {
     const leaderboardList = await fetchData(`workouts/leaderboard`);
@@ -126,7 +127,6 @@ export const fetchLeaderboard = async (exercise) => {
 
 export const fetchLeaderboardUser = async (exercise, user) => {
   try {
-    console.log(exercise);
     const leaderboard = await fetchData(
       `workouts/leaderboard/${exercise}/${user}`
     );
@@ -171,6 +171,34 @@ export const deleteConnection = async (source, dst) => {
   }
 };
 
+export const removeExistingConnection = async (usr1, usr2) => {
+  const apiURL = `https://gymconnectbackend.onrender.com/connection`;
+
+  const requestBody = {
+    user1: usr1,
+    user2: usr2,
+  };
+
+    const response = await fetch(apiURL, 
+      {
+        method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(requestBody),
+      });
+
+      if (response.status == 200) {
+        return response.json();
+      }
+
+      else {
+        console.error("Deleting connection failed!!", response.status)
+        return 0;
+      }
+
+}
+
 export const PutConnectionRequest = async (source, dst) => {
   const apiURL = `https://gymconnectbackend.onrender.com/connection/request`;
 
@@ -195,6 +223,27 @@ export const PutConnectionRequest = async (source, dst) => {
   }
 };
 
+
+export const PutUser = async (new_data) => {
+  const apiURL = "https://gymconnectbackend.onrender.com/user";
+
+  const response = await fetch(apiURL, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(new_data),
+  });
+
+  if (response.status == 200) {
+    return response.json();
+  } else {
+    console.error("Updating the user failed!!", response.status);
+    return 0;
+  }
+}
+
+  
 export const createIssue = async (issue, username) => {
   const response = await fetch("https://gymconnectbackend.onrender.com/issue", {
     method: "POST",
@@ -230,15 +279,20 @@ export const fetchCalendar = async (username) => {
 // “username”: “k1”
 // }
 export const updateCalendar = async (username, calendar) => {
-  console.log(`${BASE_URL}/calendar/${username}`);
-  const response = await fetch(`${BASE_URL}/calendar/${username}`, {
-    method: "POST",
+  const response = await fetch(`${BASE_URL}/calendar`, {
+    method: "PUT",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(calendar),
   });
-  console.log(JSON.stringify(calendar));
-  const res = await response.json();
-  console.log(res);
+  if (response.status === 404) {
+    return 404;
+  }
+  try {
+    const res = await response.json();
+    return res;
+  } catch (e) {
+    console.log(e);
+  }
 };

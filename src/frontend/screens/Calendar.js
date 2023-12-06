@@ -17,7 +17,7 @@ const Calendar = ({ route }) => {
       fetchCalendarData();
     }, [])
   );
-  console.log(schedule);
+  // console.log(schedule);
   return (
     <View>
       <ScheduleGrid schedule={schedule}></ScheduleGrid>

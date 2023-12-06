@@ -28,6 +28,7 @@ const FeedScreen = ({ navigation, route }) => {
     setSearchQuery("");
   };
 
+  
   const navigateToProfile = (navigateToUsername) => {
     navigation.navigate("Profile", {
       username: navigateToUsername,
@@ -185,8 +186,15 @@ const FeedScreen = ({ navigation, route }) => {
             Recommendations
           </Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {userData.recommendations.map((profile, index) => (
-              <View
+              {userData.recommendations.map((profile, index) => (
+                <TouchableOpacity
+          key={index}
+          onPress={() => {
+            // Navigate to the profile screen with profile data
+            navigateToProfile(profile.username);
+          }}
+                >
+                <View
                 key={index}
                 style={{
                   backgroundColor: "#ffffff",
@@ -231,6 +239,7 @@ const FeedScreen = ({ navigation, route }) => {
                   </Text>
                 </TouchableOpacity>
               </View>
+              </TouchableOpacity>
             ))}
           </ScrollView>
         </>

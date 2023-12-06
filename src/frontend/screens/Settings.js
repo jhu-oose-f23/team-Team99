@@ -14,11 +14,49 @@ import { COLORS, FONTS } from "../constants/themes";
 import { MaterialIcons } from "@expo/vector-icons";
 import { createIssue } from "../api";
 import { Snackbar } from "react-native-paper";
+import { useContext } from "react";
+import UserContext from "../UserContext";
+import { useNavigation } from "@react-navigation/native";
 
-const Settings = ({ route }) => {
+ const Settings = ({ route }) => {
   const { username } = route.params;
+
+  const {navigate} = useNavigation();
+
+  const navigateToEditProfile = () => {
+    navigate("Edit Profile");
+  };
+
+  const navigateToSecurity = () => {
+    console.log("Security function");
+  };
+
+  const navigateToNotifications = () => {
+    navigate("Notifications")
+  };
+
+  const navigateToPrivacy = () => {
+    navigate("Privacy")
+  };
+
+  const navigateToSupport = () => {
+    console.log("Support function");
+  };
+
+  const navigateToTermsAndPolicies = () => {
+    navigate("Terms and Policies")
+  };
+
+  const navigateToReportProblem = () => {
+    console.log("Report a problem");
+  };
+
+  const addAccount = () => {
+    console.log("Aadd account ");
+  };
+
   const logout = () => {
-    console.log("Logout");
+    setUserLoggedIn(false);
   };
   // Snackbar
   const [visibleSnackbar, setVisibleSnackbar] = useState(false);
@@ -63,6 +101,30 @@ const Settings = ({ route }) => {
     </Modal>
   );
 
+  const accountItems = [
+    {
+      icon: "person-outline",
+      text: "Edit Profile",
+      action: navigateToEditProfile,
+    },
+    { icon: "security", text: "Security", action: navigateToSecurity },
+    {
+      icon: "notifications-none",
+      text: "Notifications",
+      action: navigateToNotifications,
+    },
+    { icon: "lock-outline", text: "Privacy", action: navigateToPrivacy },
+  ];
+
+  const supportItems = [
+    { icon: "help-outline", text: "Help & Support", action: navigateToSupport },
+    {
+      icon: "info-outline",
+      text: "Terms and Policies",
+      action: navigateToTermsAndPolicies,
+    },
+  ];
+
   const actionsItems = [
     {
       icon: "outlined-flag",
@@ -71,6 +133,7 @@ const Settings = ({ route }) => {
     },
     { icon: "logout", text: "Log out", action: logout },
   ];
+  const { setUserLoggedIn } = useContext(UserContext);
 
   const renderSettingsItem = ({ icon, text, action }) => (
     <TouchableOpacity
@@ -100,6 +163,46 @@ const Settings = ({ route }) => {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
       <ScrollView style={{ marginHorizontal: 12 }}>
+
+        {/* Account Settings */}
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Account</Text>
+          <View
+            style={{
+              borderRadius: 12,
+              backgroundColor: COLORS.gray,
+            }}
+          >
+            {accountItems.map((item, index) => (
+              <React.Fragment key={index}>
+                {renderSettingsItem(item)}
+              </React.Fragment>
+            ))}
+          </View>
+        </View>
+
+        {/* Support and About settings */}
+
+        <View style={{ marginBottom: 12 }}>
+          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>
+            Support & About{" "}
+          </Text>
+          <View
+            style={{
+              borderRadius: 12,
+              backgroundColor: COLORS.gray,
+            }}
+          >
+            {supportItems.map((item, index) => (
+              <React.Fragment key={index}>
+                {renderSettingsItem(item)}
+              </React.Fragment>
+            ))}
+          </View>
+        </View>
+
+        {/* Actions Settings */}
+
         <View style={{ marginBottom: 12 }}>
           <View style={{ borderRadius: 12, backgroundColor: COLORS.gray }}>
             {actionsItems.map((item, index) => (
