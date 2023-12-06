@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button } from "react-native";
-import { TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
+import {
+  ActivityIndicator,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { EvilIcons, FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 // Add these at the top with your other imports
@@ -219,7 +225,7 @@ const Profile = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      {loading && <Text style={styles.loadingText}>Loading...</Text>}
+      <ActivityIndicator animating={loading}></ActivityIndicator>
       {loading === false && (
         <View>
           <View

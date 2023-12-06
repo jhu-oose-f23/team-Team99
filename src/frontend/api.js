@@ -95,7 +95,6 @@ export const postConnectionRequest = async (source, dest) => {
   }
 };
 
-
 export const fetchLeaderboardList = async () => {
   try {
     const leaderboardList = await fetchData(`workouts/leaderboard`);
@@ -179,25 +178,21 @@ export const removeExistingConnection = async (usr1, usr2) => {
     user2: usr2,
   };
 
-    const response = await fetch(apiURL, 
-      {
-        method: 'DELETE',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(requestBody),
-      });
+  const response = await fetch(apiURL, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(requestBody),
+  });
 
-      if (response.status == 200) {
-        return response.json();
-      }
-
-      else {
-        console.error("Deleting connection failed!!", response.status)
-        return 0;
-      }
-
-}
+  if (response.status == 200) {
+    return response.json();
+  } else {
+    console.error("Deleting connection failed!!", response.status);
+    return 0;
+  }
+};
 
 export const PutConnectionRequest = async (source, dst) => {
   const apiURL = `https://gymconnectbackend.onrender.com/connection/request`;
@@ -223,6 +218,23 @@ export const PutConnectionRequest = async (source, dst) => {
   }
 };
 
+export const postUser = async (userData) => {
+  console.log(JSON.stringify(userData));
+  const response = await fetch(`${BASE_URL}/user`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(userData),
+  });
+  if (response.status == 200) {
+    return response.json();
+  } else {
+    console.error("Accepting connection failed!!", response.status);
+    console.log(response.statusText);
+    return 0;
+  }
+};
 
 export const PutUser = async (new_data) => {
   const apiURL = "https://gymconnectbackend.onrender.com/user";
@@ -241,9 +253,8 @@ export const PutUser = async (new_data) => {
     console.error("Updating the user failed!!", response.status);
     return 0;
   }
-}
+};
 
-  
 export const createIssue = async (issue, username) => {
   const response = await fetch("https://gymconnectbackend.onrender.com/issue", {
     method: "POST",
