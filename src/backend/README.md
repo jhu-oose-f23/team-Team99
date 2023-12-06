@@ -283,6 +283,14 @@ GET /connection/request/username: Get all the incoming connection requests for a
         "k1"
     ]
 
+GET connection/request/out/username: Get all the outgoing connection requests for a user. Example connection/request/out/l_james. Sample response body (list) below.
+
+    [
+        "tampa",
+        "travis",
+        "d_rob"
+    ]
+
 GET /connection: check if two users are connected. Sample request and response bodies below.
 
     {
