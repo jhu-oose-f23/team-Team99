@@ -131,10 +131,6 @@ const Signup = ({ navigation, route }) => {
               containerStyle={{
                 maxHeight: 2000,
               }}
-              textStyle={{
-                textAlign: "center",
-                marginLeft: 30,
-              }}
             />
           </View>
 
@@ -159,10 +155,6 @@ const Signup = ({ navigation, route }) => {
               containerStyle={{
                 maxHeight: 2000,
               }}
-              textStyle={{
-                textAlign: "center",
-                marginLeft: 30,
-              }}
             />
           </View>
           <View style={{ zIndex: 50, alignItems: "center" }}>
@@ -185,10 +177,6 @@ const Signup = ({ navigation, route }) => {
               dropDownContainerStyle={styles.dropdown}
               containerStyle={{
                 maxHeight: 2000,
-              }}
-              textStyle={{
-                textAlign: "center",
-                marginLeft: 30,
               }}
             />
           </View>
@@ -213,10 +201,6 @@ const Signup = ({ navigation, route }) => {
               containerStyle={{
                 maxHeight: 2000,
               }}
-              textStyle={{
-                textAlign: "center",
-                marginLeft: 30,
-              }}
             />
           </View>
           <View style={{ zIndex: 20, alignItems: "center" }}>
@@ -237,10 +221,6 @@ const Signup = ({ navigation, route }) => {
               placeholderStyle={{
                 color: "#C7C7CD",
                 marginBottom: 8,
-                textAlign: "center",
-                marginLeft: 30,
-              }}
-              textStyle={{
                 textAlign: "center",
                 marginLeft: 30,
               }}
@@ -287,8 +267,9 @@ const Signup = ({ navigation, route }) => {
           </View>
 
           {/* ... add labels and input fields for frequency, gender, etc., similar to above ... */}
-
-          <Button title="Sign Up" onPress={handleSubmit} />
+          <View style={{ marginBottom: 50 }}>
+            <Button title="Sign Up" onPress={handleSubmit} />
+          </View>
         </View>
       </TouchableWithoutFeedback>
     </ScrollView>
@@ -300,6 +281,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    marginTop: "30%",
   },
   dropdown: {
     width: "80%",
