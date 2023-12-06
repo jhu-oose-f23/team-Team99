@@ -1,7 +1,6 @@
 import os
 from supabase import create_client, Client
 from collections import defaultdict
-
 from databases.user import get_user
 
 url = os.environ.get("SUPABASE_URL")
