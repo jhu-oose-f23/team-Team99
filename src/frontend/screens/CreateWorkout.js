@@ -63,8 +63,9 @@ const CreateWorkout = ({ route }) => {
 
   // Days dropdown
   const [workoutDay, setWorkoutDay] = useState(new Date());
-
-  const [open, setOpen] = useState([]);
+  const [open, setOpen] = useState(false);
+  // Exercises
+  const [exercisesOpen, setExercisesOpen] = useState([]);
   const [selectedExerciseValue, setSelectedExerciseValue] = useState(null);
   const [items, setItems] = useState([
     { label: "Bench Press", value: "Bench Press" },
@@ -172,18 +173,20 @@ const CreateWorkout = ({ route }) => {
       user: username,
       workout_name: workoutName,
       exercises: exerciseRows,
+      day: workoutDay.toISOString().slice(0, 10),
     };
     await createWorkout(workout);
 
     // Reset all fields to blank
     setWorkoutName("");
     setExerciseRows([]);
-    setWorkoutDay("");
+    setWorkoutDay(new Date());
     navigation.navigate("Profile", {
       username: username,
       loggedinUser: username,
     });
   };
+  console.log(workoutDay);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -219,13 +222,13 @@ const CreateWorkout = ({ route }) => {
             <DateTimePicker
               testID="dateTimePicker"
               value={workoutDay}
+              maximumDate={new Date()}
               mode="date"
               display="default"
               placeholderText="Select Date"
               onChange={(event, selectedDate) => {
-                const currentDate = selectedDate || birthdate;
                 setOpen(false);
-                setWorkoutDay(workoutDay);
+                setWorkoutDay(selectedDate);
               }}
               style={{ alignContent: "center", alignSelf: "center" }}
             />
@@ -259,36 +262,30 @@ const CreateWorkout = ({ route }) => {
                 zIndex: -1 * index,
               }}
             >
-              <View
-                style={[
-                  styles.input,
-                  // { flex: 2, minHeight: open[index] ? 250 : 0 },
-                  { flex: 2 },
-                ]}
-              >
+              <View style={[styles.input, { flex: 2 }]}>
                 <DropDownPicker
-                  open={open[index]}
+                  open={exercisesOpen[index]}
                   listMode="SCROLLVIEW"
                   value={item.name}
                   items={items}
                   setOpen={(o) => {
-                    const updatedOpen = [...open];
-                    // Check if open[index] is defined
-                    if (open.length > index) {
+                    const updatedOpen = [...exercisesOpen];
+                    // Check if exercisesOpen[index] is defined
+                    if (exercisesOpen.length > index) {
                       updatedOpen[index] = o;
                     } else {
                       updatedOpen.push(o);
                     }
-                    setOpen(updatedOpen);
+                    setExercisesOpen(updatedOpen);
                   }}
                   onOpen={() => {
                     // Close all other dropdowns
-                    const updatedOpen = [...open];
+                    const updatedOpen = [...exercisesOpen];
                     updatedOpen.forEach((o, i) => {
                       updatedOpen[i] = false;
                     });
                     updatedOpen[index] = true;
-                    setOpen(updatedOpen);
+                    setExercisesOpen(updatedOpen);
                   }}
                   setValue={(v) => updateExercise(index, "name", v())}
                   placeholder="Exercise"
