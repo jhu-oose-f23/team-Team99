@@ -396,6 +396,20 @@ PUT /calendar: add any number of new workouts into the weekly schedule. Duplicat
         "username": "k1"
     }
 
+DELETE /calendar: deletes any number of workouts from the weekly schedule. Sample request body:
+
+    {
+        "schedule": [
+            {
+                "day": "Thursday",
+                "end_hour": 3,
+                "name": "Back",
+                "start_hour": 2
+            } 
+        ], 
+        "username": "dhop"
+    }
+
 POST /post: make a post. Sample request body:
 note: "workout_id" can be null. The workout must belong to this user.
     
