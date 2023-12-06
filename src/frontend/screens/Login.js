@@ -12,9 +12,10 @@ const Login = ({ navigation, route }) => {
     // Check if user UID is stored in secure storage
     const checkLoginStatus = async () => {
       const storedUserUid = await SecureStore.getItemAsync("userUid");
-      if (storedUserUid) {
+      if (storedUserUid && storedUserUid !== "") {
         setUserLoggedIn(storedUserUid);
-        if (fetchUser(storedUserUid)) {
+        const res = await fetchUser(userUid);
+        if (res.status === 200) {
           setUserHasSignedUp(true);
         }
       }
@@ -30,12 +31,12 @@ const Login = ({ navigation, route }) => {
     await SecureStore.setItemAsync("userUid", userUid);
 
     setUserLoggedIn(userUid);
-    if (fetchUser(userUid)) {
+    const res = await fetchUser(userUid);
+    if (res.status === 200) {
+      console.log("user fetched ");
       setUserHasSignedUp(true);
     }
   };
-
-  console.log("rendering");
 
   return (
     <WebView
