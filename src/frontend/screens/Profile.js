@@ -256,24 +256,49 @@ const Profile = ({ navigation, route }) => {
               <View
                 style={{
                   flexDirection: "row",
-                  justifyContent: "center",
+                  justifyContent: "flex-end",
                   marginTop: 20,
                 }}
               >
                 <TouchableOpacity
                   onPress={navigateToConnections}
-                  style={styles.iconButton}
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: 10,
+                    backgroundColor: "#f0f0f0",
+                    borderRadius: 5,
+                    marginLeft: 10, // Spacing between icons
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 2,
+                    elevation: 2,
+                  }}
                 >
                   <Ionicons name="ios-people" size={24} color="black" />
                 </TouchableOpacity>
 
                 <TouchableOpacity
                   onPress={navigateToSettings}
-                  style={styles.iconButton}
+                  style={{
+                    alignItems: "center",
+                    justifyContent: "center",
+                    padding: 10,
+                    backgroundColor: "#f0f0f0",
+                    borderRadius: 5,
+                    marginLeft: 10, // Spacing between icons
+                    shadowColor: "#000",
+                    shadowOffset: { width: 0, height: 2 },
+                    shadowOpacity: 0.2,
+                    shadowRadius: 2,
+                    elevation: 2,
+                  }}
                 >
                   <Ionicons name="ios-settings" size={24} color="black" />
                 </TouchableOpacity>
               </View>
+
               <Text
                 style={[
                   styles.userDetail,
