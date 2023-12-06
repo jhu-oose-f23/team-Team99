@@ -1,5 +1,13 @@
 import React, { useContext, useState } from "react";
-import { View, TextInput, Button, StyleSheet, Text } from "react-native";
+import {
+  View,
+  TextInput,
+  Button,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DropDownPicker from "react-native-dropdown-picker";
 import UserContext from "../UserContext";
@@ -67,125 +75,127 @@ const Signup = ({ navigation, route }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>First Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="First Name"
-        onChangeText={setFirstName}
-      />
-
-      <Text style={styles.label}>Last Name</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Last Name"
-        onChangeText={setLastName}
-      />
-
-      <View style={{ zIndex: 1000, alignItems: "center" }}>
-        <Text style={{ marginRight: "50%" }}>Frequency</Text>
-        <DropDownPicker
-          open={frequencyDropdownOpen}
-          listMode="SCROLLVIEW"
-          value={frequency}
-          items={frequencyOptions}
-          setOpen={setFrequencyDropdownOpen}
-          setValue={(v) => setFrequency(v())}
-          placeholder="Frequency"
-          style={styles.dropdown}
-          placeholderStyle={{
-            color: "#C7C7CD",
-            marginBottom: 8,
-          }}
-          dropDownContainerStyle={{ ...styles.dropdown, zIndex: 1000 }}
-          containerStyle={{
-            maxHeight: 2000,
-          }}
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <Text style={styles.label}>First Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="First Name"
+          onChangeText={setFirstName}
         />
-      </View>
 
-      <View style={{ zIndex: 100, alignItems: "center" }}>
-        <Text style={{ marginRight: "55%" }}>Gender</Text>
-        <DropDownPicker
-          open={genderDropdownOpen}
-          listMode="SCROLLVIEW"
-          value={gender}
-          items={genderOptions}
-          setOpen={setGenderDropdownOpen}
-          setValue={(v) => setGender(v())}
-          placeholder="Gender"
-          style={styles.dropdown}
-          placeholderStyle={{
-            color: "#C7C7CD",
-            marginBottom: 8,
-          }}
-          dropDownContainerStyle={styles.dropdown}
-          containerStyle={{
-            maxHeight: 2000,
-          }}
+        <Text style={styles.label}>Last Name</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="Last Name"
+          onChangeText={setLastName}
         />
-      </View>
-      <View style={{ zIndex: 50, alignItems: "center" }}>
-        <Text style={{ marginRight: "45%" }}>Preferred Time</Text>
-        <DropDownPicker
-          open={preferredTimeDropdownOpen}
-          listMode="SCROLLVIEW"
-          value={preferredTime}
-          items={preferredTimeOptions}
-          setOpen={setPreferredTimeDropdownOpen}
-          setValue={(v) => setPreferredTime(v())}
-          placeholder="Preferred Time"
-          style={styles.dropdown}
-          placeholderStyle={{
-            color: "#C7C7CD",
-            marginBottom: 8,
-          }}
-          dropDownContainerStyle={styles.dropdown}
-          containerStyle={{
-            maxHeight: 2000,
-          }}
+
+        <View style={{ zIndex: 1000, alignItems: "center" }}>
+          <Text style={{ marginRight: "50%" }}>Frequency</Text>
+          <DropDownPicker
+            open={frequencyDropdownOpen}
+            listMode="SCROLLVIEW"
+            value={frequency}
+            items={frequencyOptions}
+            setOpen={setFrequencyDropdownOpen}
+            setValue={(v) => setFrequency(v())}
+            placeholder="Frequency"
+            style={styles.dropdown}
+            placeholderStyle={{
+              color: "#C7C7CD",
+              marginBottom: 8,
+            }}
+            dropDownContainerStyle={{ ...styles.dropdown, zIndex: 1000 }}
+            containerStyle={{
+              maxHeight: 2000,
+            }}
+          />
+        </View>
+
+        <View style={{ zIndex: 100, alignItems: "center" }}>
+          <Text style={{ marginRight: "55%" }}>Gender</Text>
+          <DropDownPicker
+            open={genderDropdownOpen}
+            listMode="SCROLLVIEW"
+            value={gender}
+            items={genderOptions}
+            setOpen={setGenderDropdownOpen}
+            setValue={(v) => setGender(v())}
+            placeholder="Gender"
+            style={styles.dropdown}
+            placeholderStyle={{
+              color: "#C7C7CD",
+              marginBottom: 8,
+            }}
+            dropDownContainerStyle={styles.dropdown}
+            containerStyle={{
+              maxHeight: 2000,
+            }}
+          />
+        </View>
+        <View style={{ zIndex: 50, alignItems: "center" }}>
+          <Text style={{ marginRight: "45%" }}>Preferred Time</Text>
+          <DropDownPicker
+            open={preferredTimeDropdownOpen}
+            listMode="SCROLLVIEW"
+            value={preferredTime}
+            items={preferredTimeOptions}
+            setOpen={setPreferredTimeDropdownOpen}
+            setValue={(v) => setPreferredTime(v())}
+            placeholder="Preferred Time"
+            style={styles.dropdown}
+            placeholderStyle={{
+              color: "#C7C7CD",
+              marginBottom: 8,
+            }}
+            dropDownContainerStyle={styles.dropdown}
+            containerStyle={{
+              maxHeight: 2000,
+            }}
+          />
+        </View>
+
+        <Text style={styles.label}>Height (in)</Text>
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          onChangeText={setHeight}
+          value={height}
+          placeholder="Height (in)"
+          maxLength={10}
         />
-      </View>
 
-      <Text style={styles.label}>Height (in)</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        onChangeText={setHeight}
-        value={height}
-        placeholder="Height (in)"
-        maxLength={10}
-      />
-
-      <Text style={styles.label}>Weight (lbs)</Text>
-      <TextInput
-        style={styles.input}
-        keyboardType="numeric"
-        onChangeText={setWeight}
-        value={weight}
-        placeholder="Weight (lbs)"
-        maxLength={10}
-      />
-
-      <Text style={styles.label}>Birth Date</Text>
-      <View style={styles.input}>
-        <DateTimePicker
-          testID="dateTimePicker"
-          value={birthdate}
-          mode="date"
-          display="default"
-          onChange={(event, selectedDate) => {
-            const currentDate = selectedDate || birthdate;
-            setOpen(false);
-            setBirthdate(currentDate);
-          }}
+        <Text style={styles.label}>Weight (lbs)</Text>
+        <TextInput
+          style={styles.input}
+          keyboardType="numeric"
+          onChangeText={setWeight}
+          value={weight}
+          placeholder="Weight (lbs)"
+          maxLength={10}
         />
+
+        <Text style={styles.label}>Birth Date</Text>
+        <View style={styles.input}>
+          <DateTimePicker
+            testID="dateTimePicker"
+            value={birthdate}
+            mode="date"
+            display="default"
+            onChange={(event, selectedDate) => {
+              const currentDate = selectedDate || birthdate;
+              setOpen(false);
+              setBirthdate(currentDate);
+            }}
+          />
+        </View>
+
+        {/* ... add labels and input fields for frequency, gender, etc., similar to above ... */}
+
+        <Button title="Sign Up" onPress={handleSubmit} />
       </View>
-
-      {/* ... add labels and input fields for frequency, gender, etc., similar to above ... */}
-
-      <Button title="Sign Up" onPress={handleSubmit} />
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
