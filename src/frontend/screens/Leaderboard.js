@@ -185,7 +185,7 @@ const LeaderboardTabs = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#404040",
+    backgroundColor: "#1a1a1a",
   },
   header: {
     fontSize: 24,
