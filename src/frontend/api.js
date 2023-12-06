@@ -307,3 +307,29 @@ export const updateCalendar = async (username, calendar) => {
     console.log(e);
   }
 };
+
+export const createPost = async (username, postBody, selectedWorkoutID) => {
+  try {
+    const requestBody = {
+      username: username,
+      body: postBody,
+    };
+
+    if (selectedWorkoutID !== -1) {
+      requestBody.workout_id = selectedWorkoutID;
+    }
+
+    const response = await fetch(`${BASE_URL}/post`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(requestBody),
+    });
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error("Error creating post");
+  }
+};
