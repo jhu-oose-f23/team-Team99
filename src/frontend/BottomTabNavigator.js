@@ -4,7 +4,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Feed from "./screens/FeedScreen";
+import CreateOverview from "./screens/CreateOverview";
 import CreateWorkout from "./screens/CreateWorkout";
+import CreatePost from "./screens/CreatePost";
 import LeaderboardOverview from "./screens/LeaderboardsOverview";
 import LeaderboardTabs from "./screens/Leaderboard";
 import Profile from "./screens/Profile";
@@ -32,6 +34,27 @@ const LeaderboardStack = ({ route }) => (
       component={LeaderboardTabs}
       initialParams={{ username: route.params.username }}
       // options={{ headerShown: false }}
+    />
+  </Stack.Navigator>
+);
+
+const CreateStack = ({ route }) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="CreateOverview"
+      component={CreateOverview}
+      initialParams={{ username: route.params.username }}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="CreateWorkout"
+      component={CreateWorkout}
+      initialParams={{ username: route.params.username }}
+    />
+    <Stack.Screen
+      name="CreatePost"
+      component={CreatePost}
+      initialParams={{ username: route.params.username }}
     />
   </Stack.Navigator>
 );
@@ -69,7 +92,7 @@ const BottomTabNavigator = ({ route }) => {
       />
       <Tab.Screen
         name="Create"
-        component={CreateWorkout}
+        component={CreateStack}
         initialParams={{ username: username }}
         options={{
           tabBarIcon: ({ color, size }) => (
