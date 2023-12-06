@@ -110,7 +110,7 @@ def calculate_similarity(username1, username2):
   pref_time = 1 if user1["preferred_time"] == user2["preferred_time"] else 0
 
   # handle goals
-  goal = jaccard_similarity(user1["goals"], user2["goals"])
+  goal = jaccard_similarity([g.lower() for g in user1["goals"]], [g.lower() for g in user2["goals"]])
 
   # handle height
   height = 0.5 if abs(user1["height"] - user2["height"]) <= 5 else 0
