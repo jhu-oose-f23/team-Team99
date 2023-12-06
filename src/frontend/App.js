@@ -46,12 +46,6 @@ function App() {
               initialParams={{ username: userLoggedIn }}
             />
           )}
-          {/* <Stack.Screen
-            name="Signup"
-            component={Signup}
-            initialParams={{ username: userLoggedIn }}
-            options={{ headerShown: false }}
-          /> */}
         </Stack.Navigator>
       </NavigationContainer>
     </UserContext.Provider>
