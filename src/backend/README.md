@@ -63,6 +63,10 @@ POST /workouts: Creates a new workout in database. Sample request body is below:
 
 DELETE /workouts: Deletes ALL workouts in database (this is more for testing and development purposes)
 
+DELETE /workouts/id: Deletes workout with given integer id.
+
+GET workouts/id/258: Get a workout based on an id.
+
 GET /workouts/username: Get workouts for a specific user (example: /workouts/k1). Sample response:
 
     [
