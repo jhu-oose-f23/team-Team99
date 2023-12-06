@@ -58,10 +58,10 @@ const GlobalLeaderboard = ({ navigation, route }) => {
       </View>
       <Text style={styles.rank}>
         {index === 0 && (
-          <FontAwesome5Icon name="crown" solid color="gold" size={16} />
+          <FontAwesome5Icon name="crown" solid color="#ffd700" size={16} />
         )}
         {index === 1 && (
-          <FontAwesome5Icon name="crown" solid color="silver" size={16} />
+          <FontAwesome5Icon name="crown" solid color="#c0c0c0" size={16} />
         )}
         {index === 2 && (
           <FontAwesome5Icon name="crown" solid color="#cd7f32" size={16} />
@@ -127,10 +127,10 @@ const WeightClassLeaderboard = ({ navigation, route }) => {
       </View>
       <Text style={styles.rank}>
         {index === 0 && (
-          <FontAwesome5Icon name="crown" solid color="gold" size={16} />
+          <FontAwesome5Icon name="crown" solid color="#ffd700" size={16} />
         )}
         {index === 1 && (
-          <FontAwesome5Icon name="crown" solid color="silver" size={16} />
+          <FontAwesome5Icon name="crown" solid color="#c0c0c0" size={16} />
         )}
         {index === 2 && (
           <FontAwesome5Icon name="crown" solid color="#cd7f32" size={16} />
@@ -153,7 +153,21 @@ const WeightClassLeaderboard = ({ navigation, route }) => {
 
 const LeaderboardTabs = ({ route }) => {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarActiveTintColor: 'gold', // Color for the active tab
+        tabBarInactiveTintColor: 'white', // Color for inactive tabs
+        tabBarStyle: {
+          backgroundColor: '#404040', // Background color for the tab bar
+        },
+        tabBarLabelStyle: {
+          fontSize: 16, // Adjust the font size of the tab labels
+        },
+        tabBarIndicatorStyle: {
+          backgroundColor: 'gold', // Color for the tab indicator (line under the active tab)
+        },
+      }}
+    >
       <Tab.Screen
         name="Global"
         component={GlobalLeaderboard}
@@ -171,16 +185,17 @@ const LeaderboardTabs = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
+    backgroundColor: "#404040",
   },
   header: {
     fontSize: 24,
     fontWeight: "bold",
     textAlign: "center",
     marginTop: 10,
+    color: "gold",
   },
   row: {
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#808080",
     borderRadius: 10,
     margin: 5,
     padding: 10,
@@ -191,7 +206,7 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
   avatar: {
-    backgroundColor: "lightgray",
+    backgroundColor: "#CCCCCC",
   },
   userInfo: {
     flex: 1,
@@ -199,9 +214,11 @@ const styles = StyleSheet.create({
   },
   username: {
     fontSize: 16,
+    color: "white",
   },
   score: {
     fontSize: 14,
+    color: "white",
   },
   rank: {
     fontSize: 16,
