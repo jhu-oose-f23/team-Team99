@@ -13,13 +13,13 @@ def get_all_workouts():
   data = supabase.table("Workouts").select("*").execute()
   return data.data
 
-def add_workout(workout_name, exercises, user):
+def add_workout(workout_name, exercises, user, day):
   workout = {
     "user": user,
     "workout_name": workout_name,
     "exercises": exercises, 
     "time": "now", 
-    "day": "today"
+    "day": day
   }
   data = supabase.table("Workouts").insert(workout).execute()
   return data.data[0]

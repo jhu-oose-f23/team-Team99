@@ -50,40 +50,60 @@ def get_recommendations(username):
   Helper functions
 '''
 def generate_recommendations(username):
-    # use a heap to store only the 5 most similar users
-    heap = []
-    heapify(heap)
-    if not get_user(username):
-      return []
-    users = [u["username"] for u in supabase.table("Users").select("username").neq("username", username).execute().data]
-    # check all users (besides the current user)
-    for u in users:
-      # ignore those already connected
-      if check_connection(username, u):
-        continue
-      try:
-        sim_score = calculate_similarity(username, u)
-        heappush(heap, (sim_score/6.5 * 100, u))
-        # maintain only up to 5 users
-        if len(heap) > 5:
-          heappop(heap)
-      except:
-        pass
+    recs = []
     # add second degree connections with a default similarity of 40%
     second = get_second_connections(username)
     for each in second[:5]:
-      heap.append((40, each))
-    res = {}
-    # remove duplicates
-    for score,u in heap:
-      res[u] = max(res.get(u,0), score)
-    # sort and return as list of dicts
-    result = sorted([{"username": u, "percent": res[u]} for u in res], key=lambda x: (x["percent"], x["username"]), reverse=True)
-
-    # start a thread to use workout data to find similar users without blocking response
-    t = threading.Thread(target=compare_workouts, args=[username, res])
+      recs.append((40, each))
+    further_generation = {u: s for s,u in recs}
+    # start a thread to use workout and profile data to find similar users WITHOUT blocking response
+    t = threading.Thread(target=background_recommendations, args=[username, further_generation])
     t.start()
-    return result
+    return recs
+
+def background_recommendations(username, existing_map):
+  existing_map = compare_workouts(username, existing_map)
+  existing_map = compare_profiles(username, existing_map)
+
+  result = sorted([{"username": u, "percent": existing_map[u]} for u in existing_map], key=lambda x: (x["percent"], x["username"]), reverse=True)
+  today = date.today()
+  # build a recommendation dictionary to store in the cache
+  data = {"user_id": username, "recs": result, "last_updated": f"{today.month}-{today.day}-{today.year}"}
+  # add to cache or update that user's recs if already exists
+  try:
+    data = supabase.table("Recommendation_Cache").insert(data).execute()
+  except:
+    try:
+      data = supabase.table("Recommendation_Cache").update(data).eq("user_id", username).execute()
+    except:
+      pass
+  return result
+
+def compare_profiles(user, existing_map):
+  # use a heap to store only the 5 most similar users
+  heap = []
+  heapify(heap)
+  if not get_user(user):
+    return existing_map
+  users = [u["username"] for u in supabase.table("Users").select("username").neq("username", user).execute().data]
+  # check all users (besides the current user)
+  for u in users:
+    # ignore those already connected
+    if check_connection(user, u):
+      continue
+    try:
+      sim_score = calculate_similarity(user, u)
+      heappush(heap, (sim_score/6.5 * 100, u))
+      # maintain only up to 5 users
+      if len(heap) > 5:
+        heappop(heap)
+    except:
+      pass
+  
+  # add the 5 most similar users to the existing map
+  for score, u in heap:
+    existing_map[u] = max(score, existing_map.get(u, 0))
+  return existing_map
 
 def jaccard_similarity(x, y):
     intersection = len(set(x).intersection(y))
@@ -211,21 +231,7 @@ def compare_workouts(user, existing_map):
     # if they meet the threshold, update the existing dict of similar users
     if sim >= 0.5:
       existing_map[each] = max(60, existing_map.get(each, 0))
-  
-  # sort and build a list of dicts
-  result = sorted([{"username": u, "percent": existing_map[u]} for u in existing_map], key=lambda x: (x["percent"], x["username"]), reverse=True)
-  today = date.today()
-  # build a recommendation dictionary to store in the cache
-  data = {"user_id": user, "recs": result, "last_updated": f"{today.month}-{today.day}-{today.year}"}
-  # add to cache or update that user's recs if already exists
-  try:
-    data = supabase.table("Recommendation_Cache").insert(data).execute()
-  except:
-    try:
-      data = supabase.table("Recommendation_Cache").update(data).eq("user_id", user).execute()
-    except:
-      pass
-  return result
+  return existing_map
   
 def cosine_similarity(dict1, dict2):
   dot_product = sum(dict1.get(exercise, 0) * dict2.get(exercise, 0) for exercise in set(dict1) & set(dict2))

@@ -6,7 +6,7 @@ class WorkoutSchema(Schema):
     workout_name = fields.Str(required=True)
     exercises = fields.List(fields.Dict(), required=True)
     time = fields.Str(dump_only=True)
-    day = fields.Str(dump_only=True)
+    day = fields.Str(required = True)
 
 class UserSchema(Schema):
     first_name = fields.Str(required=True)

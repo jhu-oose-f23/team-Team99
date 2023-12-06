@@ -21,7 +21,8 @@ class Workout(MethodView):
       work_name = new_data["workout_name"]
       exercises = new_data["exercises"]
       user = new_data["user"]
-      data = add_workout(work_name, exercises, user)
+      day = new_data["day"]
+      data = add_workout(work_name, exercises, user, day)
       response = make_response(data)
       response.headers['Access-Control-Allow-Origin'] = '*'
       return response
