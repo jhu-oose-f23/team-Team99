@@ -19,7 +19,7 @@ function App() {
     >
       <NavigationContainer>
         <Stack.Navigator>
-          {userLoggedIn ? (
+          {/* {userLoggedIn ? (
             userHasSignedUp ? (
               // If logged in and signed up, go to the main screen
               <Stack.Screen
@@ -45,7 +45,13 @@ function App() {
               options={{ headerShown: false }}
               initialParams={{ username: userLoggedIn }}
             />
-          )}
+          )} */}
+          <Stack.Screen
+            name="Signup"
+            component={Signup}
+            initialParams={{ username: userLoggedIn }}
+            options={{ headerShown: false }}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </UserContext.Provider>
