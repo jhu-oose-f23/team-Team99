@@ -1,13 +1,15 @@
 import React, { useContext, useState } from "react";
 import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
 import UserContext from "../UserContext";
+
 const loginApiUrl = "https://gymconnectbackend.onrender.com/user/login";
 
 const Login = ({ navigation, route }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false); 
+  const [isLoading, setIsLoading] = useState(false);
   const { setUserLoggedIn } = useContext(UserContext);
+
   const handleLogin = async () => {
     setIsLoading(true);
     try {
@@ -44,7 +46,7 @@ const Login = ({ navigation, route }) => {
       }
     } catch (error) {
       console.error("Error during login:", error);
-    } finally { 
+    } finally {
       setIsLoading(false);
     }
   };
@@ -54,6 +56,7 @@ const Login = ({ navigation, route }) => {
       <Text style={styles.label}>Username:</Text>
       <TextInput
         style={styles.input}
+        placeholderTextColor="#ccc"
         placeholder="Enter your username"
         value={username}
         onChangeText={(text) => setUsername(text)}
@@ -62,6 +65,7 @@ const Login = ({ navigation, route }) => {
       <Text style={styles.label}>Password:</Text>
       <TextInput
         style={styles.input}
+        placeholderTextColor="#ccc" 
         placeholder="Enter your password"
         secureTextEntry={true}
         value={password}
@@ -71,7 +75,8 @@ const Login = ({ navigation, route }) => {
       <Button
         title="Login"
         onPress={handleLogin}
-        disabled={isLoading} 
+        disabled={isLoading}
+        color="#ffd700" 
       />
     </View>
   );
@@ -82,17 +87,20 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: "center",
+    backgroundColor: "#1a1a1a", 
   },
   label: {
     fontSize: 16,
     marginBottom: 5,
+    color: "#ffd700", 
   },
   input: {
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ffd700", 
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+    color: "#fff", 
   },
 });
 

@@ -116,7 +116,7 @@ const Connections = ({ route, navigation }) => {
     return (
       <>
         {Requests.length > 0 && (
-          <Text style={{ fontSize: 20 }}>Connection Requests</Text>
+          <Text style={styles.goldText}>Connection Requests</Text>
         )}
 
         {Requests &&
@@ -163,7 +163,7 @@ const Connections = ({ route, navigation }) => {
     <ScrollView style={styles.container}>
       <RenderRequests />
 
-      <Text style={{ fontSize: 20 }}>Active Connections</Text>
+      <Text style={styles.goldText}>Active Connections</Text>
       {connections &&
         connections.map((user, index) => (
           <TouchableOpacity
@@ -179,7 +179,7 @@ const Connections = ({ route, navigation }) => {
             />
             <View style={styles.textStyle}>
               <Text style={styles.username}>{"@" + user.username}</Text>
-              <Text>{`${user.first_name} ${user.last_name}`}</Text>
+              <Text style={styles.whiteText}>{`${user.first_name} ${user.last_name}`}</Text>
             </View>
 
             <View style={styles.buttonStyle}>
@@ -201,19 +201,32 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     position: "relative",
+    backgroundColor: "#1a1a1a", // Dark background color
   },
 
   buttonStyle: {
-    justifyContent: "flext-end",
+    justifyContent: "flex-end", // Adjusted to move buttons to the right
+  },
+
+  goldText: {
+    fontSize: 20,
+    color: "#ffd700", // Gold text color
+    marginBottom: 10,
+  },
+
+  whiteText: {
+    color: "#fff", // White text color
   },
 
   userContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginBottom: 5,
+    marginBottom: 10,
     borderRadius: 10,
-    borderBlockColor: "gray",
+    borderColor: "#333", // Dark border color
     borderWidth: 2,
+    padding: 10,
+    backgroundColor: "#292929", // Dark background color
   },
 
   textStyle: {
@@ -226,19 +239,23 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     marginRight: 10,
   },
+  
   username: {
     fontSize: 16,
     fontWeight: "bold",
+    color: "#ffd700", // Gold text color
   },
 
   button: {
     borderRadius: 5,
-    backgroundColor: "skyblue",
+    backgroundColor: "#ffd700", // Gold button color
     alignSelf: "flex-start",
+    paddingVertical: 5,
+    color: "#fff",
   },
 
   buttonPressed: {
-    backgroundColor: "gray",
+    backgroundColor: "#555", // Dark gray color
   },
 });
 

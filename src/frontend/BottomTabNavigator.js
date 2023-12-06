@@ -36,6 +36,7 @@ const LeaderboardStack = ({ route }) => (
   </Stack.Navigator>
 );
 
+
 const SettingsNavigation = ({route}) => {
   return (
     <Stack.Navigator>
@@ -54,10 +55,27 @@ const SettingsNavigation = ({route}) => {
   
 }
 
+const screenOptions = {
+  tabBarActiveTintColor: "#ffd700", // Gold for active tab
+  tabBarInactiveTintColor: "#fff", // White for inactive tab
+  tabBarStyle: {
+    backgroundColor: "#1a1a1a", // Dark background color
+  },
+  headerStyle: {
+    backgroundColor: "#1a1a1a", // Dark background color for header
+  },
+  headerTitleStyle: {
+    color: "#ffd700", // Gold title color
+  },
+};
+
+
 const BottomTabNavigator = ({ route }) => {
   const { username } = route.params;
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={screenOptions}
+    >
       <Tab.Screen
         name="Feed"
         component={Feed}
