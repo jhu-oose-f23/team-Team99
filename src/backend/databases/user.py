@@ -55,11 +55,12 @@ def generate_recommendations(username):
     second = get_second_connections(username)
     for each in second[:5]:
       recs.append((40, each))
+    # make a dict to pass into the background thread for further recommendation generation
     further_generation = {u: s for s,u in recs}
     # start a thread to use workout and profile data to find similar users WITHOUT blocking response
     t = threading.Thread(target=background_recommendations, args=[username, further_generation])
     t.start()
-    return recs
+    return recs # return the list of only second degree connections
 
 def background_recommendations(username, existing_map):
   existing_map = compare_workouts(username, existing_map)
