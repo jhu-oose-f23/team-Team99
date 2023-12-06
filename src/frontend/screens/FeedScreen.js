@@ -7,9 +7,14 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
+  Keyboard
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
-import { fetchRecommendations, postConnectionRequest, fetchConnectionRequestSource } from "../api";
+import {
+  fetchRecommendations,
+  postConnectionRequest,
+  fetchConnectionRequestSource,
+} from "../api";
 
 const FeedScreen = ({ navigation, route }) => {
   const [connectionRequests, setConnectionRequests] = useState([]);
@@ -21,14 +26,12 @@ const FeedScreen = ({ navigation, route }) => {
     recommendations: [],
   });
 
-  
   const username = route.params.username;
   const resetToFeed = () => {
     setIsSearchActive(false);
     setSearchQuery("");
   };
 
-  
   const navigateToProfile = (navigateToUsername) => {
     navigation.navigate("Profile", {
       username: navigateToUsername,
@@ -37,10 +40,7 @@ const FeedScreen = ({ navigation, route }) => {
   };
 
   const sendConnectionRequest = async (profileId) => {
-    await postConnectionRequest(
-      username,
-      profileId
-    );
+    await postConnectionRequest(username, profileId);
     setConnectionRequests([...connectionRequests, profileId]);
   };
 
@@ -72,8 +72,10 @@ const FeedScreen = ({ navigation, route }) => {
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
-        const fetchedConnectionRequests = await fetchConnectionRequestSource(username);
-        if (fetchedConnectionRequests != null) { 
+        const fetchedConnectionRequests = await fetchConnectionRequestSource(
+          username
+        );
+        if (fetchedConnectionRequests != null) {
           setConnectionRequests(fetchedConnectionRequests);
         }
         const recommendationsResponse = await fetchRecommendations(username);
@@ -86,7 +88,7 @@ const FeedScreen = ({ navigation, route }) => {
   );
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
+    <View style={styles.container}>
       {/* Search Bar */}
       {isSearchActive && (
         <TouchableOpacity style={styles.backButton} onPress={resetToFeed}>
@@ -94,13 +96,7 @@ const FeedScreen = ({ navigation, route }) => {
         </TouchableOpacity>
       )}
       <TextInput
-        style={{
-          borderColor: "#ccc",
-          borderWidth: 1,
-          borderRadius: 5,
-          padding: 10,
-          marginBottom: 10,
-        }}
+        style={styles.searchInput}
         value={searchQuery}
         onChangeText={setSearchQuery}
         placeholder="Search..."
@@ -123,6 +119,9 @@ const FeedScreen = ({ navigation, route }) => {
                   flexDirection: "row",
                   alignItems: "center",
                   marginBottom: 15,
+                  backgroundColor: "#808080", // Light gray background
+                  padding: 10,
+                  borderRadius: 10,
                 }}
               >
                 <Image
@@ -134,7 +133,7 @@ const FeedScreen = ({ navigation, route }) => {
                     marginRight: 10,
                   }}
                 />
-                <Text>{user.name}</Text>
+                <Text style={{ color: "white" }}>{user.name}</Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -142,19 +141,8 @@ const FeedScreen = ({ navigation, route }) => {
       ) : (
         <>
           {/* Your Post component */}
-          <View
-            style={{
-              backgroundColor: "#ffffff",
-              padding: 10,
-              marginBottom: 10,
-            }}
-          >
-            <View
-              style={{
-                flexDirection: "row",
-                alignItems: "center",
-              }}
-            >
+          <View style={styles.postContainer}>
+            <View style={styles.postHeader}>
               <Image
                 source={require("../assets/icon.png")}
                 style={{
@@ -164,81 +152,89 @@ const FeedScreen = ({ navigation, route }) => {
                 }}
               />
               <View style={{ padding: 5 }}>
-                <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
                   Post Title
                 </Text>
-                <Text>Post Author</Text>
+                <Text style={{ color: "white" }}>Post Author</Text>
               </View>
             </View>
             <Image
               source={require("../assets/favicon.png")}
               style={{
-                width: 300,
-                height: 300,
+                width: 250,
+                height: 250,
                 marginBottom: 10,
               }}
             />
-            <Text>Post content goes here...</Text>
+            <Text style={{ color: "white" }}>Post content goes here...</Text>
           </View>
 
           {/* Recommendations */}
-          <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "bold",
+              marginBottom: 10,
+              color: "white",
+            }}
+          >
             Recommendations
           </Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              {userData.recommendations.map((profile, index) => (
-                <TouchableOpacity
-          key={index}
-          onPress={() => {
-            // Navigate to the profile screen with profile data
-            navigateToProfile(profile.username);
-          }}
-                >
-                <View
+            {userData.recommendations.map((profile, index) => (
+              <TouchableOpacity
                 key={index}
-                style={{
-                  backgroundColor: "#ffffff",
-                  padding: 10,
-                  marginRight: 10,
-                  alignItems: "center",
-                  height: 180,
-                  width: 180,
+                onPress={() => {
+                  // Navigate to the profile screen with profile data
+                  navigateToProfile(profile.username);
                 }}
               >
-                <Image
-                  source={require("../assets/icon.png")}
+                <View
+                  key={index}
                   style={{
-                    width: 60,
-                    height: 60,
-                    borderRadius: 30,
-                    marginBottom: 10,
+                    backgroundColor: "#808080", // Light gray background
+                    padding: 10,
+                    marginRight: 10,
+                    alignItems: "center",
+                    height: 180,
+                    width: 180,
+                    borderRadius: 10,
                   }}
-                />
-                <Text style={{ fontSize: 16, fontWeight: "bold" }}>
-                  @{profile.username}
-                </Text>
-                <Text style={{ fontSize: 14, color: "#555" }}>
-                  {profile.percent.toFixed(2)}% Match
-                </Text>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: connectionRequests.includes(profile.username)
-                      ? "green"
-                      : "#007bff",
-                    padding: 5,
-                    borderRadius: 5,
-                    marginTop: 10,
-                  }}
-                  onPress={() => sendConnectionRequest(profile.username)}
-                  disabled={connectionRequests.includes(profile.username)}
                 >
-                  <Text style={{ color: "#fff" }}>
-                    {connectionRequests.includes(profile.username)
-                      ? "Request Sent"
-                      : "Connect"}
+                  <Image
+                    source={require("../assets/icon.png")}
+                    style={{
+                      width: 60,
+                      height: 60,
+                      borderRadius: 30,
+                      marginBottom: 10,
+                    }}
+                  />
+                  <Text style={{ fontSize: 16, fontWeight: "bold", color: "white" }}>
+                    @{profile.username}
                   </Text>
-                </TouchableOpacity>
-              </View>
+                  <Text style={{ fontSize: 14, color: "#555", color: "white" }}>
+                    {profile.percent.toFixed(2)}% Match
+                  </Text>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: connectionRequests.includes(profile.username)
+                        ? "green"
+                        : "#007bff",
+                      padding: 5,
+                      borderRadius: 5,
+                      marginTop: 10,
+                    }}
+                    onPress={() => sendConnectionRequest(profile.username)}
+                    disabled={connectionRequests.includes(profile.username)}
+                  >
+                    <Text style={{ color: "white" }}>
+                      {connectionRequests.includes(profile.username)
+                        ? "Request Sent"
+                        : "Connect"}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
               </TouchableOpacity>
             ))}
           </ScrollView>
@@ -249,8 +245,13 @@ const FeedScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#1a1a1a", // Dark gray background
+  },
   backButton: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "white",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -258,6 +259,24 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontWeight: "bold",
+  },
+  searchInput: {
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: "lightgrey", // Light grey search input background
+  },
+  postContainer: {
+    backgroundColor: "#808080",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+  postHeader: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
