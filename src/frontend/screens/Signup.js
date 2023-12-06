@@ -87,6 +87,12 @@ const Signup = ({ navigation, route }) => {
       preferred_time: preferredTime,
       level,
     };
+
+    if (Object.values(userDetails).some((value) => value === "")) {
+      alert("Please fill out all the fields");
+      return;
+    }
+
     // Process the signup logic here
     await postUser(userDetails);
     setUserHasSignedUp(true);
