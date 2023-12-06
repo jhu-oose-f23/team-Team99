@@ -134,7 +134,7 @@ const Connections = ({ route, navigation }) => {
               />
               <View style={styles.textStyle}>
                 <Text style={styles.username}>{"@" + user.username}</Text>
-                <Text>{`${user.first_name} ${user.last_name}`}</Text>
+                <Text style={styles.whiteText}>{`${user.first_name} ${user.last_name}`}</Text>
               </View>
 
               <View style={styles.buttonStyle}>
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     borderColor: "#333", // Dark border color
     borderWidth: 2,
     padding: 10,
-    backgroundColor: "#292929", // Dark background color
+    backgroundColor: "#808080", // Dark background color
   },
 
   textStyle: {
