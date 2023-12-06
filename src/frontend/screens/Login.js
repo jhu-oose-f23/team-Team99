@@ -11,14 +11,13 @@ const Login = ({ navigation, route }) => {
   useEffect(() => {
     // Check if user UID is stored in secure storage
     const checkLoginStatus = async () => {
-      // TODO ONLY FOR TESTING: REMOVE
       const storedUserUid = await SecureStore.getItemAsync("userUid");
-      // if (storedUserUid) {
-      //   setUserLoggedIn(storedUserUid);
-      //   if (fetchUser(storedUserUid)) {
-      //     setUserHasSignedUp(true);
-      //   }
-      // }
+      if (storedUserUid) {
+        setUserLoggedIn(storedUserUid);
+        if (fetchUser(storedUserUid)) {
+          setUserHasSignedUp(true);
+        }
+      }
     };
     checkLoginStatus();
   }, []);
