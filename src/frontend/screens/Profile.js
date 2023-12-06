@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
 // content is a Workout object
 const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
+  console.log(content);
   return (
     <View style={styles.section}>
       <TouchableOpacity
@@ -284,7 +284,7 @@ const Profile = ({ navigation, route }) => {
               {profileData.workouts.map((workout, index) => (
                 <ExpandableSection
                   key={workout.id}
-                  title={workout.workout_name}
+                  title={workout.workout_name + " | " + workout.day}
                   content={workout}
                   onDelete={(workoutId) => {
                     setProfileData({
