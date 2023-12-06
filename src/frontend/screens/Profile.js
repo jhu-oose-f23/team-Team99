@@ -238,64 +238,69 @@ const Profile = ({ navigation, route }) => {
       {loading === false && (
         <View>
           <View
-  style={{
-    ...styles.userInfo,
-    flexDirection: 'row',
-    justifyContent: 'space-between', // Align children on opposite ends
-    alignItems: 'center',
-  }}
->
-  <View>
-    <Image
-      source={require("../assets/profile.png")}
-      style={{
-        width: 100,
-        height: 100,
-        marginRight: 10,
-      }}
-    />
-    <Text
-      style={[
-        styles.userDetail,
-        { fontSize: 20, fontWeight: "bold" },
-      ]}
-    >
-      {profileData.user.first_name} {profileData.user.last_name}
-    </Text>
-    <Text style={styles.userDetail}>@{username}</Text>
-    <Text style={styles.userDetail}>
-      {profileData.connections} Connections
-    </Text>
-
-    {username != loggedinUser &&
-      !connectionUsernames.includes(username) && (
-        <TouchableOpacity
-          style={{
-            backgroundColor: connectionRequests.includes(username)
-              ? "green"
-              : "#007bff",
-            padding: 5,
-            borderRadius: 5,
-            marginTop: 10,
-          }}
-          onPress={() => sendConnectionRequest(username)}
-          disabled={connectionRequests.includes(username)}
-        >
-          <Text style={{ color: "#fff" }}>{getButtonLabel()}</Text>
-        </TouchableOpacity>
-      )}
-  </View>
-
-  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-    <TouchableOpacity onPress={navigateToConnections} style={{ marginLeft: 10 }}>
-      <Ionicons name="ios-people" size={24} color="black" />
-    </TouchableOpacity>
-    <TouchableOpacity onPress={navigateToSettings} style={{ marginLeft: 10 }}>
-      <Ionicons name="ios-settings" size={24} color="black" />
-    </TouchableOpacity>
-  </View>
-</View>
-
+            style={{
+              ...styles.userInfo,
+              flexDirection: "row",
+              justifyContent: "space-between", // Align children on opposite ends
+              alignItems: "center",
+            }}
+          >
+            <View>
+              <Image
+                source={require("../assets/profile.png")}
+                style={{
+                  width: 100,
+                  height: 100,
+                  marginRight: 10,
+                }}
+              />
+              <Text
+                style={[
+                  styles.userDetail,
+                  { fontSize: 20, fontWeight: "bold" },
+                ]}
+              >
+                {profileData.user.first_name} {profileData.user.last_name}
+              </Text>
+              <Text style={styles.userDetail}>@{username}</Text>
+              <Text style={styles.userDetail}>
+                {profileData.connections} Connections
+              </Text>
+              {username == loggedinUser && (
+                <View style={{ flexDirection: "row", alignItems: "right" }}>
+                  <TouchableOpacity
+                    onPress={navigateToConnections}
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Ionicons name="ios-people" size={24} color="black" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={navigateToSettings}
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Ionicons name="ios-settings" size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
+              )}
+              {username != loggedinUser &&
+                !connectionUsernames.includes(username) && (
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: connectionRequests.includes(username)
+                        ? "green"
+                        : "#007bff",
+                      padding: 5,
+                      borderRadius: 5,
+                      marginTop: 10,
+                    }}
+                    onPress={() => sendConnectionRequest(username)}
+                    disabled={connectionRequests.includes(username)}
+                  >
+                    <Text style={{ color: "#fff" }}>{getButtonLabel()}</Text>
+                  </TouchableOpacity>
+                )}
+            </View>
+          </View>
 
           <Text style={styles.sectionTitle}>Workouts</Text>
           {loading ? (
