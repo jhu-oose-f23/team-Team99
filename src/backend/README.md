@@ -397,26 +397,30 @@ PUT /calendar: add any number of new workouts into the weekly schedule. Duplicat
     }
 
 POST /post: make a post. Sample request body:
+note: "workout_id" can be null. The workout must belong to this user.
     
     {
         "username": "k1", 
-        “body”: “This app sucks!”
+        “body”: “This app sucks!”, 
+        "workout_id": 255
     }
 
-GET /post/username (example /post/travis). Get all of the posts of a particualr user, sorted most to least recent. Sample response:
+GET /post/username (example /post/travis). Get all of the posts of a particular user, sorted most to least recent. Sample response:
 
     [
        {
            "body": "Got an insane bicep pump today.",
            "date_time": "2023-11-14T23:59:12.679007+00:00",
            "id": 5,
-           "username": "travis"
+           "username": "travis", 
+           "workout_id": 243
        },
        {
-           "body": "Got an insane bicep pump today.",
+           "body": "Got an insane chest pump today.",
            "date_time": "2023-11-12T23:45:28+00:00",
            "id": 4,
-           "username": "travis"
+           "username": "travis", 
+           "workout_id": null
        }
     ]
 
@@ -424,17 +428,19 @@ GET /post/feed/username (example /post/feed/k1). Get all of the posts by all con
 
     [
        {
-           "body": "Got an insane quad pump today.",
-           "date_time": "2023-11-15T00:08:59.441596+00:00",
-           "id": 10,
-           "username": "t_woods"
-       },
-       {
-           "body": "Got an insane bicep pump today.",
-           "date_time": "2023-11-15T00:08:26.279572+00:00",
-           "id": 9,
-           "username": "chicken"
-       }
+            "body": "Got an insane chest pump today.",
+            "date_time": "2023-12-04T15:31:54.891468+00:00",
+            "id": 13,
+            "username": "dhop",
+            "workout_id": null
+        },
+        {
+            "body": "Iconic",
+            "date_time": "2023-12-06T16:25:10.637199+00:00",
+            "id": 37,
+            "username": "ud40",
+            "workout_id": 262
+        }
     ]
 
 **NOTES**
