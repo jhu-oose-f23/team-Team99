@@ -316,7 +316,7 @@ export const createPost = async (username, postBody, selectedWorkoutID) => {
     };
 
     if (selectedWorkoutID !== -1) {
-      requestBody.id = selectedWorkoutID;
+      requestBody.workout_id = selectedWorkoutID;
     }
 
     const response = await fetch(`${BASE_URL}/post`, {
