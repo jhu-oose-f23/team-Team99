@@ -7,8 +7,9 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { EvilIcons, FontAwesome } from "@expo/vector-icons";
+import { EvilIcons, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+
 // Add these at the top with your other imports
 import {
   fetchWorkouts,
@@ -174,6 +175,14 @@ const Profile = ({ navigation, route }) => {
     });
   };
 
+  const navigateToConnections = () => {
+    navigation.navigate("Connections");
+  };
+
+  const navigateToSettings = () => {
+    navigation.navigate("Settings");
+  };
+
   const getButtonLabel = () => {
     if (connectionUsernames.includes(username)) {
       return "Connected";
@@ -244,6 +253,27 @@ const Profile = ({ navigation, route }) => {
               }}
             />
             <View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  marginTop: 20,
+                }}
+              >
+                <TouchableOpacity
+                  onPress={navigateToConnections}
+                  style={styles.iconButton}
+                >
+                  <Ionicons name="ios-people" size={24} color="black" />
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={navigateToSettings}
+                  style={styles.iconButton}
+                >
+                  <Ionicons name="ios-settings" size={24} color="black" />
+                </TouchableOpacity>
+              </View>
               <Text
                 style={[
                   styles.userDetail,
