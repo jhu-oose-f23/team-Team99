@@ -11,13 +11,14 @@ const Login = ({ navigation, route }) => {
   useEffect(() => {
     // Check if user UID is stored in secure storage
     const checkLoginStatus = async () => {
+      // TODO ONLY FOR TESTING: REMOVE
       const storedUserUid = await SecureStore.getItemAsync("userUid");
-      if (storedUserUid) {
-        setUserLoggedIn(storedUserUid);
-        if (fetchUser(storedUserUid)) {
-          setUserHasSignedUp(true);
-        }
-      }
+      // if (storedUserUid) {
+      //   setUserLoggedIn(storedUserUid);
+      //   if (fetchUser(storedUserUid)) {
+      //     setUserHasSignedUp(true);
+      //   }
+      // }
     };
     checkLoginStatus();
   }, []);
@@ -30,7 +31,10 @@ const Login = ({ navigation, route }) => {
     await SecureStore.setItemAsync("userUid", userUid);
 
     setUserLoggedIn(userUid);
-    if (fetchUser(userUid)) {
+    const res = await fetchUser(userUid);
+    if (res.status === 200) {
+      console.log("user fetched ");
+      console.log(res);
       setUserHasSignedUp(true);
     }
   };

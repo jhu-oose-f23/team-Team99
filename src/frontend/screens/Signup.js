@@ -56,7 +56,6 @@ const Signup = ({ navigation, route }) => {
   ]);
   const [levelDropdownOpen, setLevelDropdownOpen] = useState(false);
 
-  const [goal, setGoal] = useState([]);
   const [goalOptions, setGoalOptions] = useState([
     { label: "Meet people", value: "Meet people" },
     { label: "Build muscle", value: "Build muscle" },
@@ -127,6 +126,7 @@ const Signup = ({ navigation, route }) => {
               setValue={(v) => setFrequency(v())}
               placeholder="Frequency"
               style={styles.dropdown}
+              dropDownDirection="BOTTOM"
               placeholderStyle={{
                 color: "#C7C7CD",
                 marginBottom: 8,
@@ -151,6 +151,7 @@ const Signup = ({ navigation, route }) => {
               setValue={(v) => setGender(v())}
               placeholder="Gender"
               style={styles.dropdown}
+              dropDownDirection="BOTTOM"
               placeholderStyle={{
                 color: "#C7C7CD",
                 marginBottom: 8,
@@ -174,6 +175,7 @@ const Signup = ({ navigation, route }) => {
               setValue={(v) => setPreferredTime(v())}
               placeholder="Preferred Time"
               style={styles.dropdown}
+              dropDownDirection="BOTTOM"
               placeholderStyle={{
                 color: "#C7C7CD",
                 marginBottom: 8,
@@ -197,6 +199,7 @@ const Signup = ({ navigation, route }) => {
               setValue={(v) => setLevel(v())}
               placeholder="Level"
               style={styles.dropdown}
+              dropDownDirection="BOTTOM"
               placeholderStyle={{
                 color: "#C7C7CD",
                 marginBottom: 8,
@@ -210,19 +213,20 @@ const Signup = ({ navigation, route }) => {
             />
           </View>
           <View style={{ zIndex: 20, alignItems: "center" }}>
-            <Text style={{ marginRight: "60%" }}>Goal</Text>
+            <Text style={{ marginRight: "60%" }}>Goals</Text>
             <DropDownPicker
               open={goalDropdownOpen}
               multiple={true}
-              multipleText={`${goal.length} goal${
-                goal.length > 1 ? "s" : ""
+              multipleText={`${goals.length} goal${
+                goals.length > 1 ? "s" : ""
               } selected`}
               listMode="SCROLLVIEW"
-              value={goal}
+              value={goals}
               items={goalOptions}
               setOpen={setGoalDropdownOpen}
-              setValue={setGoal}
+              setValue={setGoals}
               placeholder="Goal"
+              dropDownDirection="BOTTOM"
               style={styles.dropdown}
               placeholderStyle={{
                 color: "#C7C7CD",
@@ -273,7 +277,7 @@ const Signup = ({ navigation, route }) => {
           </View>
 
           {/* ... add labels and input fields for frequency, gender, etc., similar to above ... */}
-          <View style={{ marginBottom: 50 }}>
+          <View style={{ marginBottom: 400 }}>
             <Button title="Sign Up" onPress={handleSubmit} />
           </View>
         </View>
@@ -287,23 +291,23 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "30%",
+    marginTop: "40%",
   },
   dropdown: {
     width: "80%",
     alignSelf: "center",
     marginTop: 1,
-    margin: 5,
+    margin: 20,
   },
   input: {
     width: "80%", // Adjust width as needed
     height: 50, // Adjust height as needed
     marginTop: 1,
-    margin: 10,
+    margin: 20,
     borderWidth: 1,
     padding: 10,
     borderRadius: 5,
-    textAlign: "center",
+    textAlign: "left",
     alignContent: "center",
     alignItems: "center",
     backgroundColor: "white",
