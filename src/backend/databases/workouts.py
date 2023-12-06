@@ -2,6 +2,7 @@ import os
 from supabase import create_client, Client
 from collections import defaultdict
 from databases.user import get_user
+from threading import Thread
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
@@ -28,7 +29,13 @@ def delete_all_workouts():
   return data.data
 
 def delete_workout(id):
+  # remove the actual workout
   data = supabase.table("Workouts").delete().eq("id", id).execute()
+  
+  # start a worker thread to remove references to this workout from posts
+  t = Thread(target=delete_workout_references, args=[id])
+  t.start()
+
   return data.data[0] if data.data else None
 
 def get_workout(id):
@@ -73,3 +80,15 @@ def get_exercises():
     for e in d["exercises"]:
       exercises.add(e["name"].lower())
   return list(exercises)
+
+'''
+Helper functions
+'''
+def delete_workout_references(id):
+  # need to remove any references to this workout from posts
+  posts = supabase.table("Posts").select("*").eq("workout_id", id).execute().data
+  for post in posts:
+    try:
+      supabase.table("Posts").update({"workout_id": None}).eq("id", post["id"]).execute()
+    except:
+      pass
