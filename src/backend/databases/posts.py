@@ -7,26 +7,33 @@ from databases.user import get_user
 
 from databases.connection import get_connections
 
+from databases.workouts import get_user_workouts
+
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
 
 supabase: Client = create_client(url, key)
 
-def submit_post(username, body):
-  if not get_user(username):
-    return None
-  unique_id = str(uuid.uuid4())
-
-  new_post = {
-    "username": username,
-    "body": body,
-    "post_id": unique_id
-  }
-  try:
-    data = supabase.table("Posts").insert(new_post).execute()
-  except:
+def submit_post(data):
+  if not get_user(data["username"]):
     return None
   
+  user_workouts = get_user_workouts(data["username"])
+  found = False
+
+  workout_id = data["workout_id"] if "workout_id" in data else None
+  for workout in user_workouts:
+    if workout["id"] == workout_id:
+      found = True
+      break
+  
+  if not found and workout_id:
+    return "Workout not found for this user"
+
+  try:
+    data = supabase.table("Posts").insert(data).execute()
+  except:
+    return None
   return data.data[0]
 
 def get_posts(username):

@@ -46,9 +46,9 @@ class IssueSchema(Schema):
 class PostSchema(Schema):
     username = fields.Str(required=True)
     body = fields.Str(required=True)
-    post_id = fields.Str(dump_only=True)
+    id = fields.Str(dump_only=True)
     date_time = fields.Str(dump_only=True)
-    image_url = fields.Str(dump_only=True)
+    workout_id = fields.Int()
 
 class CalendarSchema(Schema):
     schedule = fields.List(fields.Dict(), required=True)
