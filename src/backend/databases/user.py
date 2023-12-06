@@ -36,10 +36,13 @@ def update_user(username, data):
     return None
 
 def get_recommendations(username):
+  # first hit the cache to check whether recommendations have been stored recently
   data = supabase.table("Recommendation_Cache").select("*").eq("user_id", username).execute().data
   data = data[0] if data else []
   last_updated = data["last_updated"] if data else None
-  if not data or check_days(last_updated) > 3:
+
+  # if there are no recommendations, or those recommendations are more than 7 days old, regenerate them
+  if not data or check_days(last_updated) > 7:
     return generate_recommendations(username)
   return data["recs"]
 
@@ -47,28 +50,37 @@ def get_recommendations(username):
   Helper functions
 '''
 def generate_recommendations(username):
+    # use a heap to store only the 5 most similar users
     heap = []
     heapify(heap)
     if not get_user(username):
       return []
     users = [u["username"] for u in supabase.table("Users").select("username").neq("username", username).execute().data]
+    # check all users (besides the current user)
     for u in users:
+      # ignore those already connected
       if check_connection(username, u):
         continue
       try:
         sim_score = calculate_similarity(username, u)
         heappush(heap, (sim_score/6.5 * 100, u))
+        # maintain only up to 5 users
         if len(heap) > 5:
           heappop(heap)
       except:
         pass
+    # add second degree connections with a default similarity of 40%
     second = get_second_connections(username)
     for each in second[:5]:
       heap.append((40, each))
     res = {}
+    # remove duplicates
     for score,u in heap:
       res[u] = max(res.get(u,0), score)
+    # sort and return as list of dicts
     result = sorted([{"username": u, "percent": res[u]} for u in res], key=lambda x: (x["percent"], x["username"]), reverse=True)
+
+    # start a thread to use workout data to find similar users without blocking response
     t = threading.Thread(target=compare_workouts, args=[username, res])
     t.start()
     return result
@@ -162,12 +174,15 @@ def get_user_workouts(user):
   return data.data
 
 def compare_workouts(user, existing_map):
+  ## approach is to make vectors for each user's exercise history, then calculate similarity using cosine similarity
   all_users = get_all_users()
   possible_users = set()
   for each in all_users:
     if each["username"] == user or check_connection(user, each["username"]):
       continue
     possible_users.add(each["username"])
+  
+  # first calculate a vector for this user's exercise history (the proportion of a particular exercise compared to all exercises)
   this_user_workouts = get_user_workouts(user)
   this_user_exercises = {}
   for w in this_user_workouts:
@@ -177,25 +192,32 @@ def compare_workouts(user, existing_map):
   total_appearances = sum(this_user_exercises.values())
   for e in this_user_exercises:
     this_user_percentages[e] = this_user_exercises[e] / total_appearances
+  
+  # go through each other potential user, doing the same (calculate the vector)
   for each in possible_users:
     exercises = {}
     user_workouts = get_user_workouts(each)
     for w in user_workouts:
       for e in w["exercises"]:
         exercises[e["name"]] = exercises.get(e["name"], 0) + 1
-    
     percentages = {}
     total_appearances = sum(exercises.values())
     for e in exercises:
       percentages[e] = exercises[e] / total_appearances
 
-    # calculate similarity using cosine similarity
+    # calculate similarity using cosine similarity on the two exercise vectors
     sim = cosine_similarity(this_user_percentages, percentages)
+
+    # if they meet the threshold, update the existing dict of similar users
     if sim >= 0.5:
       existing_map[each] = max(60, existing_map.get(each, 0))
+  
+  # sort and build a list of dicts
   result = sorted([{"username": u, "percent": existing_map[u]} for u in existing_map], key=lambda x: (x["percent"], x["username"]), reverse=True)
   today = date.today()
+  # build a recommendation dictionary to store in the cache
   data = {"user_id": user, "recs": result, "last_updated": f"{today.month}-{today.day}-{today.year}"}
+  # add to cache or update that user's recs if already exists
   try:
     data = supabase.table("Recommendation_Cache").insert(data).execute()
   except:
