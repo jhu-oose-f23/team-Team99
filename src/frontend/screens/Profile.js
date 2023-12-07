@@ -1,6 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button } from "react-native";
-import { TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
+import {
+  ActivityIndicator,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Image,
+} from "react-native";
 import { EvilIcons, FontAwesome } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
 import {
@@ -11,6 +17,31 @@ import {
   postConnectionRequest,
   fetchConnectionRequestSource,
 } from "../api";
+
+function convertDateString(dateString) {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const dateParts = dateString.split("-");
+
+  const year = dateParts[0];
+  const monthIndex = parseInt(dateParts[1], 10) - 1; // months are 0-indexed in JavaScript
+  const day = parseInt(dateParts[2], 10);
+
+  const formattedDate = `${months[monthIndex]} ${day}, ${year}`;
+  return formattedDate;
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -92,7 +123,7 @@ const styles = StyleSheet.create({
 // content is a Workout object
 const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
+  console.log(content);
   return (
     <View style={styles.section}>
       <TouchableOpacity
@@ -223,7 +254,7 @@ const Profile = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      {loading && <Text style={styles.loadingText}>Loading...</Text>}
+      <ActivityIndicator animating={loading}></ActivityIndicator>
       {loading === false && (
         <View>
           <View
@@ -284,7 +315,10 @@ const Profile = ({ navigation, route }) => {
                 <ExpandableSection
                   style={styles.dropdown}
                   key={workout.id}
-                  title={workout.workout_name}
+                  title={
+                    workout.workout_name.padEnd(50, " ") +
+                    convertDateString(workout.day)
+                  }
                   content={workout}
                   onDelete={(workoutId) => {
                     setProfileData({

@@ -4,7 +4,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Feed from "./screens/FeedScreen";
+import CreateOverview from "./screens/CreateOverview";
 import CreateWorkout from "./screens/CreateWorkout";
+import CreatePost from "./screens/CreatePost";
 import LeaderboardOverview from "./screens/LeaderboardsOverview";
 import LeaderboardTabs from "./screens/Leaderboard";
 import Profile from "./screens/Profile";
@@ -37,23 +39,45 @@ const LeaderboardStack = ({ route }) => (
 );
 
 
+const CreateStack = ({ route }) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="CreateOverview"
+      component={CreateOverview}
+      initialParams={{ username: route.params.username }}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="CreateWorkout"
+      component={CreateWorkout}
+      initialParams={{ username: route.params.username }}
+    />
+    <Stack.Screen
+      name="CreatePost"
+      component={CreatePost}
+      initialParams={{ username: route.params.username }}
+    />
+  </Stack.Navigator>
+);
+
+
 const SettingsNavigation = ({route}) => {
+
   return (
     <Stack.Navigator>
-    <Stack.Screen name="Settings" 
-      component={Settings} 
-      initialParams={{username: route.params.username}}/>
-    <Stack.Screen name="Edit Profile" 
-      component={EditProfile}
-      initialParams={{username: route.params.username}}
-       />
-    <Stack.Screen name="Privacy" component={Privacy}/>
-    <Stack.Screen name="Notifications" component={Notifications}/>
-    <Stack.Screen name="Terms and Policies" component={TermsAndPolicies}/>
-  </Stack.Navigator>
-  )
-  
-}
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        initialParams={{ username: route.params.username }}
+      />
+      <Stack.Screen
+        name="Edit Profile"
+        component={EditProfile}
+        initialParams={{ username: route.params.username }}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const screenOptions = {
   tabBarActiveTintColor: "#ffd700", // Gold for active tab
@@ -88,7 +112,7 @@ const BottomTabNavigator = ({ route }) => {
       />
       <Tab.Screen
         name="Create"
-        component={CreateWorkout}
+        component={CreateStack}
         initialParams={{ username: username }}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -145,7 +169,6 @@ const BottomTabNavigator = ({ route }) => {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="ios-settings" color={color} size={size} />
           ),
-          
         }}
       />
     </Tab.Navigator>
