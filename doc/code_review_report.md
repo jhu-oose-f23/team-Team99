@@ -8,6 +8,7 @@
 - Good naming strategies - we followed good naming strategies for the components as well as the variables and the functions that we used to make them as clear as possible to the developers. Certain initial design decisions made it confusing when you were navigating between components and props. (Sambhav)
 - Consistent Error Handling - Made sure that error handling is consistent, with user-friendly error messages that do not break the user experience. We initially had app-breaking errors which are now handled with correct messages. (Peter)
 - Added Documentation - Added a step by step instruction to how to install all dependencies and run the application. (Darren)
+- To keep related classes together and make the code easy to follow, I created folders and put together pages in the same navigation stacks such as Settings screens and calendar screens. This allows anyone reading the codes to find classes representing pages that are related very easily. (Fabrice)
 
 **Backend/Database**
 - In staying consistent with the concept of low coupling, the goal with the backend was to ensure the frontend application would only need to interact with application logic via the Python API. This also meant that all database accesses also came from the Python backend server. (Ishan)
