@@ -40,7 +40,11 @@ const CreatePost = ({ route }) => {
     try {
       setIsLoading(true);
       print(selectedWorkout);
-      const data = await createPost(username, postBody, selectedWorkout.id);
+      const data = await createPost(
+        username,
+        postBody,
+        selectedWorkout ? selectedWorkout.id : -1
+      );
       console.log("Post created:", data);
     } catch (error) {
       console.error("Error creating post:", error.message);
@@ -97,7 +101,7 @@ const CreatePost = ({ route }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter your post..."
-          placeholderTextColor= "white"
+          placeholderTextColor="white"
           onChangeText={(text) => setPostBody(text)}
           value={postBody}
           multiline
@@ -123,7 +127,9 @@ const CreatePost = ({ route }) => {
                 style={styles.workoutOption}
                 onPress={() => selectWorkout(workout)}
               >
-                <Text style={styles.workoutOptionText}>{workout.workout_name}</Text>
+                <Text style={styles.workoutOptionText}>
+                  {workout.workout_name}
+                </Text>
               </TouchableOpacity>
             ))}
           </View>
