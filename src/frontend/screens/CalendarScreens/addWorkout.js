@@ -104,7 +104,6 @@ const times = [
 const AddWorkout = ({ route }) => {
   const { username } = route.params;
   const [workoutName, setWorkoutName] = useState("");
-  const [exerciseRows, setExerciseRows] = useState([]);
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
   const [existingWorkouts, setExistingWorkouts] = useState([]);
@@ -159,35 +158,6 @@ const AddWorkout = ({ route }) => {
     }, [])
   );
 
-  const addExerciseRow = () => {
-    const newExercise = {
-      name: "",
-      sets: "",
-      reps: "",
-    };
-    setExerciseRows([...exerciseRows, newExercise]);
-  };
-
-  const removeExerciseRow = (index) => {
-    const updatedExerciseRows = [...exerciseRows];
-    updatedExerciseRows.splice(index, 1);
-    setExerciseRows(updatedExerciseRows);
-  };
-
-  const updateExercise = (index, field, value) => {
-    const updatedExercise = [...exerciseRows];
-    updatedExercise[index][field] = value;
-    setExerciseRows(updatedExercise);
-  };
-
-  useEffect(() => {
-    if (exerciseRows.length >= 1 && !exerciseRows.some(isEmptyExercise)) {
-      setExerciseError("");
-    }
-  }, [exerciseRows]);
-
-  const isEmptyExercise = (exercise) =>
-    !exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim();
 
   const constructWorkoutCalendar = () => ({
     schedule: [
@@ -235,21 +205,7 @@ const AddWorkout = ({ route }) => {
       isValid = false;
     }
 
-    // Validate exercise rows
-    if (exerciseRows.length === 0) {
-      setExerciseError("At least one exercise is required");
-      isValid = false;
-    } else {
-      setExerciseError("");
-      for (const exercise of exerciseRows) {
-        if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
-          setExerciseError(
-            "Can't add another exercise unless all exercises are filled in"
-          );
-          isValid = false;
-        }
-      }
-    }
+
     const status = await updateCalendar(username, constructWorkoutCalendar());
     if (status === 404) {
       setWorkoutNameError("A workout already exists for this day and time");
@@ -261,9 +217,7 @@ const AddWorkout = ({ route }) => {
       return;
     }
 
-    // Reset all fields to blank
     setWorkoutName("");
-    setExerciseRows([]);
     setWorkoutDay("");
     setWorkoutStartTime(-1);
     setWorkoutEndTime(-1);
@@ -388,112 +342,7 @@ const AddWorkout = ({ route }) => {
       )}
       {exerciseError && <Text style={styles.errorText}>{exerciseError}</Text>}
 
-      <Button title="Add Exercise" onPress={addExerciseRow} />
 
-      <FlatList
-        data={exerciseRows}
-        keyExtractor={(item, index) => index.toString()}
-        CellRendererComponent={({ children, index, style, ...props }) => {
-          return (
-            <View
-              style={[style, { zIndex: -1 * index }]}
-              index={index}
-              {...props}
-            >
-              {children}
-            </View>
-          );
-        }}
-        renderItem={({ item, index }) => (
-          <View
-            style={{
-              flexDirection: "row",
-              marginBottom: 15,
-              backgroundColor: "#fff",
-              padding: 10,
-              borderRadius: 30,
-              alignItems: "center",
-            }}
-          >
-            <View
-              style={[
-                styles.input,
-                // { flex: 2, minHeight: open[index] ? 250 : 0 },
-                { flex: 2 },
-              ]}
-            >
-              <DropDownPicker
-                open={open[index]}
-                listMode="SCROLLVIEW"
-                value={item.name}
-                items={items}
-                setOpen={(o) => {
-                  const updatedOpen = [...open];
-                  // Check if open[index] is defined
-                  if (open.length > index) {
-                    updatedOpen[index] = o;
-                  } else {
-                    updatedOpen.push(o);
-                  }
-                  setOpen(updatedOpen);
-                }}
-                onOpen={() => {
-                  // Close all other dropdowns
-                  const updatedOpen = [...open];
-                  updatedOpen.forEach((o, i) => {
-                    updatedOpen[i] = false;
-                  });
-                  updatedOpen[index] = true;
-                  setOpen(updatedOpen);
-                }}
-                setValue={(v) => updateExercise(index, "name", v())}
-                placeholder="Exercise"
-                placeholderStyle={{
-                  color: "#C7C7CD",
-                  marginBottom: 8,
-                }}
-                style={{
-                  borderWidth: 0,
-                }}
-                dropDownContainerStyle={{
-                  borderWidth: 0,
-                  maxHeight: 2000,
-                }}
-                containerStyle={{
-                  maxHeight: 2000,
-                }}
-              />
-            </View>
-            <TextInput
-              style={[styles.input, { flex: 1, marginRight: 10 }]}
-              mode="outlined"
-              placeholder="Weight"
-              value={item.weight}
-              onChangeText={(text) => updateExercise(index, "weight", text)}
-              keyboardType="numeric"
-            />
-            <TextInput
-              style={[styles.input, { flex: 1, marginRight: 10 }]}
-              mode="outlined"
-              placeholder="Sets"
-              value={item.sets}
-              onChangeText={(text) => updateExercise(index, "sets", text)}
-              keyboardType="numeric"
-            />
-            <TextInput
-              style={[styles.input, { flex: 1 }]}
-              mode="outlined"
-              placeholder="Reps"
-              value={item.reps}
-              onChangeText={(text) => updateExercise(index, "reps", text)}
-              keyboardType="numeric"
-            />
-            <TouchableOpacity onPress={() => removeExerciseRow(index)}>
-              <Text style={styles.removeIcon}>x</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-      />
 
       <Button title="Save Workout" onPress={saveWorkout} />
     </View>

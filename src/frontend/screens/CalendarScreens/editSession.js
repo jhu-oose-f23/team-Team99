@@ -157,9 +157,6 @@ const EditSession = ({ route}) => {
     username,
   });
 
-//   const deleteSession = async () => {
-//     const results = await deleteCalendar(username, initialSession)
-//   }
 
   const EditWorkout = async () => {
     // Input validation
