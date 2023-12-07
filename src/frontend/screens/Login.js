@@ -18,6 +18,7 @@ const Login = ({ navigation, route }) => {
     if (res.code !== 400) {
       console.log("user fetched ");
       setUserHasSignedUp(true);
+
     }
   };
 

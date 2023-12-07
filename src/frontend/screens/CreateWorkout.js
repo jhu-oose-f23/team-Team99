@@ -12,12 +12,7 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
-import {
-  createWorkout,
-  fetchCalendar,
-  fetchWorkouts,
-  updateCalendar,
-} from "../api";
+import { createWorkout, fetchWorkouts, updateCalendar } from "../api";
 import { useFocusEffect } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -25,7 +20,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#1a1a1a",
   },
   errorText: {
     color: "red",
@@ -159,11 +154,13 @@ const CreateWorkout = ({ route }) => {
         }
       }
     }
+
     // const status = await updateCalendar(username, constructWorkoutCalendar());
     // if (status === 404) {
     //   setWorkoutNameError("A workout already exists for this day and time");
     //   isValid = false;
     // }
+
 
     // If any validation failed, don't proceed with the save
     if (!isValid) {
@@ -176,6 +173,7 @@ const CreateWorkout = ({ route }) => {
       day: workoutDay.toISOString().slice(0, 10),
     };
     await createWorkout(workout);
+    await updateCalendar(username, constructWorkoutCalendar());
 
     // Reset all fields to blank
     setWorkoutName("");
@@ -189,6 +187,7 @@ const CreateWorkout = ({ route }) => {
   console.log(workoutDay);
 
   return (
+
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View
@@ -231,6 +230,7 @@ const CreateWorkout = ({ route }) => {
                 setWorkoutDay(selectedDate);
               }}
               style={{ alignContent: "center", alignSelf: "center" }}
+
             />
           </View>
         </View>
@@ -245,6 +245,7 @@ const CreateWorkout = ({ route }) => {
         {workoutNameError && (
           <Text style={styles.errorText}>{workoutNameError}</Text>
         )}
+
         {exerciseError && <Text style={styles.errorText}>{exerciseError}</Text>}
 
         <Button title="Add Exercise" onPress={addExerciseRow} />
@@ -339,6 +340,7 @@ const CreateWorkout = ({ route }) => {
         <Button title="Save Workout" onPress={saveWorkout} />
       </View>
     </TouchableWithoutFeedback>
+
   );
 };
 
