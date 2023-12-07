@@ -18,7 +18,6 @@ import TermsAndPolicies from "./screens/settingsScreens/TermsAndPolicies";
 import EditProfile from "./screens/settingsScreens/editProfile";
 import Calendar from "./screens/Calendar";
 import EditWorkout from "./screens/CalendarScreens/editWorkout";
-import DeleteWorkout from "./screens/CalendarScreens/deleteWorkout";
 import AddWorkout from "./screens/CalendarScreens/addWorkout";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import EditSession from "./screens/CalendarScreens/editSession";
@@ -114,10 +113,6 @@ const CalendarNavigation = ({ route }) => {
                 onPress={() => navigate("Edit Calendar")}
               />
               <HiddenItem
-                title="Delete Workout"
-                onPress={() => navigate("Delete Workout")}
-              />
-              <HiddenItem
                 title="Add Workout"
                 onPress={() => navigate("Add Workout")}
               />
@@ -130,11 +125,6 @@ const CalendarNavigation = ({ route }) => {
         name="Edit Calendar"
         component={EditWorkout}
         initialParams={{ username: route.params.username }}
-      />
-      <Stack.Screen
-        name="Delete Workout"
-        initialParams={{ username: route.params.username }}
-        component={DeleteWorkout}
       />
       <Stack.Screen
         name="Add Workout"
