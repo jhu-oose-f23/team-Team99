@@ -280,6 +280,7 @@ const UpsertProfile = ({
                 <DateTimePicker
                   testID="dateTimePicker"
                   value={birthdate}
+                  maximumDate={new Date()}
                   mode="date"
                   display="default"
                   onChange={(event, selectedDate) => {
