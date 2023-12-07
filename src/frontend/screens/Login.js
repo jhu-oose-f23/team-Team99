@@ -1,99 +1,35 @@
-import React, { useContext, useState } from "react";
-import { View, Text, TextInput, Button, Alert, StyleSheet } from "react-native";
+import React, { useContext, useEffect } from "react";
+import { WebView } from "react-native-webview";
 import UserContext from "../UserContext";
-const loginApiUrl = "https://gymconnectbackend.onrender.com/user/login";
+import { fetchUser } from "../api";
+import * as SecureStore from "expo-secure-store";
 
 const Login = ({ navigation, route }) => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false); 
-  const { setUserLoggedIn } = useContext(UserContext);
-  const handleLogin = async () => {
-    setIsLoading(true);
-    try {
-      const response = await fetch(loginApiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
+  const { userLoggedIn } = route.params;
+  const { setUserLoggedIn, setUserHasSignedUp } = useContext(UserContext);
 
-      if (response.status === 200) {
-        // Authentication successful
-        const userData = await response.json();
-        setUserLoggedIn(userData.username);
-        navigation.navigate("Main", {
-          screen: "Profile",
-          params: {
-            username: userData.username,
-            loggedinUser: userData.username,
-          },
-        });
+  const handleWebViewMessage = async (event) => {
+    const userUid = event.nativeEvent.data;
+    // Save user UID to secure storage
+    await SecureStore.setItemAsync("userUid", userUid);
 
-        Alert.alert(
-          "Login Successful",
-          `You are now logged in as ${userData.username}`
-        );
-      } else {
-        // Authentication failed
-        Alert.alert("Login Failed", "Invalid username or password");
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-    } finally { 
-      setIsLoading(false);
+    setUserLoggedIn(userUid);
+    const res = await fetchUser(userUid);
+    if (res.code !== 400) {
+      console.log("user fetched ");
+      setUserHasSignedUp(true);
+
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.label}>Username:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your username"
-        value={username}
-        onChangeText={(text) => setUsername(text)}
-      />
-
-      <Text style={styles.label}>Password:</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your password"
-        secureTextEntry={true}
-        value={password}
-        onChangeText={(text) => setPassword(text)}
-      />
-
-      <Button
-        title="Login"
-        onPress={handleLogin}
-        disabled={isLoading} 
-      />
-    </View>
+    <WebView
+      key={userLoggedIn}
+      source={{ uri: "https://jhu-sso-api.onrender.com/jhu/login/" }}
+      style={{ marginTop: 20 }}
+      onMessage={handleWebViewMessage}
+    />
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 16,
-    justifyContent: "center",
-  },
-  label: {
-    fontSize: 16,
-    marginBottom: 5,
-  },
-  input: {
-    height: 40,
-    borderColor: "gray",
-    borderWidth: 1,
-    marginBottom: 10,
-    paddingHorizontal: 10,
-  },
-});
 
 export default Login;

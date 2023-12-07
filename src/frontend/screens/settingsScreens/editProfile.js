@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: 20,
-      backgroundColor: "#f7f8fa",
+      backgroundColor: "#1a1a1a",
     },
 
     input: {
@@ -25,6 +25,8 @@ const styles = StyleSheet.create({
         margin: 12,
         borderWidth: 1,
         padding: 10,
+        backgroundColor:"#808080",
+        color:"white",
       },
 
     userInfo: {
@@ -34,6 +36,7 @@ const styles = StyleSheet.create({
     userDetail: {
       fontSize: 18,
       marginBottom: 5,
+      color:"white"
     },
     sectionTitle: {
       fontSize: 24,
@@ -49,7 +52,7 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginBottom: 50,
         borderRadius: 5,
-        backgroundColor: "skyblue",
+        backgroundColor: "#FFD700",
         alignSelf: "center",
 
       },
@@ -81,7 +84,7 @@ const styles = StyleSheet.create({
     },
     cell: {
       textAlign: "center",
-      color: "#666",
+      color: "white",
     },
     loadingText: {
       textAlign: "center",
@@ -172,7 +175,7 @@ const EditProfile = ({ route }) => {
             {Object.keys(user).map((key) => (
                 key in stringKeys && 
                 <View key={key}>
-                    <Text style={styles.cell}>{stringKeys[key]}:</Text>
+                    <Text style={{...styles.cell, color: "white"}}>{stringKeys[key]}:</Text>
                     <TextInput
                         style={styles.input}
                         placeholder={`Enter ${key}`}

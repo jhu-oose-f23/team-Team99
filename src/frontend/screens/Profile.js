@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Button } from "react-native";
-import { TouchableOpacity, ScrollView, StyleSheet, Image } from "react-native";
-import { EvilIcons, FontAwesome } from "@expo/vector-icons";
+import {
+  ActivityIndicator,
+  TouchableOpacity,
+  ScrollView,
+  StyleSheet,
+  Image,
+} from "react-native";
+import { EvilIcons, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
-// Add these at the top with your other imports
 import {
   fetchWorkouts,
   fetchUser,
@@ -14,24 +19,53 @@ import {
   deleteConnection
 } from "../api";
 
+function convertDateString(dateString) {
+  const months = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+  const dateParts = dateString.split("-");
+
+  const year = dateParts[0];
+  const monthIndex = parseInt(dateParts[1], 10) - 1; // months are 0-indexed in JavaScript
+  const day = parseInt(dateParts[2], 10);
+
+  const formattedDate = `${months[monthIndex]} ${day}, ${year}`;
+  return formattedDate;
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#f7f8fa",
+    backgroundColor: "#1a1a1a", // Dark Grey background
   },
   userInfo: {
     alignItems: "flex-end",
     marginBottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
   },
   userDetail: {
     fontSize: 18,
     marginBottom: 5,
+    color: "#fff", // White text color
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "white", // White text color
   },
   section: {
     marginBottom: 15,
@@ -40,17 +74,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#0099ff",
+    backgroundColor: "#808080", // Light Grey button background
     padding: 12,
     borderRadius: 8,
     marginBottom: 10,
   },
   buttonText: {
-    color: "white",
+    color: "#fff",
     fontWeight: "bold",
   },
   dropdown: {
-    backgroundColor: "#eee",
+    backgroundColor: "#FFD700",
     padding: 20,
     borderRadius: 5,
   },
@@ -65,7 +99,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
     fontWeight: "bold",
-    color: "#444",
+    color: "white",
   },
   row: {
     flexDirection: "row",
@@ -77,19 +111,20 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     textAlign: "center",
-    color: "#666",
+    color: "white",
   },
   loadingText: {
     textAlign: "center",
     fontSize: 18,
     marginTop: 20,
+    color: "white", // White text color
   },
 });
 
 // content is a Workout object
 const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
   const [isExpanded, setIsExpanded] = useState(false);
-
+  console.log(content);
   return (
     <View style={styles.section}>
       <TouchableOpacity
@@ -127,7 +162,7 @@ const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
               }}
               style={{ alignSelf: "flex-end", marginRight: 10 }}
             >
-              <FontAwesome name="trash-o" size={30} color="black" />
+              <FontAwesome name="trash-o" size={30} color="red" />
             </TouchableOpacity>
           )}
         </View>
@@ -185,6 +220,14 @@ const Profile = ({ navigation, route }) => {
     });
   };
 
+  const navigateToConnections = () => {
+    navigation.navigate("Connections");
+  };
+
+  const navigateToSettings = () => {
+    navigation.navigate("Settings");
+  };
+
   const getButtonLabel = () => {
     if (connectionUsernames.includes(username)) {
       return "Connected";
@@ -236,37 +279,60 @@ const Profile = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      {loading && <Text style={styles.loadingText}>Loading...</Text>}
+      <ActivityIndicator animating={loading}></ActivityIndicator>
       {loading === false && (
         <View>
           <View
             style={{
               ...styles.userInfo,
               flexDirection: "row",
+              justifyContent: "space-between", // Align children on opposite ends
               alignItems: "center",
             }}
           >
-            <Image
-              source={require("../assets/profile.png")}
-              style={{
-                width: 100,
-                height: 100,
-                marginRight: 10,
-              }}
-            />
             <View>
-              <Text
-                style={[
-                  styles.userDetail,
-                  { fontSize: 20, fontWeight: "bold" },
-                ]}
-              >
-                {profileData.user.first_name} {profileData.user.last_name}
-              </Text>
-              <Text style={styles.userDetail}>@{username}</Text>
-              <Text style={styles.userDetail}>
-                {profileData.connections} Connections
-              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <Image
+                  source={require("../assets/profile.png")}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    marginRight: 10,
+                    backgroundColor: "#808080"
+                  }}
+                />
+                <View style={{ flexDirection: "column" }}>
+                  <Text
+                    style={[
+                      styles.userDetail,
+                      { fontSize: 20, fontWeight: "bold", color:"#FFD700"},
+                    ]}
+                  >
+                    {profileData.user.first_name} {profileData.user.last_name}
+                  </Text>
+                  <Text style={styles.userDetail}>@{username}</Text>
+                  <Text style={styles.userDetail}>
+                    {profileData.connections} Connections
+                  </Text>
+                </View>
+              </View>
+
+              {username == loggedinUser && (
+                <View style={{ flexDirection: "row", alignItems: "right" }}>
+                  <TouchableOpacity
+                    onPress={navigateToConnections}
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Ionicons name="ios-people" size={24} color="#FFD700" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={navigateToSettings}
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Ionicons name="ios-settings" size={24} color="#FFD700" />
+                  </TouchableOpacity>
+                </View>
+              )}
               {username != loggedinUser &&
                 !connectionUsernames.includes(username) && (
                   <TouchableOpacity
@@ -294,8 +360,12 @@ const Profile = ({ navigation, route }) => {
             <ScrollView>
               {profileData.workouts.map((workout, index) => (
                 <ExpandableSection
+                  style={styles.dropdown}
                   key={workout.id}
-                  title={workout.workout_name}
+                  title={
+                    workout.workout_name.padEnd(50, " ") +
+                    convertDateString(workout.day)
+                  }
                   content={workout}
                   onDelete={(workoutId) => {
                     setProfileData({

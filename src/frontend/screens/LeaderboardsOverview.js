@@ -23,7 +23,6 @@ const Leaderboards = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.header}>Popular Leaderboards</Text> */}
       {leaderboardList.map((leaderboard) => (
         <TouchableOpacity
           key={leaderboard.id}
@@ -40,7 +39,7 @@ const Leaderboards = ({ navigation, route }) => {
                 name={leaderboard.icon}
                 type="font-awesome"
                 size={30}
-                color="#555"
+                color="#FFD700"
               />
               <Text style={styles.listItemText}>{leaderboard.name}</Text>
               <Ionicons name="ios-arrow-forward" size={24} color="#555" />
@@ -53,15 +52,16 @@ const Leaderboards = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginTop: 20,
-    marginBottom: 10,
+  container: {
+    flex: 1,
+    backgroundColor: "#1a1a1a", // Dark gray background
+  },
+  listItem: {
+    marginVertical: 5,
   },
   card: {
     borderRadius: 10,
+    backgroundColor: "#808080", // Light grey button background
   },
   listItemContent: {
     flexDirection: "row",
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
   },
   listItemText: {
     fontSize: 18,
+    color: "white", // White text
   },
 });
 
