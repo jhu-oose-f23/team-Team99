@@ -86,6 +86,7 @@ const CreateWorkout = ({ route }) => {
       getWorkouts();
     }, [])
   );
+  const [loading, setLoading] = useState(false);
 
   const addExerciseRow = () => {
     const newExercise = {
@@ -162,7 +163,6 @@ const CreateWorkout = ({ route }) => {
     //   isValid = false;
     // }
 
-
     // If any validation failed, don't proceed with the save
     if (!isValid) {
       return;
@@ -173,8 +173,10 @@ const CreateWorkout = ({ route }) => {
       exercises: exerciseRows,
       day: workoutDay.toISOString().slice(0, 10),
     };
+    setLoading(true);
     await createWorkout(workout);
-    await updateCalendar(username, constructWorkoutCalendar());
+    setLoading(false);
+    // await updateCalendar(username, constructWorkoutCalendar());
 
     // Reset all fields to blank
     setWorkoutName("");
@@ -188,7 +190,6 @@ const CreateWorkout = ({ route }) => {
   console.log(workoutDay);
 
   return (
-
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View
@@ -199,9 +200,7 @@ const CreateWorkout = ({ route }) => {
           }}
         >
           <View style={{ flex: 1, height: 60 }}>
-            <Text style={{ marginRight: 50, color: "white" }}>
-              Name
-            </Text>
+            <Text style={{ marginRight: 50, color: "white" }}>Name</Text>
             <TextInput
               style={{
                 margin: 0,
@@ -217,33 +216,30 @@ const CreateWorkout = ({ route }) => {
               mode="outlined"
               placeholder="Workout Name"
               placeholderTextColor="#C7C7CD"
-
               value={workoutName}
               onChangeText={(text) => setWorkoutName(text)}
             />
           </View>
           <View style={{ flex: 1, alignItems: "center" }}>
-            <Text style={{ marginRight: 60, color: "white" }}>
-              Date
-            </Text>
+            <Text style={{ marginRight: 60, color: "white" }}>Date</Text>
             <View style={{ borderRadius: 10, overflow: "hidden" }}>
-            <DateTimePicker
-              testID="dateTimePicker"
-              value={workoutDay}
-              maximumDate={new Date()}
-              mode="date"
-              display="default"
-              placeholderText="Select Date"
-              onChange={(event, selectedDate) => {
-                setOpen(false);
-                setWorkoutDay(selectedDate);
-              }}
-              style={{
-                alignContent: "center",
-                alignSelf: "center",
-                backgroundColor: "#808080", // Light grey background
-              }}
-            />
+              <DateTimePicker
+                testID="dateTimePicker"
+                value={workoutDay}
+                maximumDate={new Date()}
+                mode="date"
+                display="default"
+                placeholderText="Select Date"
+                onChange={(event, selectedDate) => {
+                  setOpen(false);
+                  setWorkoutDay(selectedDate);
+                }}
+                style={{
+                  alignContent: "center",
+                  alignSelf: "center",
+                  backgroundColor: "#808080", // Light grey background
+                }}
+              />
             </View>
           </View>
         </View>
@@ -318,10 +314,10 @@ const CreateWorkout = ({ route }) => {
                     maxHeight: 2000,
                   }}
                   listItemLabelStyle={{
-                    color: 'white', // Text color of the dropdown items
+                    color: "white", // Text color of the dropdown items
                   }}
                   labelStyle={{
-                    color: 'white', // Text color of the label
+                    color: "white", // Text color of the label
                   }}
                 />
               </View>
@@ -359,10 +355,14 @@ const CreateWorkout = ({ route }) => {
           ))}
         </View>
 
-        <Button title="Save Workout" onPress={saveWorkout} color="#FFD700" />
+        <Button
+          title="Save Workout"
+          onPress={saveWorkout}
+          color="#FFD700"
+          disabled={loading}
+        />
       </View>
     </TouchableWithoutFeedback>
-
   );
 };
 
