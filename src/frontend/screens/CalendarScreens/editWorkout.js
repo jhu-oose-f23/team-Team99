@@ -83,8 +83,8 @@ const EditWorkout = ({ route, navigation }) => {
 
   const getTime = (string_time) => {
     const entry = times.find(dict => dict.value === string_time)
-    console.log("the entry is", entry)
-    return entry
+    console.log("the entry is", entry.label)
+    return entry.label
   }
 
   const deleteWorkout = async (session) => {
@@ -127,7 +127,8 @@ const EditWorkout = ({ route, navigation }) => {
             />
             <View style={styles.textStyle}>
               <Text style={styles.username}>{"Title: " + session.name}</Text>
-              <Text style={styles.username}>{"Time: " + getTime(session.start_hour) + " - " + getTime(session.date)}</Text>
+              <Text style={styles.username}>{"Day :" + " " + session.day}</Text>
+              <Text style={styles.username}>{"Time: " + getTime(session.start_hour) + " - " + getTime(session.end_hour)}</Text>
             </View>
             <View>
                 <Button onPress={() => deleteWorkout(session)}>
