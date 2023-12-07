@@ -14,6 +14,7 @@ import {
   fetchRecommendations,
   postConnectionRequest,
   fetchConnectionRequestSource,
+  deleteConnection,
   fetchPostsFeed,
   fetchWorkoutDetails,
 } from "../api";
@@ -44,6 +45,24 @@ const FeedScreen = ({ navigation, route }) => {
       loggedinUser: username,
     });
   };
+
+  // send a connection request if none exists. Else delete the active connection request
+
+  const changeRequestStatus = (profileId) => {
+    if (connectionRequests.includes(profileId)) {
+      const statusData = deleteConnection(username, profileId)
+
+      if (statusData) {
+        const newConnectionRequests = connectionRequests.filter(val => val != profileId)
+        setConnectionRequests([...newConnectionRequests])
+        console.log("Retracting connection succeeded")
+      }      
+    }
+
+    else {
+      sendConnectionRequest(profileId);
+    }
+  }
 
   const sendConnectionRequest = async (profileId) => {
     await postConnectionRequest(username, profileId);
@@ -302,6 +321,10 @@ const FeedScreen = ({ navigation, route }) => {
                     width: 180,
                     borderRadius: 10,
                   }}
+                  
+                  onPress={() => changeRequestStatus(profile.username)}
+                  // disabled={connectionRequests.includes(profile.username)}
+
                 >
                   <Image
                     source={require("../assets/icon.png")}
