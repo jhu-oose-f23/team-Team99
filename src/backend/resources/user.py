@@ -2,7 +2,7 @@ from flask.views import MethodView
 from flask_smorest import Blueprint, abort
 from flask import make_response
 from databases.user import add_user, get_all_users, get_user, login_user, get_recommendations, update_user
-from schemas import UserSchema, LoginSchema, UsernameSchema
+from schemas import UserSchema, LoginSchema, UsernameSchema, UserUpdateSchema
 
 blp = Blueprint("users", __name__, description="Operations on users")
 
@@ -25,7 +25,7 @@ class User(MethodView):
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
   
-  @blp.arguments(UserSchema)
+  @blp.arguments(UserUpdateSchema)
   @blp.response(200, UserSchema)
   def put(self, data):
     result = update_user(data["username"], data)
@@ -66,5 +66,3 @@ class User(MethodView):
     response = make_response(result)
     response.headers['Access-Control-Allow-Origin'] = '*'
     return response
-  
-

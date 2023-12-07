@@ -22,6 +22,21 @@ class UserSchema(Schema):
     frequency = fields.Str(required=True)
     preferred_time = fields.Str(required=True)
 
+class UserUpdateSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    username = fields.Str(required=True)
+    password = fields.Str(load_only=True)
+    gender = fields.Str()
+    birthdate = fields.Str()
+    weight = fields.Int()
+    height = fields.Int()
+    goals = fields.List(fields.Str())
+    level = fields.Str()
+    frequency = fields.Str()
+    preferred_time = fields.Str()
+
+
 class UsernameSchema(Schema):
     username = fields.Str(required=True)
 
