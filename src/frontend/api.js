@@ -240,7 +240,6 @@ export const PutConnectionRequest = async (source, dst) => {
 };
 
 export const postUser = async (userData) => {
-  console.log(JSON.stringify(userData));
   const response = await fetch(`${BASE_URL}/user`, {
     method: "POST",
     headers: {
@@ -252,12 +251,12 @@ export const postUser = async (userData) => {
     return response.json();
   } else {
     console.error("Accepting connection failed!!", response.status);
-    console.log(response.statusText);
     return 0;
   }
 };
 
 export const PutUser = async (new_data) => {
+  console.log(JSON.stringify(new_data));
   const apiURL = "https://gymconnectbackend.onrender.com/user";
 
   const response = await fetch(apiURL, {

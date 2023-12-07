@@ -208,7 +208,7 @@ const Profile = ({ navigation, route }) => {
   };
 
   const navigateToSettings = () => {
-    navigation.navigate("Settings");
+    navigation.navigate("SettingsMain");
   };
 
   const getButtonLabel = () => {

@@ -22,7 +22,6 @@ function App() {
       if (storedUserUid && storedUserUid !== "") {
         setUserLoggedIn(storedUserUid);
         const res = await fetchUser(storedUserUid);
-        console.log(res);
         if (res.code !== 400) {
           setUserHasSignedUp(true);
         }

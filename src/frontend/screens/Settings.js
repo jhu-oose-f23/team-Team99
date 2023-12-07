@@ -46,6 +46,10 @@ const Settings = ({ route }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [issue, setIssue] = useState("");
   const handleSubmit = async () => {
+    if (issue.trim() === "") {
+      alert("Please enter an issue");
+      return;
+    }
     setIssue("");
     setModalVisible(!modalVisible);
     setVisibleSnackbar(true);

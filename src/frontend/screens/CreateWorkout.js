@@ -93,6 +93,7 @@ const CreateWorkout = ({ route }) => {
       name: "",
       sets: "",
       reps: "",
+      weight: "",
     };
     setExerciseRows([...exerciseRows, newExercise]);
   };
@@ -116,7 +117,10 @@ const CreateWorkout = ({ route }) => {
   }, [exerciseRows]);
 
   const isEmptyExercise = (exercise) =>
-    !exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim();
+    !exercise.name.trim() ||
+    !exercise.sets.trim() ||
+    !exercise.weight.trim() ||
+    !exercise.reps.trim();
 
   const saveWorkout = async () => {
     // Input validation
@@ -130,11 +134,17 @@ const CreateWorkout = ({ route }) => {
       setWorkoutNameError("");
     }
 
-    let todaysDate = new Date().toISOString().slice(0, 10);
+    let dateFormatted = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/New_York",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(workoutDay);
+
     if (
       existingWorkouts.some(
         (workout) =>
-          workout.workout_name === workoutName && workout.day === todaysDate
+          workout.workout_name === workoutName && workout.day === dateFormatted
       )
     ) {
       setWorkoutNameError("A workout with this name and date already exists");
@@ -149,9 +159,7 @@ const CreateWorkout = ({ route }) => {
       setExerciseError("");
       for (const exercise of exerciseRows) {
         if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
-          setExerciseError(
-            "Can't add another exercise unless all exercises are filled in"
-          );
+          setExerciseError("Can't have an empty exercise");
           isValid = false;
         }
       }
@@ -171,7 +179,7 @@ const CreateWorkout = ({ route }) => {
       user: username,
       workout_name: workoutName,
       exercises: exerciseRows,
-      day: workoutDay.toISOString().slice(0, 10),
+      day: dateFormatted,
     };
     setLoading(true);
     await createWorkout(workout);
@@ -187,7 +195,14 @@ const CreateWorkout = ({ route }) => {
       loggedinUser: username,
     });
   };
-  console.log(workoutDay);
+  console.log(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/New_York",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(workoutDay)
+  );
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
