@@ -12,11 +12,11 @@ class Post(MethodView):
     @blp.arguments(PostSchema)
     @blp.response(201, PostSchema)
     def post(self, data):
-      body = data["body"]
-      user = data["username"]
-      data = submit_post(user, body)
+      data = submit_post(data)
       if not data:
         abort(400, message="Could not complete post. User may not exist.")
+      if data == "Workout not found for this user":
+        abort(400, message="Could not complete post. This workout not found for this user.")
       response = make_response(data)
       response.headers['Access-Control-Allow-Origin'] = '*'
       return response
