@@ -15,7 +15,7 @@ import Connections from "./screens/Connections";
 import Privacy from "./screens/settingsScreens/privacy";
 import Notifications from "./screens/settingsScreens/Notifications";
 import TermsAndPolicies from "./screens/settingsScreens/TermsAndPolicies";
-import EditProfile from "./screens/settingsScreens/editProfile";
+import EditProfile from "./screens/settingsScreens/EditProfile";
 import Calendar from "./screens/Calendar";
 
 const Tab = createBottomTabNavigator();
@@ -139,7 +139,7 @@ const BottomTabNavigator = ({ route }) => {
         }}
       />
       <Tab.Screen
-        name="Settings"
+        name="SettingsMain"
         component={SettingsNavigation}
         initialParams={{ username: username }}
         options={{
