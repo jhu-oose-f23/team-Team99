@@ -96,6 +96,7 @@ const CreateWorkout = ({ route }) => {
       name: "",
       sets: "",
       reps: "",
+      weight: "",
     };
     setExerciseRows([...exerciseRows, newExercise]);
   };
@@ -119,7 +120,10 @@ const CreateWorkout = ({ route }) => {
   }, [exerciseRows]);
 
   const isEmptyExercise = (exercise) =>
-    !exercise.name.trim() || !exercise.sets.trim() || !exercise.reps.trim();
+    !exercise.name.trim() ||
+    !exercise.sets.trim() ||
+    !exercise.weight.trim() ||
+    !exercise.reps.trim();
 
   const saveWorkout = async () => {
     // Input validation
