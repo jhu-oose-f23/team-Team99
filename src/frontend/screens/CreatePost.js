@@ -97,6 +97,7 @@ const CreatePost = ({ route }) => {
         <TextInput
           style={styles.input}
           placeholder="Enter your post..."
+          placeholderTextColor= "white"
           onChangeText={(text) => setPostBody(text)}
           value={postBody}
           multiline
@@ -122,7 +123,7 @@ const CreatePost = ({ route }) => {
                 style={styles.workoutOption}
                 onPress={() => selectWorkout(workout)}
               >
-                <Text>{workout.workout_name}</Text>
+                <Text style={styles.workoutOptionText}>{workout.workout_name}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -132,7 +133,7 @@ const CreatePost = ({ route }) => {
           title="Create Post"
           onPress={handleCreatePost}
           disabled={isLoading} // Disable the button when loading
-          color="#007bff" // Change the button color
+          color="#FFD700" // Change the button color
         />
         {isLoading && <ActivityIndicator size="small" color="#007bff" />}
       </View>
@@ -145,7 +146,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     justifyContent: "flex-start",
-    backgroundColor: "#f7f8fa",
+    backgroundColor: "#1a1a1a",
   },
   input: {
     height: 100,
@@ -153,6 +154,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 16,
     padding: 8,
+    color: "white", // Text color
+    backgroundColor: "#808080", // Light grey background
   },
   workoutBox: {
     height: 40,
@@ -161,19 +164,24 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingLeft: 8,
     marginBottom: 16,
+    backgroundColor: "#808080", // Light grey background
   },
   workoutText: {
-    color: "black",
+    color: "white", // White text
   },
   workoutOptionsContainer: {
     borderColor: "#ccc",
     borderWidth: 1,
     marginBottom: 16,
+    backgroundColor: "#808080",
   },
   workoutOption: {
     padding: 8,
     borderBottomColor: "#ccc",
     borderBottomWidth: 1,
+  },
+  workoutOptionText: {
+    color: "white",
   },
   tableHeader: {
     flexDirection: "row",
@@ -181,13 +189,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
-    backgroundColor: "#0099ff",
+    backgroundColor: "#FFD700",
   },
   headerCell: {
     flex: 1,
     textAlign: "center",
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
   exerciseRow: {
     flexDirection: "row",
@@ -199,7 +207,7 @@ const styles = StyleSheet.create({
   exerciseCell: {
     flex: 1,
     textAlign: "center",
-    color: "#666",
+    color: "white",
   },
 });
 

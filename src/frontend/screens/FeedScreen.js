@@ -7,14 +7,18 @@ import {
   TouchableOpacity,
   TextInput,
   StyleSheet,
-  Keyboard
+  FlatList,
 } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import {
   fetchRecommendations,
   postConnectionRequest,
   fetchConnectionRequestSource,
+  fetchPostsFeed,
+  fetchWorkoutDetails,
 } from "../api";
+import { Avatar } from "react-native-elements";
+import moment from "moment";
 
 const FeedScreen = ({ navigation, route }) => {
   const [connectionRequests, setConnectionRequests] = useState([]);
@@ -25,8 +29,10 @@ const FeedScreen = ({ navigation, route }) => {
   const [userData, setUserData] = useState({
     recommendations: [],
   });
+  const [posts, setPosts] = useState([]);
 
   const username = route.params.username;
+
   const resetToFeed = () => {
     setIsSearchActive(false);
     setSearchQuery("");
@@ -42,6 +48,23 @@ const FeedScreen = ({ navigation, route }) => {
   const sendConnectionRequest = async (profileId) => {
     await postConnectionRequest(username, profileId);
     setConnectionRequests([...connectionRequests, profileId]);
+  };
+
+  // Function to calculate time difference
+  const calculateTimeAgo = (date) => {
+    const now = moment();
+    const postDate = moment(date);
+    const diff = now.diff(postDate, "seconds");
+
+    if (diff < 60) {
+      return `${diff} seconds ago`;
+    } else if (diff < 3600) {
+      return `${Math.floor(diff / 60)} minutes ago`;
+    } else if (diff < 86400) {
+      return `${Math.floor(diff / 3600)} hours ago`;
+    } else {
+      return postDate.fromNow();
+    }
   };
 
   // Get Search Results
@@ -68,10 +91,32 @@ const FeedScreen = ({ navigation, route }) => {
       user.username.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Get Recommendations
+  // Function to fetch posts with workout details
+  const fetchPosts = async () => {
+    try {
+      const postsResponse = await fetchPostsFeed(username);
+      const postsWithWorkouts = await Promise.all(
+        postsResponse.map(async (post) => {
+          if (post.workout_id !== null) {
+            const workoutDetails = await fetchWorkoutDetails(post.workout_id);
+            // console.log(workoutDetails);
+            return { ...post, workoutDetails };
+          } else {
+            return post;
+          }
+        })
+      );
+      setPosts(postsWithWorkouts);
+    } catch (error) {
+      console.error("Error fetching posts:", error.message);
+    }
+  };
+
+  // Get Recommendations and Posts
   useFocusEffect(
     React.useCallback(() => {
       const fetchData = async () => {
+        await fetchPosts();
         const fetchedConnectionRequests = await fetchConnectionRequestSource(
           username
         );
@@ -86,6 +131,36 @@ const FeedScreen = ({ navigation, route }) => {
       fetchData();
     }, [username])
   );
+
+  // Render exercise table
+  const renderExerciseTable = (post) => {
+    const selectedWorkoutDetails = post.workoutDetails;
+
+    if (!post || post.workout_id === null) {
+      return null; // Don't show the table for "No Selection"
+    }
+
+    return (
+      <FlatList
+        data={selectedWorkoutDetails.exercises}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.exerciseRow}>
+            <Text style={styles.exerciseCell}>{item.name}</Text>
+            <Text style={styles.exerciseCell}>{item.sets}</Text>
+            <Text style={styles.exerciseCell}>{item.reps}</Text>
+          </View>
+        )}
+        ListHeaderComponent={() => (
+          <View style={styles.tableHeader}>
+            <Text style={styles.headerCell}>Exercise</Text>
+            <Text style={styles.headerCell}>Sets</Text>
+            <Text style={styles.headerCell}>Reps</Text>
+          </View>
+        )}
+      />
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -124,12 +199,11 @@ const FeedScreen = ({ navigation, route }) => {
                   borderRadius: 10,
                 }}
               >
-                <Image
-                  source={user.image}
-                  style={{
-                    width: 50,
-                    height: 50,
-                    borderRadius: 25,
+                <Avatar
+                  rounded
+                  title={user.username.charAt(0).toUpperCase()}
+                  containerStyle={{
+                    backgroundColor: "#007bff",
                     marginRight: 10,
                   }}
                 />
@@ -140,33 +214,57 @@ const FeedScreen = ({ navigation, route }) => {
         </ScrollView>
       ) : (
         <>
-          {/* Your Post component */}
-          <View style={styles.postContainer}>
-            <View style={styles.postHeader}>
-              <Image
-                source={require("../assets/icon.png")}
-                style={{
-                  width: 50,
-                  height: 50,
-                  borderRadius: 30,
-                }}
-              />
-              <View style={{ padding: 5 }}>
-                <Text style={{ fontSize: 20, fontWeight: "bold", color: "white" }}>
-                  Post Title
-                </Text>
-                <Text style={{ color: "white" }}>Post Author</Text>
-              </View>
-            </View>
-            <Image
-              source={require("../assets/favicon.png")}
-              style={{
-                width: 250,
-                height: 250,
-                marginBottom: 10,
-              }}
+          {/* Displaying fetched posts */}
+          <View>
+            <Text
+              style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}
+            >
+              Posts
+            </Text>
+            <FlatList
+              data={posts}
+              keyExtractor={(post) => post.id.toString()}
+              renderItem={({ item: post }) => (
+                <View style={styles.postContainer}>
+                  {/* User Avatar with First Letter */}
+                  <View style={{ flexDirection: "row", alignItems: "center" }}>
+                    <Avatar
+                      rounded
+                      title={post.username.charAt(0).toUpperCase()}
+                      containerStyle={{
+                        backgroundColor: "#007bff",
+                        marginRight: 10,
+                      }}
+                    />
+                    <View>
+                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                        {post.username}
+                      </Text>
+                      <Text style={{ color: "#555" }}>
+                        {calculateTimeAgo(post.date_time)}
+                      </Text>
+                    </View>
+                  </View>
+                  <View style={styles.divider} />
+                  <Text style={{ marginBottom: 10 }}>{post.body}</Text>
+                  {post.workoutDetails ? (
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        marginBottom: 5,
+                      }}
+                    >
+                      {post.workoutDetails.workout_name}
+                    </Text>
+                  ) : (
+                    <></>
+                  )}
+                  {/* Render exercise table for each post */}
+                  {renderExerciseTable(post)}
+                </View>
+              )}
             />
-            <Text style={{ color: "white" }}>Post content goes here...</Text>
           </View>
 
           {/* Recommendations */}
@@ -180,7 +278,11 @@ const FeedScreen = ({ navigation, route }) => {
           >
             Recommendations
           </Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            style={{ minHeight: 2500 }}
+          >
             {userData.recommendations.map((profile, index) => (
               <TouchableOpacity
                 key={index}
@@ -210,6 +312,7 @@ const FeedScreen = ({ navigation, route }) => {
                       marginBottom: 10,
                     }}
                   />
+
                   <Text style={{ fontSize: 16, fontWeight: "bold", color: "white" }}>
                     @{profile.username}
                   </Text>
@@ -218,7 +321,9 @@ const FeedScreen = ({ navigation, route }) => {
                   </Text>
                   <TouchableOpacity
                     style={{
-                      backgroundColor: connectionRequests.includes(profile.username)
+                      backgroundColor: connectionRequests.includes(
+                        profile.username
+                      )
                         ? "green"
                         : "#007bff",
                       padding: 5,
@@ -228,7 +333,7 @@ const FeedScreen = ({ navigation, route }) => {
                     onPress={() => sendConnectionRequest(profile.username)}
                     disabled={connectionRequests.includes(profile.username)}
                   >
-                    <Text style={{ color: "white" }}>
+                    <Text style={{ color: "#fff" }}>
                       {connectionRequests.includes(profile.username)
                         ? "Request Sent"
                         : "Connect"}
@@ -259,6 +364,38 @@ const styles = StyleSheet.create({
   },
   backButtonText: {
     fontWeight: "bold",
+  },
+
+  divider: {
+    height: 1,
+    backgroundColor: "#ccc",
+    marginVertical: 10,
+  },
+  tableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    backgroundColor: "#0099ff",
+  },
+  headerCell: {
+    flex: 1,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "white",
+  },
+  exerciseRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  exerciseCell: {
+    flex: 1,
+    textAlign: "center",
+    color: "#666",
   },
   searchInput: {
     borderColor: "#ccc",

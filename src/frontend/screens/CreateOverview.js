@@ -28,7 +28,7 @@ const CreateOverview = ({ navigation, route }) => {
               color="#555"
             />
             <Text style={styles.listItemText}>Create Workout</Text>
-            <Ionicons name="ios-arrow-forward" size={24} color="#555" />
+            <Ionicons name="ios-arrow-forward" size={24} color="white" />
           </View>
         </Card>
       </TouchableOpacity>
@@ -50,7 +50,7 @@ const CreateOverview = ({ navigation, route }) => {
               color="#555"
             />
             <Text style={styles.listItemText}>Create Post</Text>
-            <Ionicons name="ios-arrow-forward" size={24} color="#555" />
+            <Ionicons name="ios-arrow-forward" size={24} color="white" />
           </View>
         </Card>
       </TouchableOpacity>
@@ -59,23 +59,26 @@ const CreateOverview = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
-    marginTop: 20,
-    marginBottom: 10,
+  container: {
+    flex: 1,
+    backgroundColor: "#1a1a1a", // Dark grey background
+  },
+  listItem: {
+    marginVertical: 10,
   },
   card: {
     borderRadius: 10,
+    backgroundColor: "#808080", // Light grey background for buttons
   },
   listItemContent: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
+    padding: 15,
   },
   listItemText: {
     fontSize: 18,
+    color: "white", // White text color
   },
 });
 
