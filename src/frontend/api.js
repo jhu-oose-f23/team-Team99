@@ -26,6 +26,16 @@ export const fetchPostsFeed = async (username) => {
   }
 };
 
+export const fetchUserPosts = async (username) => {
+  try {
+    const response = await fetch(`${BASE_URL}/post/${username}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    throw new Error("Error fetching user posts");
+  }
+};
+
 export const fetchWorkouts = async (username) => {
   const workouts = await fetchData(`workouts/${username}`);
 
