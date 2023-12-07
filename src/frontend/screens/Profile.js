@@ -271,26 +271,31 @@ const Profile = ({ navigation, route }) => {
             }}
           >
             <View>
-              <Image
-                source={require("../assets/profile.png")}
-                style={{
-                  width: 100,
-                  height: 100,
-                  marginRight: 10,
-                }}
-              />
-              <Text
-                style={[
-                  styles.userDetail,
-                  { fontSize: 20, fontWeight: "bold" },
-                ]}
-              >
-                {profileData.user.first_name} {profileData.user.last_name}
-              </Text>
-              <Text style={styles.userDetail}>@{username}</Text>
-              <Text style={styles.userDetail}>
-                {profileData.connections} Connections
-              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <Image
+                  source={require("../assets/profile.png")}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    marginRight: 10,
+                  }}
+                />
+                <View style={{ flexDirection: "column" }}>
+                  <Text
+                    style={[
+                      styles.userDetail,
+                      { fontSize: 20, fontWeight: "bold" },
+                    ]}
+                  >
+                    {profileData.user.first_name} {profileData.user.last_name}
+                  </Text>
+                  <Text style={styles.userDetail}>@{username}</Text>
+                  <Text style={styles.userDetail}>
+                    {profileData.connections} Connections
+                  </Text>
+                </View>
+              </View>
+
               {username == loggedinUser && (
                 <View style={{ flexDirection: "row", alignItems: "right" }}>
                   <TouchableOpacity
