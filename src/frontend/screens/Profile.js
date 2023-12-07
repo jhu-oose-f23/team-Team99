@@ -7,8 +7,9 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import { EvilIcons, FontAwesome } from "@expo/vector-icons";
+import { EvilIcons, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+
 // Add these at the top with your other imports
 import {
   fetchWorkouts,
@@ -199,6 +200,14 @@ const Profile = ({ navigation, route }) => {
     });
   };
 
+  const navigateToConnections = () => {
+    navigation.navigate("Connections");
+  };
+
+  const navigateToSettings = () => {
+    navigation.navigate("Settings");
+  };
+
   const getButtonLabel = () => {
     if (connectionUsernames.includes(username)) {
       return "Connected";
@@ -257,30 +266,52 @@ const Profile = ({ navigation, route }) => {
             style={{
               ...styles.userInfo,
               flexDirection: "row",
+              justifyContent: "space-between", // Align children on opposite ends
               alignItems: "center",
             }}
           >
-            <Image
-              source={require("../assets/profile.png")}
-              style={{
-                width: 100,
-                height: 100,
-                marginRight: 10,
-              }}
-            />
             <View>
-              <Text
-                style={[
-                  styles.userDetail,
-                  { fontSize: 20, fontWeight: "bold" },
-                ]}
-              >
-                {profileData.user.first_name} {profileData.user.last_name}
-              </Text>
-              <Text style={styles.userDetail}>@{username}</Text>
-              <Text style={styles.userDetail}>
-                {profileData.connections} Connections
-              </Text>
+              <View style={{ flexDirection: "row" }}>
+                <Image
+                  source={require("../assets/profile.png")}
+                  style={{
+                    width: 100,
+                    height: 100,
+                    marginRight: 10,
+                  }}
+                />
+                <View style={{ flexDirection: "column" }}>
+                  <Text
+                    style={[
+                      styles.userDetail,
+                      { fontSize: 20, fontWeight: "bold" },
+                    ]}
+                  >
+                    {profileData.user.first_name} {profileData.user.last_name}
+                  </Text>
+                  <Text style={styles.userDetail}>@{username}</Text>
+                  <Text style={styles.userDetail}>
+                    {profileData.connections} Connections
+                  </Text>
+                </View>
+              </View>
+
+              {username == loggedinUser && (
+                <View style={{ flexDirection: "row", alignItems: "right" }}>
+                  <TouchableOpacity
+                    onPress={navigateToConnections}
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Ionicons name="ios-people" size={24} color="black" />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={navigateToSettings}
+                    style={{ marginLeft: 10 }}
+                  >
+                    <Ionicons name="ios-settings" size={24} color="black" />
+                  </TouchableOpacity>
+                </View>
+              )}
               {username != loggedinUser &&
                 !connectionUsernames.includes(username) && (
                   <TouchableOpacity

@@ -135,9 +135,7 @@ const BottomTabNavigator = ({ route }) => {
         component={Connections}
         initialParams={{ username: username }}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="ios-people" color={color} size={size} />
-          ),
+          tabBarButton: () => null, // Hide the tab bar icon
         }}
       />
       <Tab.Screen
@@ -146,9 +144,7 @@ const BottomTabNavigator = ({ route }) => {
         initialParams={{ username: username }}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="ios-settings" color={color} size={size} />
-          ),
+          tabBarButton: () => null,
         }}
       />
     </Tab.Navigator>
