@@ -54,6 +54,7 @@ const LeaderboardStack = ({ route }) => (
   </Stack.Navigator>
 );
 
+
 const CreateStack = ({ route }) => (
   <Stack.Navigator>
     <Stack.Screen
@@ -75,7 +76,9 @@ const CreateStack = ({ route }) => (
   </Stack.Navigator>
 );
 
-const SettingsNavigation = ({ route }) => {
+
+const SettingsNavigation = ({route}) => {
+
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -91,6 +94,7 @@ const SettingsNavigation = ({ route }) => {
     </Stack.Navigator>
   );
 };
+
 
 const CalendarNavigation = ({ route }) => {
   const { navigate } = useNavigation();
@@ -140,10 +144,27 @@ const CalendarNavigation = ({ route }) => {
   );
 };
 
+const screenOptions = {
+  tabBarActiveTintColor: "#ffd700", // Gold for active tab
+  tabBarInactiveTintColor: "#fff", // White for inactive tab
+  tabBarStyle: {
+    backgroundColor: "#1a1a1a", // Dark background color
+  },
+  headerStyle: {
+    backgroundColor: "#1a1a1a", // Dark background color for header
+  },
+  headerTitleStyle: {
+    color: "#ffd700", // Gold title color
+  },
+};
+
+
 const BottomTabNavigator = ({ route }) => {
   const { username } = route.params;
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={screenOptions}
+    >
       <Tab.Screen
         name="Feed"
         component={Feed}

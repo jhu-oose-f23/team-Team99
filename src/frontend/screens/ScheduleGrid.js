@@ -1,5 +1,11 @@
 import React from "react";
-import { View, Text, StyleSheet, Dimensions, ScrollView } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+} from "react-native";
 
 const { width: screenWidth } = Dimensions.get("window"); // Get the width of the screen
 
@@ -90,6 +96,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     marginRight: 3,
+    backgroundColor: "#1a1a1a", // Dark Grey background
   },
   scrollView: {
     backgroundColor: "#fff",
@@ -104,12 +111,14 @@ const styles = StyleSheet.create({
     borderColor: "#ddd",
     flex: 1,
     width: (screenWidth - 50) / 7, // Adjust the width for seven days minus the time column
+    backgroundColor: "#808080",
   },
   dayHeader: {
     textAlign: "center",
     fontWeight: "bold",
     padding: 4,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#1a1a1a",
+    color: "white", // White text color
   },
   timeSlot: {
     height: 20, // Set the height for each time slot
@@ -119,10 +128,11 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ddd",
   },
   activeTimeSlot: {
-    backgroundColor: "#cfe2ff",
+    backgroundColor: "#FFD700",
   },
   activityName: {
     fontSize: 10,
+    color: "white", // White text color
   },
   timeLabelContainer: {
     height: 20, // Match the height of the time slots
@@ -133,9 +143,7 @@ const styles = StyleSheet.create({
   },
   timeLabel: {
     fontSize: 10, // Match the font size of the time slots for consistency
-  },
-  columnContainer: {
-    flexDirection: "row",
+    color: "white", // White text color
   },
 });
 

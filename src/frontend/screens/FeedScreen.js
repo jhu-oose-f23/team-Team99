@@ -163,7 +163,7 @@ const FeedScreen = ({ navigation, route }) => {
   };
 
   return (
-    <View style={{ flex: 1, padding: 10 }}>
+    <View style={styles.container}>
       {/* Search Bar */}
       {isSearchActive && (
         <TouchableOpacity style={styles.backButton} onPress={resetToFeed}>
@@ -171,13 +171,7 @@ const FeedScreen = ({ navigation, route }) => {
         </TouchableOpacity>
       )}
       <TextInput
-        style={{
-          borderColor: "#ccc",
-          borderWidth: 1,
-          borderRadius: 5,
-          padding: 10,
-          marginBottom: 10,
-        }}
+        style={styles.searchInput}
         value={searchQuery}
         onChangeText={setSearchQuery}
         placeholder="Search..."
@@ -200,6 +194,9 @@ const FeedScreen = ({ navigation, route }) => {
                   flexDirection: "row",
                   alignItems: "center",
                   marginBottom: 15,
+                  backgroundColor: "#808080", // Light gray background
+                  padding: 10,
+                  borderRadius: 10,
                 }}
               >
                 <Avatar
@@ -210,7 +207,7 @@ const FeedScreen = ({ navigation, route }) => {
                     marginRight: 10,
                   }}
                 />
-                <Text>{user.name}</Text>
+                <Text style={{ color: "white" }}>{user.name}</Text>
               </View>
             </TouchableOpacity>
           ))}
@@ -220,7 +217,7 @@ const FeedScreen = ({ navigation, route }) => {
           {/* Displaying fetched posts */}
           <View>
             <Text
-              style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}
+              style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10, color: "white"}}
             >
               Posts
             </Text>
@@ -271,7 +268,14 @@ const FeedScreen = ({ navigation, route }) => {
           </View>
 
           {/* Recommendations */}
-          <Text style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}>
+          <Text
+            style={{
+              fontSize: 24,
+              fontWeight: "bold",
+              marginBottom: 10,
+              color: "white",
+            }}
+          >
             Recommendations
           </Text>
           <ScrollView
@@ -290,12 +294,13 @@ const FeedScreen = ({ navigation, route }) => {
                 <View
                   key={index}
                   style={{
-                    backgroundColor: "#ffffff",
+                    backgroundColor: "#808080", // Light gray background
                     padding: 10,
                     marginRight: 10,
                     alignItems: "center",
                     height: 180,
                     width: 180,
+                    borderRadius: 10,
                   }}
                 >
                   <Image
@@ -307,10 +312,11 @@ const FeedScreen = ({ navigation, route }) => {
                       marginBottom: 10,
                     }}
                   />
-                  <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+
+                  <Text style={{ fontSize: 16, fontWeight: "bold", color: "white" }}>
                     @{profile.username}
                   </Text>
-                  <Text style={{ fontSize: 14, color: "#555" }}>
+                  <Text style={{ fontSize: 14, color: "#555", color: "white" }}>
                     {profile.percent.toFixed(2)}% Match
                   </Text>
                   <TouchableOpacity
@@ -344,8 +350,13 @@ const FeedScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    padding: 10,
+    backgroundColor: "#1a1a1a", // Dark gray background
+  },
   backButton: {
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "white",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -354,14 +365,7 @@ const styles = StyleSheet.create({
   backButtonText: {
     fontWeight: "bold",
   },
-  postContainer: {
-    backgroundColor: "#fff",
-    padding: 15,
-    marginBottom: 15,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: "#ddd",
-  },
+
   divider: {
     height: 1,
     backgroundColor: "#ccc",
@@ -392,6 +396,24 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
     color: "#666",
+  },
+  searchInput: {
+    borderColor: "#ccc",
+    borderWidth: 1,
+    borderRadius: 5,
+    padding: 10,
+    marginBottom: 10,
+    backgroundColor: "lightgrey", // Light grey search input background
+  },
+  postContainer: {
+    backgroundColor: "#808080",
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 10,
+  },
+  postHeader: {
+    flexDirection: "row",
+    alignItems: "center",
   },
 });
 
