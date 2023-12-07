@@ -1,8 +1,8 @@
 import os
 from supabase import create_client, Client
 from collections import defaultdict
-
 from databases.user import get_user
+from threading import Thread
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
@@ -13,13 +13,13 @@ def get_all_workouts():
   data = supabase.table("Workouts").select("*").execute()
   return data.data
 
-def add_workout(workout_name, exercises, user):
+def add_workout(workout_name, exercises, user, day):
   workout = {
     "user": user,
     "workout_name": workout_name,
     "exercises": exercises, 
     "time": "now", 
-    "day": "today"
+    "day": day
   }
   data = supabase.table("Workouts").insert(workout).execute()
   return data.data[0]
@@ -29,7 +29,17 @@ def delete_all_workouts():
   return data.data
 
 def delete_workout(id):
+  # remove the actual workout
   data = supabase.table("Workouts").delete().eq("id", id).execute()
+  
+  # start a worker thread to remove references to this workout from posts
+  t = Thread(target=delete_workout_references, args=[id])
+  t.start()
+
+  return data.data[0] if data.data else None
+
+def get_workout(id):
+  data = supabase.table("Workouts").select("*").eq("id", id).execute()
   return data.data[0] if data.data else None
 
 def get_user_workouts(user):
@@ -42,13 +52,19 @@ def get_leaderboard(exercise):
   for d in data:
     for e in d["exercises"]:
       if e["name"].lower() == exercise.lower():
-        pairs[d["user"]].append(e["weight"])
+        try:
+          pairs[d["user"]].append(int(e["weight"]))
+        except:
+          pass
   leaders = [(username, max(weights)) for username, weights in pairs.items()]
   return sorted(leaders, key=lambda x: x[1], reverse=True)
 
 def get_weight_class_leaderboard(exercise, username):
   full_leaders = get_leaderboard(exercise)
-  user_weight = get_user(username)["weight"]
+  try:
+    user_weight = float(get_user(username)["weight"])
+  except:
+    return []
   l,h = user_weight * 0.75, user_weight * 1.25
   weight_class = set()
   for leader in full_leaders:
@@ -64,3 +80,15 @@ def get_exercises():
     for e in d["exercises"]:
       exercises.add(e["name"].lower())
   return list(exercises)
+
+'''
+Helper functions
+'''
+def delete_workout_references(id):
+  # need to remove any references to this workout from posts
+  posts = supabase.table("Posts").select("*").eq("workout_id", id).execute().data
+  for post in posts:
+    try:
+      supabase.table("Posts").update({"workout_id": None}).eq("id", post["id"]).execute()
+    except:
+      pass

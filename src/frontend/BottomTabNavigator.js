@@ -4,7 +4,9 @@ import { Ionicons } from "@expo/vector-icons";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Feed from "./screens/FeedScreen";
+import CreateOverview from "./screens/CreateOverview";
 import CreateWorkout from "./screens/CreateWorkout";
+import CreatePost from "./screens/CreatePost";
 import LeaderboardOverview from "./screens/LeaderboardsOverview";
 import LeaderboardTabs from "./screens/Leaderboard";
 import Profile from "./screens/Profile";
@@ -18,7 +20,7 @@ import Calendar from "./screens/Calendar";
 import EditWorkout from "./screens/CalendarScreens/editWorkout";
 import DeleteWorkout from "./screens/CalendarScreens/deleteWorkout";
 import AddWorkout from "./screens/CalendarScreens/addWorkout";
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import EditSession from "./screens/CalendarScreens/editSession";
 import {
   HeaderButtons,
@@ -53,63 +55,100 @@ const LeaderboardStack = ({ route }) => (
   </Stack.Navigator>
 );
 
-const SettingsNavigation = ({route}) => {
+const CreateStack = ({ route }) => (
+  <Stack.Navigator>
+    <Stack.Screen
+      name="CreateOverview"
+      component={CreateOverview}
+      initialParams={{ username: route.params.username }}
+      options={{ headerShown: false }}
+    />
+    <Stack.Screen
+      name="CreateWorkout"
+      component={CreateWorkout}
+      initialParams={{ username: route.params.username }}
+    />
+    <Stack.Screen
+      name="CreatePost"
+      component={CreatePost}
+      initialParams={{ username: route.params.username }}
+    />
+  </Stack.Navigator>
+);
+
+const SettingsNavigation = ({ route }) => {
   return (
     <Stack.Navigator>
-    <Stack.Screen name="Settings" 
-      component={Settings} 
-      initialParams={{username: route.params.username}}/>
-    <Stack.Screen name="Edit Profile" 
-      component={EditProfile}
-      initialParams={{username: route.params.username}}
-       />
-    <Stack.Screen name="Privacy" component={Privacy}/>
-    <Stack.Screen name="Notifications" component={Notifications}/>
-    <Stack.Screen name="Terms and Policies" component={TermsAndPolicies}/>
-  </Stack.Navigator>
-  )
-}
+      <Stack.Screen
+        name="Settings"
+        component={Settings}
+        initialParams={{ username: route.params.username }}
+      />
+      <Stack.Screen
+        name="Edit Profile"
+        component={EditProfile}
+        initialParams={{ username: route.params.username }}
+      />
+    </Stack.Navigator>
+  );
+};
 
-
-const CalendarNavigation = ({route}) => {
-
-  const {navigate} = useNavigation()
+const CalendarNavigation = ({ route }) => {
+  const { navigate } = useNavigation();
 
   return (
     <Stack.Navigator>
-    <Stack.Screen name="Calendar" 
-      component={Calendar} 
-      initialParams={{username: route.params.username}}
-      options={{
-        headerRight: () => (
-          <OverflowMenu
-            OverflowIcon={({ color }) => (
-              <MaterialIcons name="more-horiz" size={23} color={color} />
-            )}
-          >
-            <HiddenItem title="Edit Workout" onPress={() => navigate("Edit Calendar")} />
-            <HiddenItem title="Delete Workout" onPress={() => navigate("Delete Workout")} />
-            <HiddenItem title="Add Workout" onPress={() => navigate("Add Workout")} />
-            <Divider/>
-          </OverflowMenu>
-        )
-      }}/>
-    <Stack.Screen name="Edit Calendar" 
-      component={EditWorkout}
-      initialParams={{username: route.params.username}}
-       />
-    <Stack.Screen name="Delete Workout" 
-      initialParams={{username: route.params.username}}
-      component={DeleteWorkout}/>
-    <Stack.Screen name="Add Workout" 
-      initialParams={{username: route.params.username}}
-      component={AddWorkout}/>
-    <Stack.Screen name="Edit Session" 
-      initialParams={{username: route.params.username, session : {}}}
-      component={EditSession}/>
-  </Stack.Navigator>
-  )
-}
+      <Stack.Screen
+        name="Calendar"
+        component={Calendar}
+        initialParams={{ username: route.params.username }}
+        options={{
+          headerRight: () => (
+            <OverflowMenu
+              OverflowIcon={({ color }) => (
+                <MaterialIcons name="more-horiz" size={23} color={color} />
+              )}
+            >
+              <HiddenItem
+                title="Edit Workout"
+                onPress={() => navigate("Edit Calendar")}
+              />
+              <HiddenItem
+                title="Delete Workout"
+                onPress={() => navigate("Delete Workout")}
+              />
+              <HiddenItem
+                title="Add Workout"
+                onPress={() => navigate("Add Workout")}
+              />
+              <Divider />
+            </OverflowMenu>
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Edit Calendar"
+        component={EditWorkout}
+        initialParams={{ username: route.params.username }}
+      />
+      <Stack.Screen
+        name="Delete Workout"
+        initialParams={{ username: route.params.username }}
+        component={DeleteWorkout}
+      />
+      <Stack.Screen
+        name="Add Workout"
+        initialParams={{ username: route.params.username }}
+        component={AddWorkout}
+      />
+      <Stack.Screen
+        name="Edit Session"
+        initialParams={{ username: route.params.username, session: {} }}
+        component={EditSession}
+      />
+    </Stack.Navigator>
+  );
+};
 
 const BottomTabNavigator = ({ route }) => {
   const { username } = route.params;
@@ -127,7 +166,7 @@ const BottomTabNavigator = ({ route }) => {
       />
       <Tab.Screen
         name="Create"
-        component={CreateWorkout}
+        component={CreateStack}
         initialParams={{ username: username }}
         options={{
           tabBarIcon: ({ color, size }) => (
@@ -139,7 +178,6 @@ const BottomTabNavigator = ({ route }) => {
         name="Calendar"
         component={CalendarNavigation}
         initialParams={{ username: username }}
-        
         options={{
           headerShown: false,
           tabBarIcon: ({ color, size }) => (
@@ -172,9 +210,7 @@ const BottomTabNavigator = ({ route }) => {
         component={Connections}
         initialParams={{ username: username }}
         options={{
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="ios-people" color={color} size={size} />
-          ),
+          tabBarButton: () => null, // Hide the tab bar icon
         }}
       />
       <Tab.Screen
@@ -183,10 +219,7 @@ const BottomTabNavigator = ({ route }) => {
         initialParams={{ username: username }}
         options={{
           headerShown: false,
-          tabBarIcon: ({ color, size }) => (
-            <Ionicons name="ios-settings" color={color} size={size} />
-          ),
-          
+          tabBarButton: () => null,
         }}
       />
     </Tab.Navigator>
