@@ -296,19 +296,7 @@ export const fetchCalendar = async (username) => {
   return calendar;
 };
 
-// Calendar is an object like
-// {
-//   "schedule": [
-//       {"day": "Sunday",  "end_hour": 12, "name": "cardio", "start_hour": 10.5},
-//       {"day": "Monday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
-//       {"day": "Tuesday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
-//      {"day": "Wednesday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
-//     {"day": "Thursday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
-//     {"day": "Friday", "end_hour": 12, "name": "cardio", "start_hour": 10.5},
-//     {"day": "Saturday", "end_hour": 12, "name": "cardio", "start_hour": 10.5}
-// ]
-// “username”: “k1”
-// }
+
 export const updateCalendar = async (username, calendar) => {
   const response = await fetch(`${BASE_URL}/calendar`, {
     method: "PUT",
@@ -325,6 +313,30 @@ export const updateCalendar = async (username, calendar) => {
     return res;
   } catch (e) {
     console.log(e);
+  }
+};
+
+
+export const deleteCalendar = async (username, session) => {
+  const apiUrl = `https://gymconnectbackend.onrender.com/calendar`;
+  const new_session = [session]
+  console.log("the username is", username)
+  try {
+    const response = await fetch(apiUrl, { 
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        "username": username,
+        "schedule": new_session
+      })
+    });
+    const responseData = await response.json();
+    console.log("The response is", responseData)
+    return responseData;
+  } catch (error) {
+    console.error("Error fetching data:", error);
   }
 };
 
@@ -353,3 +365,4 @@ export const createPost = async (username, postBody, selectedWorkoutID) => {
     throw new Error("Error creating post");
   }
 };
+
