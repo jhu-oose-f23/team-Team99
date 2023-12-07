@@ -16,6 +16,16 @@ const fetchData = async (endpoint) => {
   }
 };
 
+export const fetchPostsFeed = async (username) => {
+  try {
+    const response = await fetch(`${BASE_URL}/post/feed/${username}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+  }
+};
+
 export const fetchWorkouts = async (username) => {
   const workouts = await fetchData(`workouts/${username}`);
 
@@ -26,6 +36,17 @@ export const fetchWorkouts = async (username) => {
       id: exerciseId,
     })),
   }));
+};
+
+export const fetchWorkoutDetails = async (id) => {
+  // console.log(id);
+  try {
+    const response = await fetch(`${BASE_URL}/workouts/id/${id}`);
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching workouts:", error);
+  }
 };
 
 export const createWorkout = async (workout) => {
