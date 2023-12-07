@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
   userDetail: {
     fontSize: 18,
     marginBottom: 5,
-    color: "#FFD700", // White text color
+    color: "#fff", // White text color
   },
   sectionTitle: {
     fontSize: 24,
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   buttonText: {
-    color: "#FFD700",
+    color: "#fff",
     fontWeight: "bold",
   },
   dropdown: {
@@ -134,7 +134,7 @@ const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
         <EvilIcons
           name={isExpanded ? "chevron-up" : "chevron-down"}
           size={24}
-          color="#FFD700"
+          color="white"
         />
       </TouchableOpacity>
       {isExpanded && (
@@ -161,7 +161,7 @@ const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
               }}
               style={{ alignSelf: "flex-end", marginRight: 10 }}
             >
-              <FontAwesome name="trash-o" size={30} color="black" />
+              <FontAwesome name="trash-o" size={30} color="red" />
             </TouchableOpacity>
           )}
         </View>
@@ -273,15 +273,6 @@ const Profile = ({ navigation, route }) => {
               alignItems: "center",
             }}
           >
-            <Image
-              source={require("../assets/profile.png")}
-              style={{
-                width: 100,
-                height: 100,
-                marginRight: 10,
-                backgroundColor: "#808080",
-              }}
-            />
             <View>
               <View style={{ flexDirection: "row" }}>
                 <Image
@@ -290,13 +281,14 @@ const Profile = ({ navigation, route }) => {
                     width: 100,
                     height: 100,
                     marginRight: 10,
+                    backgroundColor: "#808080"
                   }}
                 />
                 <View style={{ flexDirection: "column" }}>
                   <Text
                     style={[
                       styles.userDetail,
-                      { fontSize: 20, fontWeight: "bold" },
+                      { fontSize: 20, fontWeight: "bold", color:"#FFD700"},
                     ]}
                   >
                     {profileData.user.first_name} {profileData.user.last_name}
@@ -314,13 +306,13 @@ const Profile = ({ navigation, route }) => {
                     onPress={navigateToConnections}
                     style={{ marginLeft: 10 }}
                   >
-                    <Ionicons name="ios-people" size={24} color="black" />
+                    <Ionicons name="ios-people" size={24} color="#FFD700" />
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={navigateToSettings}
                     style={{ marginLeft: 10 }}
                   >
-                    <Ionicons name="ios-settings" size={24} color="black" />
+                    <Ionicons name="ios-settings" size={24} color="#FFD700" />
                   </TouchableOpacity>
                 </View>
               )}

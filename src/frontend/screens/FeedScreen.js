@@ -217,7 +217,7 @@ const FeedScreen = ({ navigation, route }) => {
           {/* Displaying fetched posts */}
           <View>
             <Text
-              style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10 }}
+              style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10, color: "white"}}
             >
               Posts
             </Text>
