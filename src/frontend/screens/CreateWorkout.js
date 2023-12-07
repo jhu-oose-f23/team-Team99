@@ -137,11 +137,17 @@ const CreateWorkout = ({ route }) => {
       setWorkoutNameError("");
     }
 
-    let todaysDate = new Date().toISOString().slice(0, 10);
+    let dateFormatted = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/New_York",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(workoutDay);
+
     if (
       existingWorkouts.some(
         (workout) =>
-          workout.workout_name === workoutName && workout.day === todaysDate
+          workout.workout_name === workoutName && workout.day === dateFormatted
       )
     ) {
       setWorkoutNameError("A workout with this name and date already exists");
@@ -175,7 +181,7 @@ const CreateWorkout = ({ route }) => {
       user: username,
       workout_name: workoutName,
       exercises: exerciseRows,
-      day: workoutDay.toISOString().slice(0, 10),
+      day: dateFormatted,
     };
     await createWorkout(workout);
 
@@ -188,7 +194,14 @@ const CreateWorkout = ({ route }) => {
       loggedinUser: username,
     });
   };
-  console.log(workoutDay);
+  console.log(
+    new Intl.DateTimeFormat("en-CA", {
+      timeZone: "America/New_York",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(workoutDay)
+  );
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
