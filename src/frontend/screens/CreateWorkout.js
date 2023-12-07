@@ -12,12 +12,7 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
-import {
-  createWorkout,
-  fetchCalendar,
-  fetchWorkouts,
-  updateCalendar,
-} from "../api";
+import { createWorkout, fetchWorkouts, updateCalendar } from "../api";
 import { useFocusEffect } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -160,11 +155,13 @@ const CreateWorkout = ({ route }) => {
         }
       }
     }
+
     // const status = await updateCalendar(username, constructWorkoutCalendar());
     // if (status === 404) {
     //   setWorkoutNameError("A workout already exists for this day and time");
     //   isValid = false;
     // }
+
 
     // If any validation failed, don't proceed with the save
     if (!isValid) {
@@ -177,6 +174,7 @@ const CreateWorkout = ({ route }) => {
       day: workoutDay.toISOString().slice(0, 10),
     };
     await createWorkout(workout);
+    await updateCalendar(username, constructWorkoutCalendar());
 
     // Reset all fields to blank
     setWorkoutName("");
@@ -190,6 +188,7 @@ const CreateWorkout = ({ route }) => {
   console.log(workoutDay);
 
   return (
+
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View
@@ -259,6 +258,7 @@ const CreateWorkout = ({ route }) => {
         {workoutNameError && (
           <Text style={styles.errorText}>{workoutNameError}</Text>
         )}
+
         {exerciseError && <Text style={styles.errorText}>{exerciseError}</Text>}
 
         <Button title="Add Exercise" onPress={addExerciseRow} color="#FFD700" />
@@ -362,6 +362,7 @@ const CreateWorkout = ({ route }) => {
         <Button title="Save Workout" onPress={saveWorkout} color="#FFD700" />
       </View>
     </TouchableWithoutFeedback>
+
   );
 };
 
