@@ -9,8 +9,6 @@ import {
 } from "react-native";
 import { EvilIcons, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
-
-// Add these at the top with your other imports
 import {
   fetchWorkouts,
   fetchUser,
@@ -49,20 +47,24 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#f7f8fa",
+    backgroundColor: "#1a1a1a", // Dark Grey background
   },
   userInfo: {
     alignItems: "flex-end",
     marginBottom: 20,
+    flexDirection: "row",
+    alignItems: "center",
   },
   userDetail: {
     fontSize: 18,
     marginBottom: 5,
+    color: "#fff", // White text color
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
+    color: "white", // White text color
   },
   section: {
     marginBottom: 15,
@@ -71,17 +73,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "#0099ff",
+    backgroundColor: "#808080", // Light Grey button background
     padding: 12,
     borderRadius: 8,
     marginBottom: 10,
   },
   buttonText: {
-    color: "white",
+    color: "#fff",
     fontWeight: "bold",
   },
   dropdown: {
-    backgroundColor: "#eee",
+    backgroundColor: "#FFD700",
     padding: 20,
     borderRadius: 5,
   },
@@ -96,7 +98,7 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
     fontWeight: "bold",
-    color: "#444",
+    color: "white",
   },
   row: {
     flexDirection: "row",
@@ -108,12 +110,13 @@ const styles = StyleSheet.create({
   cell: {
     flex: 1,
     textAlign: "center",
-    color: "#666",
+    color: "white",
   },
   loadingText: {
     textAlign: "center",
     fontSize: 18,
     marginTop: 20,
+    color: "white", // White text color
   },
 });
 
@@ -158,7 +161,7 @@ const ExpandableSection = ({ title, content, onDelete, allowDelete }) => {
               }}
               style={{ alignSelf: "flex-end", marginRight: 10 }}
             >
-              <FontAwesome name="trash-o" size={30} color="black" />
+              <FontAwesome name="trash-o" size={30} color="red" />
             </TouchableOpacity>
           )}
         </View>
@@ -278,13 +281,14 @@ const Profile = ({ navigation, route }) => {
                     width: 100,
                     height: 100,
                     marginRight: 10,
+                    backgroundColor: "#808080"
                   }}
                 />
                 <View style={{ flexDirection: "column" }}>
                   <Text
                     style={[
                       styles.userDetail,
-                      { fontSize: 20, fontWeight: "bold" },
+                      { fontSize: 20, fontWeight: "bold", color:"#FFD700"},
                     ]}
                   >
                     {profileData.user.first_name} {profileData.user.last_name}
@@ -302,13 +306,13 @@ const Profile = ({ navigation, route }) => {
                     onPress={navigateToConnections}
                     style={{ marginLeft: 10 }}
                   >
-                    <Ionicons name="ios-people" size={24} color="black" />
+                    <Ionicons name="ios-people" size={24} color="#FFD700" />
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={navigateToSettings}
                     style={{ marginLeft: 10 }}
                   >
-                    <Ionicons name="ios-settings" size={24} color="black" />
+                    <Ionicons name="ios-settings" size={24} color="#FFD700" />
                   </TouchableOpacity>
                 </View>
               )}
@@ -339,6 +343,7 @@ const Profile = ({ navigation, route }) => {
             <ScrollView>
               {profileData.workouts.map((workout, index) => (
                 <ExpandableSection
+                  style={styles.dropdown}
                   key={workout.id}
                   title={
                     workout.workout_name.padEnd(50, " ") +
