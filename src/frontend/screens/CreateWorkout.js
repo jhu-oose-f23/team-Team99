@@ -152,9 +152,7 @@ const CreateWorkout = ({ route }) => {
       setExerciseError("");
       for (const exercise of exerciseRows) {
         if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
-          setExerciseError(
-            "Can't add another exercise unless all exercises are filled in"
-          );
+          setExerciseError("Can't have an empty exercise");
           isValid = false;
         }
       }
