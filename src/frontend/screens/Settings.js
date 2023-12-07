@@ -109,13 +109,14 @@ const Settings = ({ route }) => {
         paddingLeft: 12,
       }}
     >
-      <MaterialIcons name={icon} size={24} />
+      <MaterialIcons name={icon} size={24} style={{color:"white"}} />
       <Text
         style={{
           marginLeft: 36,
           ...FONTS.semiBold,
           fontWeight: 600,
           fontSize: 16,
+          color:"white"
         }}
       >
         {text}
@@ -124,7 +125,7 @@ const Settings = ({ route }) => {
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#1a1a1a" }}>
       <ScrollView style={{ marginHorizontal: 12 }}>
         {/* Account Settings */}
         <View>

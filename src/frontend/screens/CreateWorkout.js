@@ -12,12 +12,7 @@ import {
 } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation } from "@react-navigation/native";
-import {
-  createWorkout,
-  fetchCalendar,
-  fetchWorkouts,
-  updateCalendar,
-} from "../api";
+import { createWorkout, fetchWorkouts, updateCalendar } from "../api";
 import { useFocusEffect } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 
@@ -25,7 +20,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#1a1a1a",
   },
   errorText: {
     color: "red",
@@ -34,7 +29,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     marginBottom: 15,
-    backgroundColor: "#fff",
+    backgroundColor: "#808080",
     padding: 10,
     borderRadius: 5,
     alignItems: "center",
@@ -42,8 +37,9 @@ const styles = StyleSheet.create({
   input: {
     margin: 0,
     marginBottom: 5,
-    backgroundColor: "#fff",
+    backgroundColor: "#808080",
     height: 40,
+    color: "white", // White text color
   },
   removeIcon: {
     color: "red",
@@ -159,11 +155,13 @@ const CreateWorkout = ({ route }) => {
         }
       }
     }
+
     // const status = await updateCalendar(username, constructWorkoutCalendar());
     // if (status === 404) {
     //   setWorkoutNameError("A workout already exists for this day and time");
     //   isValid = false;
     // }
+
 
     // If any validation failed, don't proceed with the save
     if (!isValid) {
@@ -176,6 +174,7 @@ const CreateWorkout = ({ route }) => {
       day: workoutDay.toISOString().slice(0, 10),
     };
     await createWorkout(workout);
+    await updateCalendar(username, constructWorkoutCalendar());
 
     // Reset all fields to blank
     setWorkoutName("");
@@ -189,6 +188,7 @@ const CreateWorkout = ({ route }) => {
   console.log(workoutDay);
 
   return (
+
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <View
@@ -199,26 +199,34 @@ const CreateWorkout = ({ route }) => {
           }}
         >
           <View style={{ flex: 1, height: 60 }}>
-            <Text style={{ marginRight: 50 }}>Name</Text>
+            <Text style={{ marginRight: 50, color: "white" }}>
+              Name
+            </Text>
             <TextInput
               style={{
                 margin: 0,
-                backgroundColor: "#fff",
+                backgroundColor: "#808080",
                 padding: 10,
                 borderRadius: 10,
-                borderWidth: 1, // specify border width for outlined mode
+                borderWidth: 1,
                 flex: 1,
                 height: 100,
-                borderColor: "white",
+                //borderColor: "white",
+                color: "white", // White text color
               }}
               mode="outlined"
               placeholder="Workout Name"
+              placeholderTextColor="#C7C7CD"
+
               value={workoutName}
               onChangeText={(text) => setWorkoutName(text)}
             />
           </View>
           <View style={{ flex: 1, alignItems: "center" }}>
-            <Text style={{ marginRight: 60 }}>Date</Text>
+            <Text style={{ marginRight: 60, color: "white" }}>
+              Date
+            </Text>
+            <View style={{ borderRadius: 10, overflow: "hidden" }}>
             <DateTimePicker
               testID="dateTimePicker"
               value={workoutDay}
@@ -230,8 +238,13 @@ const CreateWorkout = ({ route }) => {
                 setOpen(false);
                 setWorkoutDay(selectedDate);
               }}
-              style={{ alignContent: "center", alignSelf: "center" }}
+              style={{
+                alignContent: "center",
+                alignSelf: "center",
+                backgroundColor: "#808080", // Light grey background
+              }}
             />
+            </View>
           </View>
         </View>
         <View
@@ -245,9 +258,10 @@ const CreateWorkout = ({ route }) => {
         {workoutNameError && (
           <Text style={styles.errorText}>{workoutNameError}</Text>
         )}
+
         {exerciseError && <Text style={styles.errorText}>{exerciseError}</Text>}
 
-        <Button title="Add Exercise" onPress={addExerciseRow} />
+        <Button title="Add Exercise" onPress={addExerciseRow} color="#FFD700" />
         <View>
           {exerciseRows.map((item, index) => (
             <View
@@ -255,7 +269,7 @@ const CreateWorkout = ({ route }) => {
               style={{
                 flexDirection: "row",
                 marginBottom: 15,
-                backgroundColor: "#fff",
+                backgroundColor: "#808080",
                 padding: 10,
                 borderRadius: 30,
                 alignItems: "center",
@@ -270,7 +284,6 @@ const CreateWorkout = ({ route }) => {
                   items={items}
                   setOpen={(o) => {
                     const updatedOpen = [...exercisesOpen];
-                    // Check if exercisesOpen[index] is defined
                     if (exercisesOpen.length > index) {
                       updatedOpen[index] = o;
                     } else {
@@ -279,7 +292,6 @@ const CreateWorkout = ({ route }) => {
                     setExercisesOpen(updatedOpen);
                   }}
                   onOpen={() => {
-                    // Close all other dropdowns
                     const updatedOpen = [...exercisesOpen];
                     updatedOpen.forEach((o, i) => {
                       updatedOpen[i] = false;
@@ -295,13 +307,21 @@ const CreateWorkout = ({ route }) => {
                   }}
                   style={{
                     borderWidth: 0,
+                    backgroundColor: "#808080", // Light grey background
                   }}
                   dropDownContainerStyle={{
                     borderWidth: 0,
                     maxHeight: 2000,
+                    backgroundColor: "#808080", // Light grey background
                   }}
                   containerStyle={{
                     maxHeight: 2000,
+                  }}
+                  listItemLabelStyle={{
+                    color: 'white', // Text color of the dropdown items
+                  }}
+                  labelStyle={{
+                    color: 'white', // Text color of the label
                   }}
                 />
               </View>
@@ -309,6 +329,7 @@ const CreateWorkout = ({ route }) => {
                 style={[styles.input, { flex: 1, marginRight: 10 }]}
                 mode="outlined"
                 placeholder="Weight"
+                placeholderTextColor="#C7C7CD"
                 value={item.weight}
                 onChangeText={(text) => updateExercise(index, "weight", text)}
                 keyboardType="numeric"
@@ -317,6 +338,7 @@ const CreateWorkout = ({ route }) => {
                 style={[styles.input, { flex: 1, marginRight: 10 }]}
                 mode="outlined"
                 placeholder="Sets"
+                placeholderTextColor="#C7C7CD"
                 value={item.sets}
                 onChangeText={(text) => updateExercise(index, "sets", text)}
                 keyboardType="numeric"
@@ -325,6 +347,7 @@ const CreateWorkout = ({ route }) => {
                 style={[styles.input, { flex: 1 }]}
                 mode="outlined"
                 placeholder="Reps"
+                placeholderTextColor="#C7C7CD"
                 value={item.reps}
                 onChangeText={(text) => updateExercise(index, "reps", text)}
                 keyboardType="numeric"
@@ -336,9 +359,10 @@ const CreateWorkout = ({ route }) => {
           ))}
         </View>
 
-        <Button title="Save Workout" onPress={saveWorkout} />
+        <Button title="Save Workout" onPress={saveWorkout} color="#FFD700" />
       </View>
     </TouchableWithoutFeedback>
+
   );
 };
 
