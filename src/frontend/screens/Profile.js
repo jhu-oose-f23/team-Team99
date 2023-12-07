@@ -6,9 +6,11 @@ import {
   ScrollView,
   StyleSheet,
   Image,
+  FlatList,
 } from "react-native";
 import { EvilIcons, FontAwesome, Ionicons } from "@expo/vector-icons";
 import { useFocusEffect } from "@react-navigation/native";
+import moment from "moment";
 import {
   fetchWorkouts,
   fetchUser,
@@ -16,7 +18,9 @@ import {
   deleteWorkout,
   postConnectionRequest,
   fetchConnectionRequestSource,
-  deleteConnection
+  deleteConnection,
+  fetchUserPosts,
+  fetchWorkoutDetails,
 } from "../api";
 
 function convertDateString(dateString) {
@@ -119,6 +123,40 @@ const styles = StyleSheet.create({
     marginTop: 20,
     color: "white", // White text color
   },
+  postContainer: {
+    backgroundColor: "grey",
+    padding: 15,
+    marginBottom: 15,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#ddd",
+  },
+  tableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-evenly",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+    backgroundColor: "#0099ff",
+  },
+  headerCell: {
+    flex: 1,
+    textAlign: "center",
+    fontWeight: "bold",
+    color: "white",
+  },
+  exerciseRow: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  exerciseCell: {
+    flex: 1,
+    textAlign: "center",
+    color: "#666",
+  },
 });
 
 // content is a Workout object
@@ -184,25 +222,25 @@ const Profile = ({ navigation, route }) => {
   });
 
   const [connectionUsernames, setConnectionUsernames] = useState([]);
+  const [posts, setPosts] = useState([]);
 
   // If username != loggedinUser, this profile is for a different user than the logged in user
   const { username, loggedinUser } = route.params;
 
-
   const changeRequestStatus = (profileId) => {
     if (connectionRequests.includes(profileId)) {
-      const statusData = deleteConnection(loggedinUser, profileId)
+      const statusData = deleteConnection(loggedinUser, profileId);
 
       if (statusData) {
-        const newConnectionRequests = connectionRequests.filter(val => val != profileId)
-        setConnectionRequests([...newConnectionRequests])
-      }      
-    }
-
-    else {
+        const newConnectionRequests = connectionRequests.filter(
+          (val) => val != profileId
+        );
+        setConnectionRequests([...newConnectionRequests]);
+      }
+    } else {
       sendConnectionRequest(profileId);
     }
-  }
+  };
 
   const sendConnectionRequest = async (profileId) => {
     await postConnectionRequest(loggedinUser, profileId);
@@ -236,6 +274,54 @@ const Profile = ({ navigation, route }) => {
     } else {
       return "Connect";
     }
+  };
+
+  // Function to calculate time difference
+  const calculateTimeAgo = (date) => {
+    const now = moment();
+    const postDate = moment(date);
+    const diff = now.diff(postDate, "seconds");
+
+    if (diff < 60) {
+      return `${diff} seconds ago`;
+    } else if (diff < 3600) {
+      return `${Math.floor(diff / 60)} minutes ago`;
+    } else if (diff < 86400) {
+      return `${Math.floor(diff / 3600)} hours ago`;
+    } else {
+      return postDate.fromNow();
+    }
+  };
+
+  // Render exercise table
+  const renderExerciseTable = (post) => {
+    console.log(post);
+    const selectedWorkoutDetails = post.workoutDetails;
+
+    if (!post || post.workout_id === null) {
+      return null; // Don't show the table for "No Selection"
+    }
+
+    return (
+      <FlatList
+        data={selectedWorkoutDetails.exercises}
+        keyExtractor={(item, index) => index.toString()}
+        renderItem={({ item }) => (
+          <View style={styles.exerciseRow}>
+            <Text style={styles.exerciseCell}>{item.name}</Text>
+            <Text style={styles.exerciseCell}>{item.sets}</Text>
+            <Text style={styles.exerciseCell}>{item.reps}</Text>
+          </View>
+        )}
+        ListHeaderComponent={() => (
+          <View style={styles.tableHeader}>
+            <Text style={styles.headerCell}>Exercise</Text>
+            <Text style={styles.headerCell}>Sets</Text>
+            <Text style={styles.headerCell}>Reps</Text>
+          </View>
+        )}
+      />
+    );
   };
 
   // useEffect doesn't rerender if you switch to this screen from the nav bar but useFocusEffect does
@@ -273,7 +359,31 @@ const Profile = ({ navigation, route }) => {
         });
         setLoading(false);
       };
+
+      const fetchUserPostData = async () => {
+        try {
+          const postsResponse = await fetchUserPosts(username);
+          const postsWithWorkouts = await Promise.all(
+            postsResponse.map(async (post) => {
+              if (post.workout_id !== null) {
+                const workoutDetails = await fetchWorkoutDetails(
+                  post.workout_id
+                );
+                // console.log(workoutDetails);
+                return { ...post, workoutDetails };
+              } else {
+                return post;
+              }
+            })
+          );
+          setPosts(postsWithWorkouts);
+        } catch (error) {
+          console.error("Error fetching posts:", error.message);
+        }
+      };
+
       fetchProfileData();
+      fetchUserPostData();
     }, [username])
   );
 
@@ -298,14 +408,14 @@ const Profile = ({ navigation, route }) => {
                     width: 100,
                     height: 100,
                     marginRight: 10,
-                    backgroundColor: "#808080"
+                    backgroundColor: "#808080",
                   }}
                 />
                 <View style={{ flexDirection: "column" }}>
                   <Text
                     style={[
                       styles.userDetail,
-                      { fontSize: 20, fontWeight: "bold", color:"#FFD700"},
+                      { fontSize: 20, fontWeight: "bold", color: "#FFD700" },
                     ]}
                   >
                     {profileData.user.first_name} {profileData.user.last_name}
@@ -380,6 +490,50 @@ const Profile = ({ navigation, route }) => {
               ))}
             </ScrollView>
           )}
+
+          {/* Displaying fetched posts */}
+          <View>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: "bold",
+                marginBottom: 10,
+                color: "white",
+              }}
+            >
+              My Posts
+            </Text>
+            <FlatList
+              data={posts}
+              keyExtractor={(post) => post.id.toString()}
+              renderItem={({ item: post }) => (
+                <View style={styles.postContainer}>
+                  {/* User Avatar with First Letter */}
+                  <Text style={{ color: "#555" }}>
+                    Posted {calculateTimeAgo(post.date_time)}
+                  </Text>
+                  <View style={styles.divider} />
+                  <Text style={{ marginBottom: 10 }}>{post.body}</Text>
+                  {post.workoutDetails ? (
+                    <Text
+                      style={{
+                        fontSize: 18,
+                        fontWeight: "bold",
+                        marginBottom: 5,
+                      }}
+                    >
+                      {post.workoutDetails.workout_name}
+                    </Text>
+                  ) : (
+                    <></>
+                  )}
+                  {/* Render exercise table for each post */}
+                  {renderExerciseTable(post)}
+                </View>
+              )}
+            />
+          </View>
+
           {username != loggedinUser && (
             <Button title="Back to my profile" onPress={navigateToOwnProfile} />
           )}
