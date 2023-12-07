@@ -57,4 +57,9 @@ def accept_connection(source, dest):
     supabase.table("Connections").insert(new_conn).execute().data[0]
   except:
     return "Connection already exists"
+  
+  # clear recommendation cache for both users
+  supabase.table("Recommendation_Cache").delete().eq("user_id", source).execute()
+  supabase.table("Recommendation_Cache").delete().eq("user_id", dest).execute()
+  
   return supabase.table("Connections").select("*").eq("user1", source).eq("user2", dest).execute().data[0]

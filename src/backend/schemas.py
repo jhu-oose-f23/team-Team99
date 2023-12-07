@@ -6,7 +6,7 @@ class WorkoutSchema(Schema):
     workout_name = fields.Str(required=True)
     exercises = fields.List(fields.Dict(), required=True)
     time = fields.Str(dump_only=True)
-    day = fields.Str(dump_only=True)
+    day = fields.Str(required = True)
 
 class UserSchema(Schema):
     first_name = fields.Str(required=True)
@@ -21,6 +21,21 @@ class UserSchema(Schema):
     level = fields.Str(required=True)
     frequency = fields.Str(required=True)
     preferred_time = fields.Str(required=True)
+
+class UserUpdateSchema(Schema):
+    first_name = fields.Str()
+    last_name = fields.Str()
+    username = fields.Str(required=True)
+    password = fields.Str(load_only=True)
+    gender = fields.Str()
+    birthdate = fields.Str()
+    weight = fields.Int()
+    height = fields.Int()
+    goals = fields.List(fields.Str())
+    level = fields.Str()
+    frequency = fields.Str()
+    preferred_time = fields.Str()
+
 
 class UsernameSchema(Schema):
     username = fields.Str(required=True)
@@ -46,7 +61,9 @@ class IssueSchema(Schema):
 class PostSchema(Schema):
     username = fields.Str(required=True)
     body = fields.Str(required=True)
+    id = fields.Str(dump_only=True)
     date_time = fields.Str(dump_only=True)
+    workout_id = fields.Int()
 
 class CalendarSchema(Schema):
     schedule = fields.List(fields.Dict(), required=True)
