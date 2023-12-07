@@ -18,45 +18,26 @@ import { useContext } from "react";
 import UserContext from "../UserContext";
 import { useNavigation } from "@react-navigation/native";
 
- const Settings = ({ route }) => {
+const Settings = ({ route }) => {
   const { username } = route.params;
+  const { setUserLoggedIn, setUserHasSignedUp } = useContext(UserContext);
 
-  const {navigate} = useNavigation();
+  const { navigate } = useNavigation();
 
   const navigateToEditProfile = () => {
     navigate("Edit Profile");
   };
 
-  const navigateToSecurity = () => {
-    console.log("Security function");
-  };
-
-  const navigateToNotifications = () => {
-    navigate("Notifications")
-  };
-
-  const navigateToPrivacy = () => {
-    navigate("Privacy")
-  };
-
-  const navigateToSupport = () => {
-    console.log("Support function");
-  };
-
-  const navigateToTermsAndPolicies = () => {
-    navigate("Terms and Policies")
-  };
-
-  const navigateToReportProblem = () => {
-    console.log("Report a problem");
-  };
-
-  const addAccount = () => {
-    console.log("Aadd account ");
-  };
-
-  const logout = () => {
-    setUserLoggedIn(false);
+  const logout = async () => {
+    console.log("logging out");
+    const res = await fetch("https://jhu-sso-api.onrender.com/jhu/logout", {
+      credentials: "include", // to ensure cookies are sent
+    });
+    console.log(res.status);
+    console.log("logged out");
+    // console.log(data);
+    setUserLoggedIn("");
+    setUserHasSignedUp(false);
   };
   // Snackbar
   const [visibleSnackbar, setVisibleSnackbar] = useState(false);
@@ -65,6 +46,10 @@ import { useNavigation } from "@react-navigation/native";
   const [modalVisible, setModalVisible] = useState(false);
   const [issue, setIssue] = useState("");
   const handleSubmit = async () => {
+    if (issue.trim() === "") {
+      alert("Please enter an issue");
+      return;
+    }
     setIssue("");
     setModalVisible(!modalVisible);
     setVisibleSnackbar(true);
@@ -107,22 +92,6 @@ import { useNavigation } from "@react-navigation/native";
       text: "Edit Profile",
       action: navigateToEditProfile,
     },
-    { icon: "security", text: "Security", action: navigateToSecurity },
-    {
-      icon: "notifications-none",
-      text: "Notifications",
-      action: navigateToNotifications,
-    },
-    { icon: "lock-outline", text: "Privacy", action: navigateToPrivacy },
-  ];
-
-  const supportItems = [
-    { icon: "help-outline", text: "Help & Support", action: navigateToSupport },
-    {
-      icon: "info-outline",
-      text: "Terms and Policies",
-      action: navigateToTermsAndPolicies,
-    },
   ];
 
   const actionsItems = [
@@ -131,9 +100,8 @@ import { useNavigation } from "@react-navigation/native";
       text: "Report an Issue",
       action: () => setModalVisible(true),
     },
-    { icon: "logout", text: "Log out", action: logout },
+    // { icon: "logout", text: "Log out", action: logout },
   ];
-  const { setUserLoggedIn } = useContext(UserContext);
 
   const renderSettingsItem = ({ icon, text, action }) => (
     <TouchableOpacity
@@ -143,16 +111,16 @@ import { useNavigation } from "@react-navigation/native";
         alignItems: "center",
         paddingVertical: 8,
         paddingLeft: 12,
-        backgroundColor: COLORS.gray,
       }}
     >
-      <MaterialIcons name={icon} size={24} color="black" />
+      <MaterialIcons name={icon} size={24} style={{color:"white"}} />
       <Text
         style={{
           marginLeft: 36,
           ...FONTS.semiBold,
           fontWeight: 600,
           fontSize: 16,
+          color:"white"
         }}
       >
         {text}
@@ -161,16 +129,13 @@ import { useNavigation } from "@react-navigation/native";
   );
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.white }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#1a1a1a" }}>
       <ScrollView style={{ marginHorizontal: 12 }}>
-
         {/* Account Settings */}
-        <View style={{ marginBottom: 12 }}>
-          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>Account</Text>
+        <View>
           <View
             style={{
               borderRadius: 12,
-              backgroundColor: COLORS.gray,
             }}
           >
             {accountItems.map((item, index) => (
@@ -181,30 +146,10 @@ import { useNavigation } from "@react-navigation/native";
           </View>
         </View>
 
-        {/* Support and About settings */}
-
-        <View style={{ marginBottom: 12 }}>
-          <Text style={{ ...FONTS.h4, marginVertical: 10 }}>
-            Support & About{" "}
-          </Text>
-          <View
-            style={{
-              borderRadius: 12,
-              backgroundColor: COLORS.gray,
-            }}
-          >
-            {supportItems.map((item, index) => (
-              <React.Fragment key={index}>
-                {renderSettingsItem(item)}
-              </React.Fragment>
-            ))}
-          </View>
-        </View>
-
         {/* Actions Settings */}
 
         <View style={{ marginBottom: 12 }}>
-          <View style={{ borderRadius: 12, backgroundColor: COLORS.gray }}>
+          <View style={{ borderRadius: 12 }}>
             {actionsItems.map((item, index) => (
               <React.Fragment key={index}>
                 {renderSettingsItem(item)}

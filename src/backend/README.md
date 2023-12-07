@@ -63,6 +63,10 @@ POST /workouts: Creates a new workout in database. Sample request body is below:
 
 DELETE /workouts: Deletes ALL workouts in database (this is more for testing and development purposes)
 
+DELETE /workouts/id: Deletes workout with given integer id.
+
+GET workouts/id/258: Get a workout based on an id.
+
 GET /workouts/username: Get workouts for a specific user (example: /workouts/k1). Sample response:
 
     [
@@ -279,6 +283,14 @@ GET /connection/request/username: Get all the incoming connection requests for a
         "k1"
     ]
 
+GET connection/request/out/username: Get all the outgoing connection requests for a user. Example connection/request/out/l_james. Sample response body (list) below.
+
+    [
+        "tampa",
+        "travis",
+        "d_rob"
+    ]
+
 GET /connection: check if two users are connected. Sample request and response bodies below.
 
     {
@@ -384,27 +396,45 @@ PUT /calendar: add any number of new workouts into the weekly schedule. Duplicat
         "username": "k1"
     }
 
+DELETE /calendar: deletes any number of workouts from the weekly schedule. Sample request body:
+
+    {
+        "schedule": [
+            {
+                "day": "Thursday",
+                "end_hour": 3,
+                "name": "Back",
+                "start_hour": 2
+            } 
+        ], 
+        "username": "dhop"
+    }
+
 POST /post: make a post. Sample request body:
+note: "workout_id" can be null. The workout must belong to this user.
     
     {
         "username": "k1", 
-        “body”: “This app sucks!”
+        “body”: “This app sucks!”, 
+        "workout_id": 255
     }
 
-GET /post/username (example /post/travis). Get all of the posts of a particualr user, sorted most to least recent. Sample response:
+GET /post/username (example /post/travis). Get all of the posts of a particular user, sorted most to least recent. Sample response:
 
     [
        {
            "body": "Got an insane bicep pump today.",
            "date_time": "2023-11-14T23:59:12.679007+00:00",
            "id": 5,
-           "username": "travis"
+           "username": "travis", 
+           "workout_id": 243
        },
        {
-           "body": "Got an insane bicep pump today.",
+           "body": "Got an insane chest pump today.",
            "date_time": "2023-11-12T23:45:28+00:00",
            "id": 4,
-           "username": "travis"
+           "username": "travis", 
+           "workout_id": null
        }
     ]
 
@@ -412,17 +442,19 @@ GET /post/feed/username (example /post/feed/k1). Get all of the posts by all con
 
     [
        {
-           "body": "Got an insane quad pump today.",
-           "date_time": "2023-11-15T00:08:59.441596+00:00",
-           "id": 10,
-           "username": "t_woods"
-       },
-       {
-           "body": "Got an insane bicep pump today.",
-           "date_time": "2023-11-15T00:08:26.279572+00:00",
-           "id": 9,
-           "username": "chicken"
-       }
+            "body": "Got an insane chest pump today.",
+            "date_time": "2023-12-04T15:31:54.891468+00:00",
+            "id": 13,
+            "username": "dhop",
+            "workout_id": null
+        },
+        {
+            "body": "Iconic",
+            "date_time": "2023-12-06T16:25:10.637199+00:00",
+            "id": 37,
+            "username": "ud40",
+            "workout_id": 262
+        }
     ]
 
 **NOTES**

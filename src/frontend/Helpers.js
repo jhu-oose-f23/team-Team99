@@ -4,3 +4,10 @@ export const navigateToProfile = (navigation, toUsername, fromUsername) => {
     loggedinUser: fromUsername,
   });
 };
+
+export const navigateToEdit = (navigation, usedUsername, usedSession) => {
+  navigation.navigate("Edit Session", {
+      username: usedUsername, 
+      session: usedSession,
+  });
+};
