@@ -188,6 +188,7 @@ const EditSession = ({ route}) => {
       isValid = false;
     }
 
+    // console.log("The username is", username)
     const status1 = await deleteCalendar(username, initialSession)
 
     
