@@ -8,31 +8,14 @@ const Login = ({ navigation, route }) => {
   const { userLoggedIn } = route.params;
   const { setUserLoggedIn, setUserHasSignedUp } = useContext(UserContext);
 
-  useEffect(() => {
-    // Check if user UID is stored in secure storage
-    const checkLoginStatus = async () => {
-      const storedUserUid = await SecureStore.getItemAsync("userUid");
-      if (storedUserUid && storedUserUid !== "") {
-        setUserLoggedIn(storedUserUid);
-        const res = await fetchUser(userUid);
-        if (res.status === 200) {
-          setUserHasSignedUp(true);
-        }
-      }
-    };
-    checkLoginStatus();
-  }, []);
-
   const handleWebViewMessage = async (event) => {
     const userUid = event.nativeEvent.data;
-    console.log(userUid);
-
     // Save user UID to secure storage
     await SecureStore.setItemAsync("userUid", userUid);
 
     setUserLoggedIn(userUid);
     const res = await fetchUser(userUid);
-    if (res.status === 200) {
+    if (res.code !== 400) {
       console.log("user fetched ");
       setUserHasSignedUp(true);
     }
