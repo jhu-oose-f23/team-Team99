@@ -1,0 +1,3 @@
+In iteration 4, we focused on workout schedules and the exercise leaderboard (which was one of our target non-CRUD features). This was definitely very positive as it allowed us to focus on important user stories. Of course, we also had a good number of bug fixes done as well. 
+
+Future areas for improvement for the final few weeks include completing posts functionality, getting JHU SSO fully integrated with the app, completing a makeover of the UI, and fixing bugs and improving app speed/usability. We did a much better job of planning early and getting tasks done earlier in this iteration, and that will be continued going forward as well.
