@@ -1,4 +1,4 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
+ <!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
 
 <a name="readme-top"></a>
 
@@ -119,6 +119,12 @@ Sambhav Chordia - schordi1@jhu.edu
 <!--Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com-->
 
 Project Link: [https://github.com/jhu-oose-f23/team-Team99](https://github.com/jhu-oose-f23/team-Team99)
+
+
+Latest Deployed Version:
+
+<img width="336" alt="Screenshot 2023-12-08 at 6 34 31 PM" src="https://github.com/jhu-oose-f23/team-Team99/assets/64459817/1efe7781-379e-4714-a499-4b69aea32e0f">
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
