@@ -47,9 +47,9 @@ def get_recommendations(username):
   return data["recs"]
 
 def delete_user(username):
-  # need to delete from all tables
-  
+  # first delete from the Users table
   data = supabase.table("Users").delete().eq("username", username).execute()
+  # need to delete from all tables
   t = threading.Thread(target=delete_user_helper, args=[username])
   t.start()
   return data.data[0] if data else None
