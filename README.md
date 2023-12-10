@@ -19,13 +19,6 @@
 *** https://www.markdownguide.org/basic-syntax/#reference-style-links
 -->
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
@@ -33,67 +26,27 @@
     <img src="images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
-  <h3 align="center">GymConnect</h3>
+  <h1 align="center">GymConnect</h3>
 
   <p align="center">
     Connect with Fellow Gym Bros!
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
   </p>
 </div>
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
 
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 The GymConnect project endeavors to bridge the gap in the fitness world by addressing several pressing issues. Many people find it challenging to meet like-minded fitness enthusiasts at the gym, maintain organized workout routines, and build a sense of community within their fitness journey. In response to these challenges, we propose the development of a cutting-edge mobile application, GymConnect. This innovative app will serve as an all-encompassing fitness companion, offering a multitude of features designed to empower users and create a supportive community. With GymConnect, users can easily discover workout partners who share their fitness interests, log and track their workouts, access expert guidance and information on exercises, and interact within fitness-focused communities. By setting and achieving fitness goals, users will not only improve their physical well-being but also find motivation and recognition within GymConnect's vibrant fitness community. The GymConnect project aims to redefine the gym experience, making it more engaging, connected, and ultimately, more effective for fitness enthusiasts of all levels.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ### Built With
 
-This project was built with React Native for frontend as allows us to use the same codebase to build apps for both iOS and Android. For backend, we will use Python (Flask framework). This is lightweight, easy to build, test and deploy. For a database, we will use supabase (PostgreSQL). Relational database makes sense for this project as users will be connected to each other (social media aspect) and data will be fairly structured.
+This project was built with React Native for frontend as allows us to use the same codebase to build apps for both iOS and Android. For backend, we use Python (Flask framework). This is lightweight, easy to build, test and deploy. For a database, we use supabase (PostgreSQL). Relational database makes sense for this project as users will be connected to each other (social media aspect) and data will be fairly structured.
 
 - [![React Native][React-Native]][React-Native-url]
 - [![Flask][Flask]][Flask-url]
 - [![Supabase][Supabase]][Supabase-url]
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
 
@@ -124,26 +77,6 @@ Project Link: [https://github.com/jhu-oose-f23/team-Team99](https://github.com/j
 Latest Deployed Version:
 
 <img width="336" alt="Screenshot 2023-12-08 at 6 34 31 PM" src="https://github.com/jhu-oose-f23/team-Team99/assets/64459817/1efe7781-379e-4714-a499-4b69aea32e0f">
-
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-<!-- ACKNOWLEDGMENTS -->
-
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-- [Choose an Open Source License](https://choosealicense.com)
-- [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-- [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-- [Malven's Grid Cheatsheet](https://grid.malven.co/)
-- [Img Shields](https://shields.io)
-- [GitHub Pages](https://pages.github.com)
-- [Font Awesome](https://fontawesome.com)
-- [React Icons](https://react-icons.github.io/react-icons/search)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
