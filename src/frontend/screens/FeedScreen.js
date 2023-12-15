@@ -232,15 +232,16 @@ const FeedScreen = ({ navigation, route }) => {
           ))}
         </ScrollView>
       ) : (
-        <>
+        <View style={{flex: 1}}>
           {/* Displaying fetched posts */}
-          <View>
+          <View style={{flex: 1}}>
             <Text
               style={{ fontSize: 24, fontWeight: "bold", marginBottom: 10, color: "white"}}
             >
               Posts
             </Text>
             <FlatList
+              style={{ height: 400}}
               data={posts}
               keyExtractor={(post) => post.id.toString()}
               renderItem={({ item: post }) => (
@@ -251,27 +252,29 @@ const FeedScreen = ({ navigation, route }) => {
                       rounded
                       title={post.username.charAt(0).toUpperCase()}
                       containerStyle={{
-                        backgroundColor: "#007bff",
+                        backgroundColor: "#FFD700",
                         marginRight: 10,
                       }}
+                      titleStyle={{ color: "black" }}
                     />
                     <View>
-                      <Text style={{ fontSize: 16, fontWeight: "bold" }}>
+                      <Text style={{ fontSize: 16, fontWeight: "bold", color:"white"}}>
                         {post.username}
                       </Text>
-                      <Text style={{ color: "#555" }}>
+                      <Text style={{ color: "#888" }}>
                         {calculateTimeAgo(post.date_time)}
                       </Text>
                     </View>
                   </View>
                   <View style={styles.divider} />
-                  <Text style={{ marginBottom: 10 }}>{post.body}</Text>
+                  <Text style={{ marginBottom: 10,color: "white" }}>{post.body}</Text>
                   {post.workoutDetails ? (
                     <Text
                       style={{
                         fontSize: 18,
                         fontWeight: "bold",
                         marginBottom: 5,
+                        color:"white"
                       }}
                     >
                       {post.workoutDetails.workout_name}
@@ -287,86 +290,89 @@ const FeedScreen = ({ navigation, route }) => {
           </View>
 
           {/* Recommendations */}
-          <Text
-            style={{
-              fontSize: 24,
-              fontWeight: "bold",
-              marginBottom: 10,
-              color: "white",
-            }}
-          >
-            Recommendations
-          </Text>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            style={{ minHeight: 2500 }}
-          >
-            {userData.recommendations.map((profile, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => {
-                  // Navigate to the profile screen with profile data
-                  navigateToProfile(profile.username);
-                }}
-              >
-                <View
+          <View style={{height: 210}}>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: "bold",
+                marginBottom: 10,
+                marginTop: 10,
+                color: "white",
+              }}
+            >
+              Recommendations
+            </Text>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              style={{ minHeight: 2500 }}
+            >
+              {userData.recommendations.map((profile, index) => (
+                <TouchableOpacity
                   key={index}
-                  style={{
-                    backgroundColor: "#808080", // Light gray background
-                    padding: 10,
-                    marginRight: 10,
-                    alignItems: "center",
-                    height: 180,
-                    width: 180,
-                    borderRadius: 10,
+                  onPress={() => {
+                    // Navigate to the profile screen with profile data
+                    navigateToProfile(profile.username);
                   }}
-                  
-                  onPress={() => changeRequestStatus(profile.username)}
-                  // disabled={connectionRequests.includes(profile.username)}
-
                 >
-                  <Image
-                    source={require("../assets/icon.png")}
+                  <View
+                    key={index}
                     style={{
-                      width: 60,
-                      height: 60,
-                      borderRadius: 30,
-                      marginBottom: 10,
+                      backgroundColor: "#808080", // Light gray background
+                      padding: 10,
+                      marginRight: 10,
+                      alignItems: "center",
+                      height: 150,
+                      width: 150,
+                      borderRadius: 10,
                     }}
-                  />
+                    
+                    onPress={() => changeRequestStatus(profile.username)}
+                    // disabled={connectionRequests.includes(profile.username)}
 
-                  <Text style={{ fontSize: 16, fontWeight: "bold", color: "white" }}>
-                    @{profile.username}
-                  </Text>
-                  <Text style={{ fontSize: 14, color: "#555", color: "white" }}>
-                    {profile.percent.toFixed(2)}% Match
-                  </Text>
-                  <TouchableOpacity
-                    style={{
-                      backgroundColor: connectionRequests.includes(
-                        profile.username
-                      )
-                        ? "green"
-                        : "#007bff",
-                      padding: 5,
-                      borderRadius: 5,
-                      marginTop: 10,
-                    }}
-                    onPress={() => sendConnectionRequest(profile.username)}
-                    disabled={connectionRequests.includes(profile.username)}
                   >
-                    <Text style={{ color: "#fff" }}>
-                      {connectionRequests.includes(profile.username)
-                        ? "Request Sent"
-                        : "Connect"}
+                    <Image
+                      source={require("../assets/icon.png")}
+                      style={{
+                        width: 60,
+                        height: 60,
+                        borderRadius: 30,
+                        marginBottom: 10,
+                      }}
+                    />
+
+                    <Text style={{ fontSize: 16, fontWeight: "bold", color: "white" }}>
+                      @{profile.username}
                     </Text>
-                  </TouchableOpacity>
-                </View>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        </>
+                    <Text style={{ fontSize: 14, color: "#555", color: "white" }}>
+                      {profile.percent.toFixed(2)}% Match
+                    </Text>
+                    <TouchableOpacity
+                      style={{
+                        backgroundColor: connectionRequests.includes(
+                          profile.username
+                        )
+                          ? "green"
+                          : "#007bff",
+                        padding: 5,
+                        borderRadius: 5,
+                        marginTop: 4,
+                      }}
+                      onPress={() => sendConnectionRequest(profile.username)}
+                      disabled={connectionRequests.includes(profile.username)}
+                    >
+                      <Text style={{ color: "#fff" }}>
+                        {connectionRequests.includes(profile.username)
+                          ? "Request Sent"
+                          : "Connect"}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
+        </View>
       )}
     </View>
   );
@@ -400,13 +406,13 @@ const styles = StyleSheet.create({
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: "#ccc",
-    backgroundColor: "#0099ff",
+    backgroundColor: "#FFD700",
   },
   headerCell: {
     flex: 1,
     textAlign: "center",
     fontWeight: "bold",
-    color: "white",
+    color: "black",
   },
   exerciseRow: {
     flexDirection: "row",
@@ -418,7 +424,7 @@ const styles = StyleSheet.create({
   exerciseCell: {
     flex: 1,
     textAlign: "center",
-    color: "#666",
+    color: "white",
   },
   searchInput: {
     borderColor: "#ccc",
@@ -429,7 +435,7 @@ const styles = StyleSheet.create({
     backgroundColor: "lightgrey", // Light grey search input background
   },
   postContainer: {
-    backgroundColor: "#808080",
+    backgroundColor: "#333333",
     padding: 10,
     marginBottom: 10,
     borderRadius: 10,
