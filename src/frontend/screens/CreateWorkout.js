@@ -48,6 +48,8 @@ const styles = StyleSheet.create({
   },
 });
 
+
+
 const CreateWorkout = ({ route }) => {
   const { username } = route.params;
   const [workoutName, setWorkoutName] = useState("");
@@ -203,6 +205,16 @@ const CreateWorkout = ({ route }) => {
       day: "2-digit",
     }).format(workoutDay)
   );
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Create Workout",
+      headerStyle: {
+        backgroundColor: "#1a1a1a", // Set your desired background color
+      },
+      headerTintColor: "#FFD700", // Set text color
+    });
+  }, [navigation]);
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
