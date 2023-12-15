@@ -22,6 +22,7 @@ import {
   fetchUserPosts,
   fetchWorkoutDetails,
 } from "../api";
+import { Avatar } from "react-native-elements";
 
 function convertDateString(dateString) {
   const months = [
@@ -402,14 +403,17 @@ const Profile = ({ navigation, route }) => {
           >
             <View>
               <View style={{ flexDirection: "row" }}>
-                <Image
-                  source={require("../assets/profile.png")}
-                  style={{
-                    width: 100,
-                    height: 100,
+                <Avatar
+                  rounded
+                  title={profileData.user.first_name.charAt(0).toUpperCase()}
+                  containerStyle={{
+                    backgroundColor: "#FFD700",
                     marginRight: 10,
-                    backgroundColor: "#808080",
+                    width: 80,
+                    height: 80,
+                    borderRadius:60,
                   }}
+                  titleStyle={{ color: "black",fontSize: 30, fontWeight: "bold" }}
                 />
                 <View style={{ flexDirection: "column" }}>
                   <Text

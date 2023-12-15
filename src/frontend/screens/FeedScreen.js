@@ -318,7 +318,7 @@ const FeedScreen = ({ navigation, route }) => {
                   <View
                     key={index}
                     style={{
-                      backgroundColor: "#808080", // Light gray background
+                      backgroundColor: "#333333", // Light gray background
                       padding: 10,
                       marginRight: 10,
                       alignItems: "center",
@@ -331,14 +331,19 @@ const FeedScreen = ({ navigation, route }) => {
                     // disabled={connectionRequests.includes(profile.username)}
 
                   >
-                    <Image
-                      source={require("../assets/icon.png")}
-                      style={{
-                        width: 60,
-                        height: 60,
-                        borderRadius: 30,
-                        marginBottom: 10,
+                    
+                    <Avatar
+                      rounded
+                      title={profile.username.charAt(0).toUpperCase()}
+                      containerStyle={{
+                        backgroundColor: "#FFD700",
+                        //marginRight: 10,
+                        width:60,
+                        height:60,
+                        borderRadius:30,
+                        marginBottom:10,
                       }}
+                      titleStyle={{ color: "black",fontSize:25}}
                     />
 
                     <Text style={{ fontSize: 16, fontWeight: "bold", color: "white" }}>
