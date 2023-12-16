@@ -6,10 +6,22 @@ import {
   Dimensions,
   ScrollView,
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
 const { width: screenWidth } = Dimensions.get("window"); // Get the width of the screen
 
 const ScheduleGrid = ({ schedule }) => {
+  const navigation = useNavigation();
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: "#1a1a1a", // Set header background color
+      },
+      headerTintColor: "#FFD700", // Set text color
+    });
+  }, [navigation]);
+
   const daysOfWeek = {
     Monday: "Mon",
     Tuesday: "Tue",
