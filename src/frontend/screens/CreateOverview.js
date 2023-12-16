@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   },
   card: {
     borderRadius: 10,
-    backgroundColor: "#808080", // Light grey background for buttons
+    backgroundColor: "#333333", // Light grey background for buttons
   },
   listItemContent: {
     flexDirection: "row",

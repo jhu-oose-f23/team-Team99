@@ -49,7 +49,16 @@ const LeaderboardStack = ({ route }) => (
       name="Leaderboard"
       component={LeaderboardTabs}
       initialParams={{ username: route.params.username }}
-      // options={{ headerShown: false }}
+      options={{
+        title: 'Leaderboard', // Set the title for this screen's header
+        headerStyle: {
+          backgroundColor: '#1a1a1a', // Set the background color
+        },
+        headerTintColor: 'gold', // Set the text color
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        },
+      }}
     />
   </Stack.Navigator>
 );

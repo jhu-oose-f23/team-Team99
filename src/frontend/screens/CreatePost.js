@@ -12,6 +12,7 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { createPost, fetchWorkouts } from "../api";
+import { useNavigation } from "@react-navigation/native";
 
 const CreatePost = ({ route }) => {
   const [postBody, setPostBody] = useState("");
@@ -20,8 +21,19 @@ const CreatePost = ({ route }) => {
   const [selectedWorkoutDetails, setSelectedWorkoutDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [workouts, setWorkouts] = useState([]);
+  const navigation = useNavigation();
 
   const username = route.params.username;
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Create Post",
+      headerStyle: {
+        backgroundColor: "#1a1a1a", // Set your desired background color
+      },
+      headerTintColor: "#FFD700", // Set text color
+    });
+  }, [navigation]);
 
   useEffect(() => {
     const fetchWorkoutData = async () => {
