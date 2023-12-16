@@ -222,9 +222,10 @@ const FeedScreen = ({ navigation, route }) => {
                   rounded
                   title={user.username.charAt(0).toUpperCase()}
                   containerStyle={{
-                    backgroundColor: "#007bff",
+                    backgroundColor: "#FFD700",
                     marginRight: 10,
                   }}
+                  titleStyle={{ color: "black" }}
                 />
                 <Text style={{ color: "white" }}>{user.name}</Text>
               </View>

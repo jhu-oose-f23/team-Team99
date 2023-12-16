@@ -51,6 +51,7 @@ const GlobalLeaderboard = ({ navigation, route }) => {
         title={item.username[0].toUpperCase()}
         size="medium"
         containerStyle={styles.avatar}
+        titleStyle={{ color: "black" }}
       />
       <View style={styles.userInfo}>
         <Text style={styles.username}>{item.username}</Text>
@@ -120,6 +121,7 @@ const WeightClassLeaderboard = ({ navigation, route }) => {
         title={item.username[0].toUpperCase()}
         size="medium"
         containerStyle={styles.avatar}
+        titleStyle={{ color: "black" }}
       />
       <View style={styles.userInfo}>
         <Text style={styles.username}>{item.username}</Text>
@@ -195,7 +197,7 @@ const styles = StyleSheet.create({
     color: "gold",
   },
   row: {
-    backgroundColor: "#808080",
+    backgroundColor: "#333333",
     borderRadius: 10,
     margin: 5,
     padding: 10,
@@ -206,7 +208,8 @@ const styles = StyleSheet.create({
     backgroundColor: "lightblue",
   },
   avatar: {
-    backgroundColor: "#CCCCCC",
+    backgroundColor: "#FFD700",
+
   },
   userInfo: {
     flex: 1,
