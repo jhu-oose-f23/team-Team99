@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -11,9 +11,9 @@ import {
 
 import { useNavigation } from "@react-navigation/native";
 import {
-//   createWorkout,
+  //   createWorkout,
   fetchCalendar,
-//   fetchWorkouts,
+  fetchWorkouts,
   updateCalendar,
 } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
@@ -158,7 +158,6 @@ const AddWorkout = ({ route }) => {
     }, [])
   );
 
-
   const constructWorkoutCalendar = () => ({
     schedule: [
       {
@@ -204,7 +203,6 @@ const AddWorkout = ({ route }) => {
       setWorkoutNameError("A workout with this name already exists");
       isValid = false;
     }
-
 
     const status = await updateCalendar(username, constructWorkoutCalendar());
     if (status === 404) {
@@ -342,12 +340,9 @@ const AddWorkout = ({ route }) => {
       )}
       {exerciseError && <Text style={styles.errorText}>{exerciseError}</Text>}
 
-
-
       <Button title="Save Workout" onPress={saveWorkout} />
     </View>
   );
 };
 
 export default AddWorkout;
-
