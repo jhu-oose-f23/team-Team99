@@ -402,8 +402,19 @@ const Profile = ({ navigation, route }) => {
             }}
           >
             <View>
-              <View style={{ flexDirection: "row" }}>
-                <Avatar
+              <View
+                style={{
+                  flexDirection: "row",
+                  alignItems: "top",
+                }}
+              >
+                <View
+                  style={{
+                    flexDirection: "row",
+                    alignItems: "center",
+                  }}
+                >
+                  <Avatar
                   rounded
                   title={profileData.user.first_name.charAt(0).toUpperCase()}
                   containerStyle={{
@@ -411,42 +422,48 @@ const Profile = ({ navigation, route }) => {
                     marginRight: 10,
                     width: 80,
                     height: 80,
-                    borderRadius:60,
+                    borderRadius: 60,
                   }}
-                  titleStyle={{ color: "black",fontSize: 30, fontWeight: "bold" }}
+                  titleStyle={{ color: "black", fontSize: 30}}
                 />
-                <View style={{ flexDirection: "column" }}>
-                  <Text
-                    style={[
-                      styles.userDetail,
-                      { fontSize: 20, fontWeight: "bold", color: "#FFD700" },
-                    ]}
-                  >
-                    {profileData.user.first_name} {profileData.user.last_name}
-                  </Text>
-                  <Text style={styles.userDetail}>@{username}</Text>
-                  <Text style={styles.userDetail}>
-                    {profileData.connections} Connections
-                  </Text>
+                  <View style={{ flexDirection: "column" }}>
+                    <Text
+                      style={[
+                        styles.userDetail,
+                        { fontSize: 20, fontWeight: "bold", color: "#FFD700" },
+                      ]}
+                    >
+                      {profileData.user.first_name} {profileData.user.last_name}
+                    </Text>
+                    <Text style={styles.userDetail}>@{username}</Text>
+                    {username == loggedinUser && (
+                      <TouchableOpacity onPress={navigateToConnections}>
+                        <Text style={{...styles.userDetail,textDecorationLine:'underline', color: '#FFD700'}}>
+                          {profileData.connections} Connections
+                        </Text>
+                      </TouchableOpacity>
+                    )}
+                    {username != loggedinUser && (
+                      <Text style={styles.userDetail}>
+                        {profileData.connections} Connections
+                      </Text>
+                    )}
+                  </View>
+                </View>
+                <View style={{}}>
+                  {username == loggedinUser && (
+                    <View>
+                      <TouchableOpacity onPress={navigateToSettings}>
+                        <Ionicons
+                          name="ios-settings"
+                          size={24}
+                          color="#FFD700"
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  )}
                 </View>
               </View>
-
-              {username == loggedinUser && (
-                <View style={{ flexDirection: "row", alignItems: "right" }}>
-                  <TouchableOpacity
-                    onPress={navigateToConnections}
-                    style={{ marginLeft: 10 }}
-                  >
-                    <Ionicons name="ios-people" size={24} color="#FFD700" />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={navigateToSettings}
-                    style={{ marginLeft: 10 }}
-                  >
-                    <Ionicons name="ios-settings" size={24} color="#FFD700" />
-                  </TouchableOpacity>
-                </View>
-              )}
               {username != loggedinUser &&
                 !connectionUsernames.includes(username) && (
                   <TouchableOpacity
@@ -459,7 +476,7 @@ const Profile = ({ navigation, route }) => {
                       marginTop: 10,
                     }}
                     onPress={() => changeRequestStatus(username)}
-                    // disabled={connectionRequests.includes(username)}
+                  // disabled={connectionRequests.includes(username)}
                   >
                     <Text style={{ color: "#fff" }}>{getButtonLabel()}</Text>
                   </TouchableOpacity>
