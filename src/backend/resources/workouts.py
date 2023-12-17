@@ -23,6 +23,8 @@ class Workout(MethodView):
       user = new_data["user"]
       day = new_data["day"]
       data = add_workout(work_name, exercises, user, day)
+      if not data:
+        abort(400, message="Failed to post workout. User may not be found.")
       response = make_response(data)
       response.headers['Access-Control-Allow-Origin'] = '*'
       return response

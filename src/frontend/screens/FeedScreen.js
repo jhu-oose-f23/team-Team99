@@ -193,7 +193,7 @@ const FeedScreen = ({ navigation, route }) => {
         style={styles.searchInput}
         value={searchQuery}
         onChangeText={setSearchQuery}
-        placeholder="Search..."
+        placeholder="Search for users..."
         onFocus={() => setIsSearchActive(true)}
         onBlur={() => setIsSearchActive(true)}
       />
