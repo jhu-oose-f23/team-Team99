@@ -50,19 +50,18 @@ const LeaderboardStack = ({ route }) => (
       component={LeaderboardTabs}
       initialParams={{ username: route.params.username }}
       options={{
-        title: 'Leaderboard', // Set the title for this screen's header
+        title: "Leaderboard", // Set the title for this screen's header
         headerStyle: {
-          backgroundColor: '#1a1a1a', // Set the background color
+          backgroundColor: "#1a1a1a", // Set the background color
         },
-        headerTintColor: 'gold', // Set the text color
+        headerTintColor: "gold", // Set the text color
         headerTitleStyle: {
-          fontWeight: 'bold',
+          fontWeight: "bold",
         },
       }}
     />
   </Stack.Navigator>
 );
-
 
 const CreateStack = ({ route }) => (
   <Stack.Navigator>
@@ -85,9 +84,7 @@ const CreateStack = ({ route }) => (
   </Stack.Navigator>
 );
 
-
-const SettingsNavigation = ({route}) => {
-
+const SettingsNavigation = ({ route }) => {
   return (
     <Stack.Navigator>
       <Stack.Screen
@@ -104,14 +101,13 @@ const SettingsNavigation = ({route}) => {
   );
 };
 
-
 const CalendarNavigation = ({ route }) => {
   const { navigate } = useNavigation();
 
   return (
     <Stack.Navigator>
       <Stack.Screen
-        name="Calendar"
+        name="Calendar "
         component={Calendar}
         initialParams={{ username: route.params.username }}
         options={{
@@ -167,13 +163,10 @@ const screenOptions = {
   },
 };
 
-
 const BottomTabNavigator = ({ route }) => {
   const { username } = route.params;
   return (
-    <Tab.Navigator
-      screenOptions={screenOptions}
-    >
+    <Tab.Navigator screenOptions={screenOptions}>
       <Tab.Screen
         name="Feed"
         component={Feed}

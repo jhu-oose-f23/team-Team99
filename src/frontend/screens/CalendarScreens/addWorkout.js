@@ -1,4 +1,4 @@
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -9,11 +9,10 @@ import {
   TextInput,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
 import {
-//   createWorkout,
+  //   createWorkout,
   fetchCalendar,
-//   fetchWorkouts,
+  fetchWorkouts,
   updateCalendar,
 } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
@@ -23,7 +22,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#1a1a1a",
   },
   errorText: {
     color: "red",
@@ -40,7 +39,6 @@ const styles = StyleSheet.create({
   input: {
     margin: 0,
     marginBottom: 5,
-    backgroundColor: "#fff",
     height: 40,
   },
   removeIcon: {
@@ -101,13 +99,20 @@ const times = [
   { label: "11:30 PM", value: 23.5 },
 ];
 
-const AddWorkout = ({ route }) => {
+const AddWorkout = ({ route, navigation }) => {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: "#1a1a1a", // Set header background color
+      },
+      headerTintColor: "#FFD700", // Set text color
+    });
+  }, [navigation]);
   const { username } = route.params;
   const [workoutName, setWorkoutName] = useState("");
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
   const [existingWorkouts, setExistingWorkouts] = useState([]);
-  const navigation = useNavigation();
 
   // Days dropdown
   const [workoutDay, setWorkoutDay] = useState("");
@@ -125,28 +130,11 @@ const AddWorkout = ({ route }) => {
   // Start time dropdown
   const [workoutStartTime, setWorkoutStartTime] = useState(-1);
   const [startTimeOpen, setStartTimeOpen] = useState(false);
-  const [startTimeItems, setStartTimeItems] = useState(times);
 
   // End time dropdown
   const [workoutEndTime, setWorkoutEndTime] = useState(-1);
   const [endTimeOpen, setEndTimeOpen] = useState(false);
-  const [endTimeItems, setEndTimeItems] = useState(times);
 
-  const [open, setOpen] = useState([]);
-  const [selectedExerciseValue, setSelectedExerciseValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Bench Press", value: "Bench Press" },
-    { label: "Bicep Curl", value: "Bicep Curl" },
-    { label: "Pull Up", value: "Pull Up" },
-    { label: "Chin Up", value: "Chin Up" },
-    { label: "Tricep Dip", value: "Tricep Dip" },
-    { label: "Seated Row", value: "Seated Row" },
-    { label: "Overhead Press", value: "Overhead Press" },
-    { label: "Bent over Rows", value: "Bent over Rows" },
-    { label: "Squat", value: "Squat" },
-    { label: "Romanian Deadlift", value: "Romanian Deadlift" },
-    { label: "Skullcrushers", value: "Skullcrushers" },
-  ]);
 
   useFocusEffect(
     React.useCallback(() => {
@@ -157,7 +145,6 @@ const AddWorkout = ({ route }) => {
       getWorkouts();
     }, [])
   );
-
 
   const constructWorkoutCalendar = () => ({
     schedule: [
@@ -172,21 +159,16 @@ const AddWorkout = ({ route }) => {
   });
 
   const saveWorkout = async () => {
-    // Input validation
-    let isValid = true;
-
-    // Validate workout name
     if (!workoutName.trim()) {
       setWorkoutNameError("Workout name is required");
-      isValid = false;
-    } else {
-      setWorkoutNameError("");
+      return;
     }
+    setWorkoutNameError("");
 
     // Check if start time is before end time
     if (workoutStartTime >= workoutEndTime) {
       setWorkoutNameError("Start time must be before end time");
-      isValid = false;
+      return;
     }
 
     // Cannot add time if day is not filled in
@@ -195,25 +177,19 @@ const AddWorkout = ({ route }) => {
       (workoutStartTime != -1 || workoutEndTime != -1)
     ) {
       setWorkoutNameError("Must select a day if adding a time");
-      isValid = false;
+      return;
     }
 
     if (
       existingWorkouts.some((workout) => workout.workout_name === workoutName)
     ) {
       setWorkoutNameError("A workout with this name already exists");
-      isValid = false;
+      return;
     }
-
 
     const status = await updateCalendar(username, constructWorkoutCalendar());
     if (status === 404) {
       setWorkoutNameError("A workout already exists for this day and time");
-      isValid = false;
-    }
-
-    // If any validation failed, don't proceed with the save
-    if (!isValid) {
       return;
     }
 
@@ -221,7 +197,7 @@ const AddWorkout = ({ route }) => {
     setWorkoutDay("");
     setWorkoutStartTime(-1);
     setWorkoutEndTime(-1);
-    navigation.navigate("Profile", {
+    navigation.navigate("Calendar ", {
       username: username,
       loggedinUser: username,
     });
@@ -240,15 +216,17 @@ const AddWorkout = ({ route }) => {
           <TextInput
             style={{
               margin: 0,
-              backgroundColor: "#fff",
+              backgroundColor: "white",
               padding: 10,
               borderRadius: 10,
               borderWidth: 1, // specify border width for outlined mode
               flex: 1,
-              borderColor: "white",
+              backgroundColor: "#808080",
+              color: "white",
             }}
             mode="outlined"
             placeholder="Workout Name"
+            placeholderTextColor={"#C7C7CD"}
             value={workoutName}
             onChangeText={(text) => setWorkoutName(text)}
           />
@@ -269,13 +247,18 @@ const AddWorkout = ({ route }) => {
             }}
             style={{
               borderWidth: 0,
+              backgroundColor: "#808080",
             }}
             dropDownContainerStyle={{
               borderWidth: 0,
               maxHeight: 2000,
+              backgroundColor: "#808080",
             }}
             containerStyle={{
               maxHeight: 2000,
+            }}
+            textStyle={{
+              color: "white",
             }}
           />
         </View>
@@ -303,12 +286,17 @@ const AddWorkout = ({ route }) => {
             }}
             style={{
               borderWidth: 0,
+              backgroundColor: "#808080",
             }}
             dropDownContainerStyle={{
               borderWidth: 0,
+              backgroundColor: "#808080",
             }}
             containerStyle={{
               maxHeight: 2000,
+            }}
+            textStyle={{
+              color: "white",
             }}
           />
         </View>
@@ -327,12 +315,17 @@ const AddWorkout = ({ route }) => {
             }}
             style={{
               borderWidth: 0,
+              backgroundColor: "#808080",
             }}
             dropDownContainerStyle={{
               borderWidth: 0,
+              backgroundColor: "#808080",
             }}
             containerStyle={{
               maxHeight: 2000,
+            }}
+            textStyle={{
+              color: "white",
             }}
           />
         </View>
@@ -342,12 +335,9 @@ const AddWorkout = ({ route }) => {
       )}
       {exerciseError && <Text style={styles.errorText}>{exerciseError}</Text>}
 
-
-
-      <Button title="Save Workout" onPress={saveWorkout} />
+      <Button title="Save Workout" color="#FFD700" onPress={saveWorkout} />
     </View>
   );
 };
 
 export default AddWorkout;
-

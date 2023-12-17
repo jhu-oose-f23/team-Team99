@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   },
   activityName: {
     fontSize: 10,
-    color: "white", // White text color
+    color: "#808080", // White text color
   },
   timeLabelContainer: {
     height: 20, // Match the height of the time slots

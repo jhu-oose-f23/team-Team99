@@ -48,8 +48,6 @@ const styles = StyleSheet.create({
   },
 });
 
-
-
 const CreateWorkout = ({ route }) => {
   const { username } = route.params;
   const [workoutName, setWorkoutName] = useState("");
@@ -125,16 +123,12 @@ const CreateWorkout = ({ route }) => {
     !exercise.reps.trim();
 
   const saveWorkout = async () => {
-    // Input validation
-    let isValid = true;
-
     // Validate workout name
     if (!workoutName.trim()) {
       setWorkoutNameError("Workout name is required");
-      isValid = false;
-    } else {
-      setWorkoutNameError("");
+      return;
     }
+    setWorkoutNameError("");
 
     let dateFormatted = new Intl.DateTimeFormat("en-CA", {
       timeZone: "America/New_York",
@@ -150,33 +144,20 @@ const CreateWorkout = ({ route }) => {
       )
     ) {
       setWorkoutNameError("A workout with this name and date already exists");
-      isValid = false;
+      return;
     }
 
     // Validate exercise rows
     if (exerciseRows.length === 0) {
       setExerciseError("At least one exercise is required");
-      isValid = false;
-    } else {
-      setExerciseError("");
-      for (const exercise of exerciseRows) {
-        if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
-          setExerciseError("Can't have an empty exercise");
-          isValid = false;
-        }
-      }
-    }
-
-    // const status = await updateCalendar(username, constructWorkoutCalendar());
-    // if (status === 404) {
-    //   setWorkoutNameError("A workout already exists for this day and time");
-    //   isValid = false;
-    // }
-
-    // If any validation failed, don't proceed with the save
-    if (!isValid) {
       return;
     }
+    setExerciseError("");
+    if (exerciseRows.length >= 1 && exerciseRows.some(isEmptyExercise)) {
+      setExerciseError("Can't have an empty exercise");
+      return
+    }
+
     const workout = {
       user: username,
       workout_name: workoutName,
@@ -186,7 +167,6 @@ const CreateWorkout = ({ route }) => {
     setLoading(true);
     await createWorkout(workout);
     setLoading(false);
-    // await updateCalendar(username, constructWorkoutCalendar());
 
     // Reset all fields to blank
     setWorkoutName("");
