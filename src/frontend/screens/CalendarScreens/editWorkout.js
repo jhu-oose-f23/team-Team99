@@ -25,9 +25,18 @@ import {
 } from "../../api";
 
 const EditWorkout = ({ route, navigation }) => {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: "#1a1a1a", // Set header background color
+      },
+      headerTintColor: "#FFD700", // Set text color
+    });
+  }, [navigation]);
+
   const username = route.params.username;
-  const [workouts, setWorkouts] = useState([])
-  const {navigate} = useNavigation()
+  const [workouts, setWorkouts] = useState([]);
+  const { navigate } = useNavigation();
 
   const times = [
     { label: "12:00 AM", value: 0 },
@@ -80,33 +89,31 @@ const EditWorkout = ({ route, navigation }) => {
     { label: "11:30 PM", value: 23.5 },
   ];
 
-
   const getTime = (string_time) => {
-    const entry = times.find(dict => dict.value === string_time)
-    console.log("the entry is", entry.label)
-    return entry.label
-  }
+    const entry = times.find((dict) => dict.value === string_time);
+    console.log("the entry is", entry.label);
+    return entry.label;
+  };
 
   const deleteWorkout = async (session) => {
-    const status1 = await deleteCalendar(username, session)
+    const status1 = await deleteCalendar(username, session);
 
-    console.log("The status is", status1)
-    
-    const newWorkout = workouts.filter(item => item !== session);
-    setWorkouts(newWorkout)
-  }
+    console.log("The status is", status1);
+
+    const newWorkout = workouts.filter((item) => item !== session);
+    setWorkouts(newWorkout);
+  };
 
   useFocusEffect(
     React.useCallback(() => {
+      const fetchCalendarData = async () => {
+        const userResponse = await fetchCalendar(username);
+        const workout = userResponse.schedule;
+        const name = userResponse.username;
+        setWorkouts(workout ? workout : []);
+      };
 
-        const fetchCalendarData = async () => {
-            const userResponse = await fetchCalendar(username)
-            const workout = userResponse.schedule
-            const name = userResponse.username
-            setWorkouts(workout ? workout: []);
-        }
-
-      fetchCalendarData()
+      fetchCalendarData();
     }, [])
   );
 
@@ -115,9 +122,7 @@ const EditWorkout = ({ route, navigation }) => {
       {workouts &&
         workouts.map((session, index) => (
           <TouchableOpacity
-            onPress={() =>
-              navigateToEdit(navigation, username, session)
-            }
+            onPress={() => navigateToEdit(navigation, username, session)}
             style={styles.userContainer}
             key={index}
           >
@@ -126,15 +131,18 @@ const EditWorkout = ({ route, navigation }) => {
               style={styles.profileImage}
             />
             <View style={styles.textStyle}>
-              <Text style={styles.username}>{"Title: " + session.name}</Text>
-              <Text style={styles.username}>{"Day :" + " " + session.day}</Text>
-              <Text style={styles.username}>{"Time: " + getTime(session.start_hour) + " - " + getTime(session.end_hour)}</Text>
+              <Text style={styles.workoutName}>{ session.name} </Text>
+              <Text style={styles.username}>{ session.day}  </Text>
+              <Text style={styles.username}>
+                {
+                  getTime(session.start_hour) +
+                  " - " +
+                  getTime(session.end_hour)}
+              </Text>
             </View>
             <View>
-                <Button onPress={() => deleteWorkout(session)}>
-                  Delete
-                </Button>
-              </View>
+              <Button onPress={() => deleteWorkout(session)} textColor="#FFD700">Delete</Button>
+            </View>
           </TouchableOpacity>
         ))}
     </ScrollView>
@@ -146,6 +154,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     position: "relative",
+    backgroundColor: "#1a1a1a",
   },
 
   buttonStyle: {
@@ -172,7 +181,10 @@ const styles = StyleSheet.create({
     marginRight: 10,
   },
   username: {
-    fontSize: 16,
+    color: 'white',
+  },
+  workoutName: {
+    color: '#FFD700',
     fontWeight: "bold",
   },
 
@@ -188,4 +200,3 @@ const styles = StyleSheet.create({
 });
 
 export default EditWorkout;
-
