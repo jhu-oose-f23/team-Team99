@@ -2,6 +2,8 @@ import os
 from supabase import create_client, Client
 from databases.user import get_user
 from databases.connection import check_connection
+from databases.user import get_recommendations
+from threading import Thread
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
@@ -61,5 +63,11 @@ def accept_connection(source, dest):
   # clear recommendation cache for both users
   supabase.table("Recommendation_Cache").delete().eq("user_id", source).execute()
   supabase.table("Recommendation_Cache").delete().eq("user_id", dest).execute()
+
+  # recalculate recommendations for both users
+  t1 = Thread(target=get_recommendations, args=(source,))
+  t1.start()
+  t2 = Thread(target=get_recommendations, args=(dest,))
+  t2.start()
   
   return supabase.table("Connections").select("*").eq("user1", source).eq("user2", dest).execute().data[0]

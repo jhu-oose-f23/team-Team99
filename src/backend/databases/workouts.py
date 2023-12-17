@@ -14,11 +14,23 @@ def get_all_workouts():
   return data.data
 
 def add_workout(workout_name, exercises, user, day):
+  # check if user exists
+  if not get_user(user):
+    return None
+  
+  to_update = []
+  for exercise in exercises:
+    to_update.append(exercise["name"].lower())
+  
+  # update the leaderboard cache for each of these exercises
+  t = Thread(target=async_leaderboard, args=[to_update])
+  t.start()
+  
   workout = {
     "user": user,
     "workout_name": workout_name,
     "exercises": exercises, 
-    "time": "now", 
+    "time": "now",
     "day": day
   }
   data = supabase.table("Workouts").insert(workout).execute()
@@ -31,11 +43,20 @@ def delete_all_workouts():
 def delete_workout(id):
   # remove the actual workout
   data = supabase.table("Workouts").delete().eq("id", id).execute()
-  
+
   # start a worker thread to remove references to this workout from posts
   t = Thread(target=delete_workout_references, args=[id])
   t.start()
 
+  to_update = []
+  if data.data:
+    exercises = data.data[0]["exercises"]
+    for exercise in exercises:
+      to_update.append(exercise["name"].lower())
+  
+  # update the leaderboard cache for each of these exercises
+  t2 = Thread(target=async_leaderboard, args=[to_update])
+  t2.start()
   return data.data[0] if data.data else None
 
 def get_workout(id):
@@ -47,17 +68,15 @@ def get_user_workouts(user):
   return data.data
 
 def get_leaderboard(exercise):
-  data = supabase.table("Workouts").select("*").execute().data
-  pairs = defaultdict(list)
-  for d in data:
-    for e in d["exercises"]:
-      if e["name"].lower() == exercise.lower():
-        try:
-          pairs[d["user"]].append(int(e["weight"]))
-        except:
-          pass
-  leaders = [(username, max(weights)) for username, weights in pairs.items()]
-  return sorted(leaders, key=lambda x: x[1], reverse=True)
+  exercise = exercise.lower()
+  # check cache
+  data = supabase.table("Leaderboard_Cache").select("*").eq("exercise", exercise).execute().data
+  data = data[0]["leaderboard"] if data else []
+  if data:
+    return data
+  # if not in cache, generate the leaderboard
+  leaders = generate_leaderboard(exercise)
+  return leaders
 
 def get_weight_class_leaderboard(exercise, username):
   full_leaders = get_leaderboard(exercise)
@@ -92,3 +111,29 @@ def delete_workout_references(id):
       supabase.table("Posts").update({"workout_id": None}).eq("id", post["id"]).execute()
     except:
       pass
+
+def generate_leaderboard(exercise):
+  data = supabase.table("Workouts").select("*").execute().data
+  pairs = defaultdict(list)
+  for d in data:
+    for e in d["exercises"]:
+      if e["name"].lower() == exercise.lower():
+        try:
+          pairs[d["user"]].append(int(e["weight"]))
+        except:
+          pass
+  leaders = sorted([(username, max(weights)) for username, weights in pairs.items()], key=lambda x: x[1], reverse=True)
+  # add to cache
+  try:
+    supabase.table("Leaderboard_Cache").insert({"exercise": exercise, "leaderboard": leaders}).execute()
+  except:
+    try:
+      supabase.table("Leaderboard_Cache").update({"leaderboard": leaders}).eq("exercise", exercise).execute()
+    except:
+      pass
+  return leaders
+
+def async_leaderboard(exercises):
+  for exercise in exercises:
+    t = Thread(target=generate_leaderboard, args=[exercise])
+    t.start()

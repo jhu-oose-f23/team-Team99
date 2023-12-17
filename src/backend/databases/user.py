@@ -46,9 +46,28 @@ def get_recommendations(username):
     return generate_recommendations(username)
   return data["recs"]
 
+def delete_user(username):
+  # first delete from the Users table
+  data = supabase.table("Users").delete().eq("username", username).execute()
+  # need to delete from all tables
+  t = threading.Thread(target=delete_user_helper, args=[username])
+  t.start()
+  return data.data[0] if data else None
+
 '''
   Helper functions
 '''
+def delete_user_helper(username):
+  supabase.table("Calendars").delete().eq("username", username).execute()
+  supabase.table("Connections").delete().eq("user1", username).execute()
+  supabase.table("Connections").delete().eq("user2", username).execute()
+  supabase.table("Connection_Requests").delete().eq("source", username).execute()
+  supabase.table("Connection_Requests").delete().eq("dest", username).execute()
+  supabase.table("Issues").delete().eq("username", username).execute()
+  supabase.table("Posts").delete().eq("username", username).execute()
+  supabase.table("Recommendation_Cache").delete().eq("user_id", username).execute()
+  supabase.table("Workouts").delete().eq("user", username).execute()
+
 def generate_recommendations(username):
     recs = []
     # add second degree connections with a default similarity of 40%

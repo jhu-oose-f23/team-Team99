@@ -1,6 +1,7 @@
 import os
 from supabase import create_client, Client
 from databases.user import get_user
+from threading import Thread
 
 url = os.environ.get("SUPABASE_URL")
 key = os.environ.get("SUPABASE_KEY")
@@ -31,4 +32,10 @@ def delete_connection(user1, user2):
   data = supabase.table("Connections").delete().eq("user1", user1).eq("user2", user2).execute()
   if not data.data:
     data = supabase.table("Connections").delete().eq("user1", user2).eq("user2", user1).execute()
+
+  # clear recommendation cache for both users
+  supabase.table("Recommendation_Cache").delete().eq("user_id", user1).execute()
+  supabase.table("Recommendation_Cache").delete().eq("user_id", user2).execute()
+
   return data.data[0]
+
