@@ -7,7 +7,7 @@ import {
   TextInput,
   StyleSheet,
 } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useLayoutEffect } from "react";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import { COLORS, FONTS } from "../constants/themes";
@@ -18,7 +18,15 @@ import { useContext } from "react";
 import UserContext from "../UserContext";
 import { useNavigation } from "@react-navigation/native";
 
-const Settings = ({ route }) => {
+const Settings = ({ route, navigation }) => {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: "#1a1a1a", // Set header background color
+      },
+      headerTintColor: "#FFD700", // Set text color
+    });
+  }, [navigation]);
   const { username } = route.params;
   const { setUserLoggedIn, setUserHasSignedUp } = useContext(UserContext);
 

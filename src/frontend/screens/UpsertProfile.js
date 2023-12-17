@@ -129,7 +129,7 @@ const UpsertProfile = ({
             </>
           )}
           <View style={{ zIndex: 1000, alignItems: "center" }}>
-            <Text style={{ marginRight: "50%" }}>Frequency</Text>
+            <Text style={{ marginRight: "50%", marginTop: "10%", color: 'white'}}>Frequency</Text>
             <DropDownPicker
               open={frequencyDropdownOpen}
               listMode="SCROLLVIEW"
@@ -150,11 +150,14 @@ const UpsertProfile = ({
               containerStyle={{
                 maxHeight: 2000,
               }}
+              textStyle={{
+                color: "white",
+              }}
             />
           </View>
 
           <View style={{ zIndex: 100, alignItems: "center" }}>
-            <Text style={{ marginRight: "55%" }}>Gender</Text>
+            <Text style={{ marginRight: "55%",  color: 'white' }}>Gender</Text>
             <DropDownPicker
               open={genderDropdownOpen}
               listMode="SCROLLVIEW"
@@ -175,10 +178,13 @@ const UpsertProfile = ({
               containerStyle={{
                 maxHeight: 2000,
               }}
+              textStyle={{
+                color: "white",
+              }}
             />
           </View>
           <View style={{ zIndex: 50, alignItems: "center" }}>
-            <Text style={{ marginRight: "45%" }}>Preferred Time</Text>
+            <Text style={{ marginRight: "45%", color: 'white' }}>Preferred Time</Text>
             <DropDownPicker
               open={preferredTimeDropdownOpen}
               listMode="SCROLLVIEW"
@@ -199,10 +205,13 @@ const UpsertProfile = ({
               containerStyle={{
                 maxHeight: 2000,
               }}
+              textStyle={{
+                color: "white",
+              }}
             />
           </View>
           <View style={{ zIndex: 40, alignItems: "center" }}>
-            <Text style={{ marginRight: "60%" }}>Level</Text>
+            <Text style={{ marginRight: "60%", color: 'white' }}>Level</Text>
             <DropDownPicker
               open={levelDropdownOpen}
               listMode="SCROLLVIEW"
@@ -223,10 +232,13 @@ const UpsertProfile = ({
               containerStyle={{
                 maxHeight: 2000,
               }}
+              textStyle={{
+                color: "white",
+              }}
             />
           </View>
           <View style={{ zIndex: 20, alignItems: "center" }}>
-            <Text style={{ marginRight: "60%" }}>Goals</Text>
+            <Text style={{ marginRight: "60%", color: 'white' }}>Goals</Text>
             <DropDownPicker
               open={goalDropdownOpen}
               multiple={true}
@@ -295,7 +307,7 @@ const UpsertProfile = ({
 
           {/* ... add labels and input fields for frequency, gender, etc., similar to above ... */}
           <View style={{ marginBottom: 400 }}>
-            <Button title="Submit" onPress={handleSubmit} />
+            <Button title="Submit" color="#FFD700" onPress={handleSubmit} />
           </View>
         </View>
       </TouchableWithoutFeedback>
@@ -308,13 +320,14 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "30%",
+    backgroundColor:"#1a1a1a",
   },
   dropdown: {
     width: "80%",
     alignSelf: "center",
     marginTop: 1,
     margin: 20,
+    backgroundColor: '#808080'
   },
   input: {
     width: "80%", // Adjust width as needed
@@ -327,7 +340,8 @@ const styles = StyleSheet.create({
     textAlign: "left",
     alignContent: "center",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "#808080",
+    color: 'white',
   },
   row: {
     flexDirection: "row",
@@ -345,6 +359,7 @@ const styles = StyleSheet.create({
   label: {
     marginRight: "50%",
     marginBottom: 0,
+    color: 'white',
   },
 });
 

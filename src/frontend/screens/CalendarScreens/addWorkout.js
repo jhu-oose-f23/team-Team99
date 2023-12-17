@@ -9,7 +9,6 @@ import {
   TextInput,
 } from "react-native";
 
-import { useNavigation } from "@react-navigation/native";
 import {
   //   createWorkout,
   fetchCalendar,

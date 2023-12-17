@@ -12,14 +12,13 @@ import {
     deleteCalendar,
   updateCalendar,
 } from "../../api";
-import { useFocusEffect } from "@react-navigation/native";
 import DropDownPicker from "react-native-dropdown-picker";
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 16,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#1a1a1a",
   },
   errorText: {
     color: "red",
@@ -97,18 +96,26 @@ const times = [
   { label: "11:30 PM", value: 23.5 },
 ];
 
-const EditSession = ({ route}) => {
+const EditSession = ({ route, navigation }) => {
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerStyle: {
+        backgroundColor: "#1a1a1a", // Set header background color
+      },
+      headerTintColor: "#FFD700", // Set text color
+    });
+  }, [navigation]);
+
   const { username, session } = route.params;
   const [workoutName, setWorkoutName] = useState(session?.name);
   const [workoutNameError, setWorkoutNameError] = useState("");
   const [exerciseError, setExerciseError] = useState("");
-  const [existingWorkouts, setExistingWorkouts] = useState([]);
-  const navigation = useNavigation();
   const initialSession = session;
+  
 
   // Days dropdown
   const [workoutDay, setWorkoutDay] = useState(session?.day);
-  const [dayOpen, setDayOpen] = useState(true);
+  const [dayOpen, setDayOpen] = useState(false);
   const [daysItems, setDaysItems] = useState([
     { label: "Monday", value: "Monday" },
     { label: "Tuesday", value: "Tuesday" },
@@ -121,29 +128,11 @@ const EditSession = ({ route}) => {
 
   // Start time dropdown
   const [workoutStartTime, setWorkoutStartTime] = useState(session?.start_hour);
-  const [startTimeOpen, setStartTimeOpen] = useState(true);
-  const [startTimeItems, setStartTimeItems] = useState(times);
+  const [startTimeOpen, setStartTimeOpen] = useState(false);
 
   // End time dropdown
   const [workoutEndTime, setWorkoutEndTime] = useState(session?.end_hour);
   const [endTimeOpen, setEndTimeOpen] = useState(false);
-  const [endTimeItems, setEndTimeItems] = useState(times);
-
-  const [open, setOpen] = useState([]);
-  const [selectedExerciseValue, setSelectedExerciseValue] = useState(null);
-  const [items, setItems] = useState([
-    { label: "Bench Press", value: "Bench Press" },
-    { label: "Bicep Curl", value: "Bicep Curl" },
-    { label: "Pull Up", value: "Pull Up" },
-    { label: "Chin Up", value: "Chin Up" },
-    { label: "Tricep Dip", value: "Tricep Dip" },
-    { label: "Seated Row", value: "Seated Row" },
-    { label: "Overhead Press", value: "Overhead Press" },
-    { label: "Bent over Rows", value: "Bent over Rows" },
-    { label: "Squat", value: "Squat" },
-    { label: "Romanian Deadlift", value: "Romanian Deadlift" },
-    { label: "Skullcrushers", value: "Skullcrushers" },
-  ]);
 
   const constructWorkoutCalendar = () => ({
     schedule: [
@@ -200,11 +189,7 @@ const EditSession = ({ route}) => {
       return;
     }
 
-    // setWorkoutName("");
-    // setWorkoutDay("");
-    // setWorkoutStartTime(-1);
-    // setWorkoutEndTime(-1);
-    navigation.navigate("Profile", {
+    navigation.navigate("Calendar ", {
       username: username,
       loggedinUser: username,
     });
@@ -223,12 +208,11 @@ const EditSession = ({ route}) => {
           <TextInput
             style={{
               margin: 0,
-              backgroundColor: "#fff",
               padding: 10,
               borderRadius: 10,
-              borderWidth: 1, // specify border width for outlined mode
               flex: 1,
-              borderColor: "white",
+              backgroundColor: "#808080",
+              color: "white",
             }}
             mode="outlined"
             placeholder={`Workout Name`} 
@@ -247,18 +231,23 @@ const EditSession = ({ route}) => {
             setValue={(v) => setWorkoutDay(v())}
             placeholder="Day"
             placeholderStyle={{
-              color: "#C7C7CD",
               marginBottom: 8,
+              color: "#C7C7CD",
             }}
             style={{
               borderWidth: 0,
+              backgroundColor: "#808080",
             }}
             dropDownContainerStyle={{
               borderWidth: 0,
               maxHeight: 2000,
+              backgroundColor: "#808080",
             }}
             containerStyle={{
               maxHeight: 2000,
+            }}
+            textStyle={{
+              color: "white",
             }}
           />
         </View>
@@ -286,12 +275,17 @@ const EditSession = ({ route}) => {
             }}
             style={{
               borderWidth: 0,
+              backgroundColor: "#808080",
             }}
             dropDownContainerStyle={{
               borderWidth: 0,
+              backgroundColor: "#808080",
             }}
             containerStyle={{
               maxHeight: 2000,
+            }}
+            textStyle={{
+              color: "white",
             }}
           />
         </View>
@@ -310,12 +304,17 @@ const EditSession = ({ route}) => {
             }}
             style={{
               borderWidth: 0,
+              backgroundColor: "#808080",
             }}
             dropDownContainerStyle={{
               borderWidth: 0,
+              backgroundColor: "#808080",
             }}
             containerStyle={{
               maxHeight: 2000,
+            }}
+            textStyle={{
+              color: "white",
             }}
           />
         </View>
@@ -325,7 +324,7 @@ const EditSession = ({ route}) => {
       )}
       {exerciseError && <Text style={styles.errorText}>{exerciseError}</Text>}
 
-      <Button title="Edit Workout" onPress={EditWorkout} />
+      <Button title="Edit Workout" color="#FFD700" onPress={EditWorkout} />
     </View>
   );
 };
