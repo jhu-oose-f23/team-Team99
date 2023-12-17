@@ -76,7 +76,8 @@ Project Link: [https://github.com/jhu-oose-f23/team-Team99](https://github.com/j
 
 Latest Deployed Version:
 
-<img width="336" alt="Screenshot 2023-12-08 at 6 34 31 PM" src="https://github.com/jhu-oose-f23/team-Team99/assets/64459817/1efe7781-379e-4714-a499-4b69aea32e0f">
+<img width="329" alt="Screenshot 2023-12-17 at 12 33 34 PM" src="https://github.com/jhu-oose-f23/team-Team99/assets/64459817/b920a106-ef9d-4b3b-a5f8-2a6987f0041a">
+
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
